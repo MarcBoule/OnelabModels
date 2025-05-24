@@ -10,7 +10,7 @@ This directory contains examples for studying the Kelvin (inversion) and shell t
 
 * [2D-Planar](#2Dplanar)
 
-More specifically, the electrostatic potential is simulated for a pair of perfectly conducting parallel cylindrical conductors (called wirepair) or a single perfectly conducting sphere. 
+More specifically, the electrostatic potential is simulated for a pair of perfectly conducting parallel cylindrical conductors (called wirepair) or for a single perfectly conducting sphere. Given the symmetry that is exploited, only one of the two wires is visible in the geometric model.
 
 The electric field energy in the entire unbounded space is computed in both geometries, from which the capacitance can then be established. For the cylindrical case, it is the capacitance between the two wires, and in the spherical case, it is the capacitance with respect to infinity (i.e. an outer shell at infinity).
 
@@ -24,11 +24,11 @@ Support for the Kelvin transformation was added in the development version of Ge
 
 ### Meshing
 
-The meshing is kept as simple as possible and is generally uniform. In the interior region it is identical in both the shell and Kelvin cases. In the exterior region, the mesh becomes coarser near the outer boundary in the shell case, while it is kept uniform in the Kelvin case. This is done in order to keep the number of degrees of freedom generally comparable between both cases. The mesh size is also automatically doubled for second order simulations, when compared to first order simulations.
+The meshing is kept as simple as possible and is generally uniform. In the interior region it is identical in both the shell and Kelvin cases. In the exterior region, the mesh becomes coarser near the outer boundary in the shell case, while it is kept uniform in the Kelvin case. This is done in order to keep the number of degrees of freedom generally comparable between both cases. The entire mesh size is also automatically doubled for second order simulations, when compared to first order simulations.
 
 ### Number of integration points
 
-An option is provided in each simulation to study the effect of the number of integration points used in the Integration object in the GetDP code. 
+An option is provided in each simulation to study the effect of the number of integration points used in the Integration object in the models' code. 
 
 When the "Min num of integration pts" option is checked, the theoretical minimum number of points is used. For first order simulations, triangles and tetrahedra can be properly integrated with a single point, while for second order simulations, three points are needed for triangles and four points are needed for tetrahedra. Interestingly, the results below show that the choice of points can have a non-negligible effect in some cases.
  
@@ -129,7 +129,7 @@ From the above results, the following observations can be made:
 
 * The Kelvin transformation works quite well in the 3D-Cylindrical and 2D-Planar cases: it seems much better than the shell transformation in first order simulations, and is comparable to the shell transformation in second order simulations.
 
-* The Kelvin transformation is more mitigated in the 3D-Spherical and 2D-Axisymmetric cases: the only instance where it performs favorably is the first order 3D-Spherical case, while for the 2D-Axisymmetric case, something seems wrong and further investigation is required.
+* The Kelvin transformation is more problematic in the 3D-Spherical and 2D-Axisymmetric cases: the only instance where it performs favorably is the first order 3D-Spherical case, while for the 2D-Axisymmetric case, something seems wrong and further investigation is required.
 
 * The number of integration points also has an effect in certain scenarios: choosing the theoretical minimum number of points is sometimes advantageous (sometimes by a wide margin), while in other cases the values from the template show a slight improvement.
 
