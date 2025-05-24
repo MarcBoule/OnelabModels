@@ -1,6 +1,6 @@
 # Shell and Kelvin transformation benchmarking
 
-This directory contains examples for studying the shell and Kelvin (inversion) transformations in GetDP. It covers the following cases on Form0 (scalar potential) function spaces:
+This directory contains examples for studying the Kelvin (inversion) and shell transformations in [GetDP](https://getdp.info/). It covers the following cases on Form0 (scalar potential) function spaces:
 
 * [3D-Spherical](#3Dsperical)
 
@@ -12,7 +12,7 @@ This directory contains examples for studying the shell and Kelvin (inversion) t
 
 More specifically, the electrostatic potential is simulated for a pair of perfectly conducting parallel cylindrical conductors (called wirepair) or a single perfectly conducting sphere. 
 
-In both geometries the electric field energy in the entire unbounded space is computed, from which the capacitance can then be established. For the cylindrical case, it is the capacitance between the two wires, and in the spherical case, it is the capacitance with respect to infinity (i.e. an outer shell at infinity).
+The electric field energy in the entire unbounded space is computed in both geometries, from which the capacitance can then be established. For the cylindrical case, it is the capacitance between the two wires, and in the spherical case, it is the capacitance with respect to infinity (i.e. an outer shell at infinity).
 
 
 
@@ -24,30 +24,32 @@ Support for the Kelvin transformation was added in the development version of Ge
 
 ### Meshing
 
-The meshing is kept as simple as possible and is generally uniform. In the interior region it is identical in both the Shell and Kelvin cases. In the exterior region, the mesh becomes coarser near the outer boundary in the Shell case, while it is kept uniform in the Kelvin case. This is done in order to keep the number of degrees of freedom generally comparable between both cases. The mesh size is also automatically doubled for second order simulations, when compared to first order simulations.
+The meshing is kept as simple as possible and is generally uniform. In the interior region it is identical in both the shell and Kelvin cases. In the exterior region, the mesh becomes coarser near the outer boundary in the shell case, while it is kept uniform in the Kelvin case. This is done in order to keep the number of degrees of freedom generally comparable between both cases. The mesh size is also automatically doubled for second order simulations, when compared to first order simulations.
 
 ### Number of integration points
 
-An option is provided to study the effect of the number of integration points used in the Integration object in the GetDP simulation code. 
+An option is provided in each simulation to study the effect of the number of integration points used in the Integration object in the GetDP code. 
 
-When the "Min num of integration pts" option is checked, the theoretical minimum number of points is used. For first order simulations, triangles and tetrahedra can be properly integrated with a single point, while for second order simulations, three points are needed for triangles and four points are needed for tetrahedra. The results shown below show, interestingly, that the choice of points can have a non-negligible effect in some cases.
+When the "Min num of integration pts" option is checked, the theoretical minimum number of points is used. For first order simulations, triangles and tetrahedra can be properly integrated with a single point, while for second order simulations, three points are needed for triangles and four points are needed for tetrahedra. Interestingly, the results below show that the choice of points can have a non-negligible effect in some cases.
  
-When the "Min num of integration pts" option is not checked, the number of points correspond to those given in the `Lib_Elasticity_u.pro` template that is bundled with GetDP.
+When the "Min num of integration pts" option is not checked, the numbers of points correspond to those given in the `Lib_Elasticity_u.pro` template that is bundled with GetDP.
 
 ### Second order elements
 
 When the "2nd order elements" option is checked, both second order geometrical elements are used, as well as second order interpolation basis functions. The only visible effect of this parameter in the models is in the `.geo` files, since for Form0 spaces the `BF_Node_2E` basis functions are automatically added in GetDP (and thus are not explicitly visible in the `.pro` files).
 
 
+## Test cases
+
 
 <a id="3Dsperical"></a>
-## 3D Spherical
+### 3D Spherical
 
-3D model of the capacitance of a single sphere (with respect to infinity), with the Shell (pictured) and Kelvin transformations. 
+3D model of the capacitance of a single sphere (with respect to infinity), with the shell (pictured) and Kelvin transformations. 
 
 ![IM](img/3Dspherical.jpg)
 
-Relative difference in the capacitance of the simulation compared to the analytical calculation:
+Relative difference in the capacitance of the simulation, when compared to the analytical calculation:
 
 | Order:	| Transform:	| Num int pts:	| 			| Dofs:	|
 | ---- | ---- | ---- | ---- | ---- |
@@ -57,15 +59,17 @@ Relative difference in the capacitance of the simulation compared to the analyti
 | Second	| Kelvin		| -0.608%		| -0.263%	| 65817	|
 | Second	| Shell			| 0.000752%		| 0.000844%	| 92437	|
 
+Comments: First order Kelvin seems quite good; however, for second order simulations, Kelvin is not as good as first order and shell is the preferred transformation.
+
 
 <a id="3Dcylindrical"></a>
-## 3D Cylindrical
+### 3D Cylindrical
 
-3D model of the capacitance of a pair of parallel wires, with the Kelvin (pictured) and Shell transformations.
+3D model of the capacitance of a pair of parallel wires, with the Kelvin (pictured) and shell transformations.
 
 ![IM](img/3Dcylindrical.jpg)
 
-Relative difference in the capacitance of the simulation compared to the analytical calculation:
+Relative difference in the capacitance of the simulation, when compared to the analytical calculation:
 
 | Order:	| Transform:	| Num int pts:	| 			| Dofs:	|
 | ---- | ---- | ---- | ---- | ---- |
@@ -75,17 +79,17 @@ Relative difference in the capacitance of the simulation compared to the analyti
 | Second	| Kelvin		| 0.00248%		| 0.00238%	| 94351	|
 | Second	| Shell			| 0.00349%		| 0.00423%	| 92028	|
 
-
+Comments: First order Kelvin seems noticeably more accurate than shell, but both shell and Kelvin are quite comparable for second order simulations.
 
 
 <a id="2Daxisymmetric"></a>
-## 2D Axisymmetric
+### 2D Axisymmetric
 
-2D model of the capacitance of a single sphere (with respect to infinity), with the Shell (pictured) and Kelvin transformations.
+2D model of the capacitance of a single sphere (with respect to infinity), with the shell (pictured) and Kelvin transformations.
 
 ![IM](img/2Daxisymmetric.jpg)
 
-Relative difference in the capacitance of the simulation compared to the analytical calculation:
+Relative difference in the capacitance of the simulation, when compared to the analytical calculation:
 
 | Order:	| Transform:	| Num int pts:	| 			| Dofs:	|
 | ---- | ---- | ---- | ---- | ---- |
@@ -95,16 +99,17 @@ Relative difference in the capacitance of the simulation compared to the analyti
 | Second	| Kelvin		| 66.0%			| 66.0%		| 3178	|
 | Second	| Shell			| 0.0000965%	| 0.000465%	| 3802	|
 
+Comments: The shell transformation is clearly preferable here and something likely needs to be improved with the axisymmetric Kelvin transformation.
 
 
 <a id="2Dplanar"></a>
-## 2D Planar
+### 2D Planar
 
-2D model of the capacitance of a pair of parallel wires, with the Kelvin (pictured) and Shell transformations.
+2D model of the capacitance of a pair of parallel wires, with the Kelvin (pictured) and shell transformations.
 
 ![IM](img/2Dplanar.jpg)
 
-Relative difference in the capacitance of the simulation compared to the analytical calculation: 
+Relative difference in the capacitance of the simulation, when compared to the analytical calculation: 
 
 | Order:	| Transform:	| Num int pts:	| 			| Dofs:	|
 | ---- | ---- | ---- | ---- | ---- |
@@ -114,20 +119,20 @@ Relative difference in the capacitance of the simulation compared to the analyti
 | Second	| Kelvin		| 0.000619%		| 0.000545%	| 2971	|
 | Second	| Shell			| 0.000634%		| 0.000567%	| 3583	|
 
-Comment: the first order Kelvin simulation is actually more accurate than the second order simulation...
+Comments: the first order Kelvin simulation is actually more accurate than the second order simulation, which is unexpected and perhaps just circumstantial.
 
 
 
 # Conclusion
 
-From the above results, the following observation can be made:
+From the above results, the following observations can be made:
 
 * The Kelvin transformation works quite well in the 3D-Cylindrical and 2D-Planar cases: it seems much better than the shell transformation in first order simulations, and is comparable to the shell transformation in second order simulations.
 
-* The Kelvin transformation is more mitigated in the 3D-Spherical and 2D-Axisymmetric cases: the only instance where it performs favorably is the first order 3D-Spherical case, while for the 2D-Axisymmetric case, something seems clearly wrong and further investigation is required.
+* The Kelvin transformation is more mitigated in the 3D-Spherical and 2D-Axisymmetric cases: the only instance where it performs favorably is the first order 3D-Spherical case, while for the 2D-Axisymmetric case, something seems wrong and further investigation is required.
 
-* The number of integration points also has an effect in certain scenarios: in some cases, choosing the theoretical minimum number of points is advantageous (sometimes by a wide margin), while in other cases the values from the template show a slight improvement.
+* The number of integration points also has an effect in certain scenarios: choosing the theoretical minimum number of points sometimes advantageous (sometimes by a wide margin), while in other cases the values from the template show a slight improvement.
 
-It should be emphasized that these results and conclusions are based on single simulations with fixed parameters, and that the results would likely behave a bit differently as the different parameters (model dimensions, meshing, etc.) are varied. It is left to the reader to explore this further.
+It should be emphasized that these results and conclusions are based on single simulations with fixed parameters, and that the results could potentially behave a bit differently as the different parameters (model dimensions, meshing, etc.) are varied. It is left to the reader to explore this further.
 
 If any errors are observed in the above results and/or the simulation files, please open a github issue.
