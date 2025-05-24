@@ -130,7 +130,6 @@ PostOperation {
 	{ Name PostV2; NameOfPostProcessing PostV;
 		Operation {
 			Print[ v, OnElementsOf VolAll, File "sphere_v.pos" ];
-			Print[ v, OnLine {{rs+e,e,0}{rb-e,e,0}} {1000}, Format TimeTable, File "sphere_v.txt" ];
 		}
 	} 
 }

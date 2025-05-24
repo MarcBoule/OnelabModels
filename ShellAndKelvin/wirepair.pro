@@ -128,7 +128,6 @@ PostOperation {
 	{ Name PostV2; NameOfPostProcessing PostV;
 		Operation {
 			Print[ v, OnElementsOf VolAll, File "wirepair_v.pos" ];
-			Print[ v, OnLine {{rc+e,e,0}{rb-e,e,0}} {1000}, Format TimeTable, File "wirepair_v.txt" ];
 		}
 	} 
 }
