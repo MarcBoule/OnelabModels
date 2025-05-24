@@ -131,7 +131,7 @@ From the above results, the following observations can be made:
 
 * The Kelvin transformation is more mitigated in the 3D-Spherical and 2D-Axisymmetric cases: the only instance where it performs favorably is the first order 3D-Spherical case, while for the 2D-Axisymmetric case, something seems wrong and further investigation is required.
 
-* The number of integration points also has an effect in certain scenarios: choosing the theoretical minimum number of points sometimes advantageous (sometimes by a wide margin), while in other cases the values from the template show a slight improvement.
+* The number of integration points also has an effect in certain scenarios: choosing the theoretical minimum number of points is sometimes advantageous (sometimes by a wide margin), while in other cases the values from the template show a slight improvement.
 
 It should be emphasized that these results and conclusions are based on single simulations with fixed parameters, and that the results could potentially behave a bit differently as the different parameters (model dimensions, meshing, etc.) are varied. It is left to the reader to explore this further.
 
