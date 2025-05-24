@@ -2,13 +2,13 @@
 
 This directory contains examples for studying the shell and Kelvin (inversion) transformations in GetDP. It covers the following cases on Form0 (scalar potential) function spaces:
 
-* [3D-Spherical](#3dsperical)
+* [3D-Spherical](#3Dsperical)
 
-* [3D-Cylindrical](#3dcylindrical)
+* [3D-Cylindrical](#3Dcylindrical)
 
-* [2D-Axisymmetric](#2daxisymmetric)
+* [2D-Axisymmetric](#2Daxisymmetric)
 
-* [2D-Planar](#2dplanar)
+* [2D-Planar](#2Dplanar)
 
 More specifically, the electrostatic potential is simulated for a pair of perfectly conducting parallel cylindrical conductors (called wirepair) or a single perfectly conducting sphere. 
 
@@ -40,7 +40,7 @@ When the "2nd order elements" option is checked, both second order geometrical e
 
 
 
-<a id="3dsperical"></a>
+<a id="3Dsperical"></a>
 ## 3D Spherical
 
 3D model of the capacitance of a single sphere (with respect to infinity), with the Shell (pictured) and Kelvin transformations. 
@@ -58,7 +58,7 @@ Relative difference in the capacitance of the simulation compared to the analyti
 | Second	| Shell			| 0.000752%		| 0.000844%	| 92437	|
 
 
-<a id="3dcylindrical"></a>
+<a id="3Dcylindrical"></a>
 ## 3D Cylindrical
 
 3D model of the capacitance of a pair of parallel wires, with the Kelvin (pictured) and Shell transformations.
@@ -78,12 +78,12 @@ Relative difference in the capacitance of the simulation compared to the analyti
 
 
 
-<a id="2daxisymmetric"></a>
+<a id="2Daxisymmetric"></a>
 ## 2D Axisymmetric
 
 2D model of the capacitance of a single sphere (with respect to infinity), with the Shell (pictured) and Kelvin transformations.
 
-![IM](img/2daxisymmetric.jpg)
+![IM](img/2Daxisymmetric.jpg)
 
 Relative difference in the capacitance of the simulation compared to the analytical calculation:
 
@@ -97,12 +97,12 @@ Relative difference in the capacitance of the simulation compared to the analyti
 
 
 
-<a id="2dplanar"></a>
+<a id="2Dplanar"></a>
 ## 2D Planar
 
 2D model of the capacitance of a pair of parallel wires, with the Kelvin (pictured) and Shell transformations.
 
-![IM](img/2dplanar.jpg)
+![IM](img/2Dplanar.jpg)
 
 Relative difference in the capacitance of the simulation compared to the analytical calculation: 
 
