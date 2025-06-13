@@ -1,6 +1,6 @@
 # Shell and Kelvin transformation benchmarking
 
-This directory contains examples for studying the Kelvin (inversion) and shell transformations in [GetDP](https://getdp.info/). It covers the following cases on Form0 (scalar potential) function spaces:
+This directory contains examples for studying the Kelvin (inversion) and shell transformations in [GetDP](https://getdp.info/). A version _greater_ than 3.5.0 of GepDP is required (or a development version, until such a version is released). The examples cover the following cases on Form0 (scalar potential) function spaces:
 
 * [3D-Spherical](#3Dsperical)
 
