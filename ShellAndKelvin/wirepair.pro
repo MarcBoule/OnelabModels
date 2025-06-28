@@ -13,15 +13,13 @@ Group {
 	SurCond   = #120;
 	SurLefts  = #121;
 	SurBndInt = #122; // unused in shell version
-	SurBndExt = #123;
+	SurBndExt = #123; // Neumann (unused) in shell version
 	VolAll    = #{VolInt,VolExt};
 }
 
 Constraint {
 	{ Name CstV; Case {
-		If(Flag_Shell == 1)
-			{ Region SurBndExt; Type Assign; Value 0.0; }
-		Else
+		If(Flag_Shell != 1)
 			{ Region    SurBndExt; Type Link; // Kelvin link
 			  RegionRef SurBndInt;  Coefficient 1.0;
 			  Function  Vector[ X[] - xe, Y[], Z[] ]; }

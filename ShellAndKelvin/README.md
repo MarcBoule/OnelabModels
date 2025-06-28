@@ -75,9 +75,9 @@ Relative difference in the capacitance of the simulation, when compared to the a
 | ---- | ---- | ---- | ---- | ---- |
 |			|  				| Minimum		| Template	| 		|
 | First		| Kelvin		| 0.0995%		| 0.0995%	| 88324	|
-| First		| Shell			| 1.14%			| 1.60%		| 84175	|
+| First		| Shell			| 0.894%		| 1.26%		| 86094	|
 | Second	| Kelvin		| 0.00248%		| 0.00238%	| 94351	|
-| Second	| Shell			| 0.00349%		| 0.00423%	| 92028	|
+| Second	| Shell			| 0.00290%		| 0.00345%	| 94052	|
 
 Comments: First order Kelvin seems noticeably more accurate than shell, but both shell and Kelvin are quite comparable for second order simulations.
 
@@ -115,9 +115,9 @@ Relative difference in the capacitance of the simulation, when compared to the a
 | ---- | ---- | ---- | ---- | ---- |
 |			|  				| Minimum		| Template	| 		|
 | First		| Kelvin		| 0.0000149%	| 0.0000149%| 2851	|
-| First		| Shell			| 0.0138%		| 0.0288%	| 3394	|
+| First		| Shell			| 0.0125%		| 0.0279%	| 3457	|
 | Second	| Kelvin		| 0.000619%		| 0.000545%	| 2971	|
-| Second	| Shell			| 0.000634%		| 0.000567%	| 3583	|
+| Second	| Shell			| 0.000630%		| 0.000565%	| 3647	|
 
 Comments: the first order Kelvin simulation is actually more accurate than the second order simulation, which is unexpected and perhaps just circumstantial.
 
