@@ -20,7 +20,7 @@ The electric field energy in the entire unbounded space is computed in both geom
 
 ### Meshing
 
-The meshing is kept as simple as possible and is generally uniform. In the interior region it is identical in both the shell and Kelvin cases. In the exterior region, the mesh becomes coarser near the outer boundary in the shell case, while it is kept uniform in the Kelvin case. This is done in order to keep the number of degrees of freedom generally comparable between both cases. The entire mesh size is also automatically doubled for second order simulations, when compared to first order simulations.
+The meshing is kept as simple as possible and is generally uniform. In the interior region it is identical in both the shell and Kelvin cases. In the exterior region, the mesh becomes coarser near the outer boundary in the shell case, while it is kept uniform in the Kelvin case. This is done in order to keep the number of degrees of freedom generally comparable between both cases. The entire mesh size is also automatically doubled (i.e. made more coarse) for second order simulations, when compared to first order simulations.
 
 ### Number of integration points
 
@@ -32,7 +32,7 @@ When the "Min num of integration pts" option is not checked, the numbers of poin
 
 ### Second order elements
 
-When the "2nd order elements" option is checked, both second order geometrical elements are used, as well as second order interpolation basis functions. The only visible effect of this parameter in the models is in the `.geo` files, since for Form0 spaces the `BF_Node_2E` basis functions are automatically added in GetDP (and thus are not explicitly visible in the `.pro` files).
+When the "2nd order elements" option is checked, both second order geometrical elements as well as second order interpolation basis functions are used. The only visible effect of this parameter in the models is in the `.geo` files, since for Form0 spaces the `BF_Node_2E` basis functions are automatically added in GetDP (and thus are not explicitly visible in the `.pro` files).
 
 
 ## Test cases
