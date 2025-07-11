@@ -1,6 +1,6 @@
 # Shell and Kelvin transformation benchmarking
 
-This directory contains examples for studying the Kelvin (inversion) and shell transformations in [GetDP](https://getdp.info/). A version _greater_ than 3.5.0 of GepDP is required (or a development version, until such a version is released). The examples cover the following cases on Form0 (scalar potential) function spaces:
+This directory contains examples for studying the Kelvin (inversion) and shell transformations in [GetDP](https://getdp.info/). Support for the Kelvin transformation was added in the development version of GetDP in early march 2025, thus a version _greater_ than 3.5.0 of GepDP is required (or a development version, until such a version is released). The examples cover the following cases on Form0 (scalar potential) function spaces:
 
 * [3D-Spherical](#3Dsperical)
 
@@ -10,17 +10,13 @@ This directory contains examples for studying the Kelvin (inversion) and shell t
 
 * [2D-Planar](#2Dplanar)
 
-More specifically, the electrostatic potential is simulated for a pair of perfectly conducting parallel cylindrical conductors (called wirepair) or for a single perfectly conducting sphere. Given the symmetry that is exploited, only one of the two wires is visible in the geometric model.
+More specifically, the electrostatic potential is simulated for a single perfectly conducting sphere, or a pair of perfectly conducting parallel cylindrical conductors (called wirepair); given the symmetry that is exploited, only one of these two wires is visible in the geometric model.
 
 The electric field energy in the entire unbounded space is computed in both geometries, from which the capacitance can then be established. For the cylindrical case, it is the capacitance between the two wires, and in the spherical case, it is the capacitance with respect to infinity (i.e. an outer shell at infinity).
 
 
 
 ## General remarks
-
-### Implementation note
-
-Support for the Kelvin transformation was added in the development version of GetDP in early march 2025, and requires a version of GetDP _greater_ than 3.5.0 (or a development version until such a version is released).
 
 ### Meshing
 
