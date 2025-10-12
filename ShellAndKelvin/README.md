@@ -10,10 +10,11 @@ This directory contains examples for studying the Kelvin (inversion) and shell t
 
 * [2D-Planar](#2Dplanar)
 
-More specifically, the electrostatic potential is simulated for a single perfectly conducting sphere, or a pair of perfectly conducting parallel cylindrical conductors (called wirepair); given the symmetry that is exploited, only one of these two wires is visible in the geometric model.
+More specifically, the electrostatic potential is simulated for a single perfectly conducting sphere, or a pair of perfectly conducting parallel cylindrical conductors (called wirepair); given the symmetry that is exploited, only one of the two wires is visible in the geometric model of the wirepair.
 
 The electric field energy in the entire unbounded space is computed in both geometries, from which the capacitance can then be established. For the cylindrical case, it is the capacitance between the two wires, and in the spherical case, it is the capacitance with respect to infinity (i.e. an outer shell at infinity).
 
+*Disclaimer*: This is still a work in progress for the spherical and axisymmetrical cases, where the Kelvin transformation requires extra considerations: a factor of 1/_r_ still needs to be accounted for, as is visible in equation (6) in the Chen 1997 TMAG paper titled _A review of finite element open boundary techniques for static and quasistatic electromagnetic field problems_.
 
 
 ## General remarks
@@ -115,7 +116,7 @@ Relative difference in the capacitance of the simulation, when compared to the a
 | Second	| Kelvin		| 0.000619%		| 0.000545%	| 2971	|
 | Second	| Shell			| 0.000630%		| 0.000565%	| 3647	|
 
-Comments: the first order Kelvin simulation is actually more accurate than the second order simulation, which is unexpected and perhaps just circumstantial.
+Comments: the first order Kelvin simulation is actually more accurate than the second order simulation, which is unexpected and perhaps only circumstantial.
 
 
 
@@ -125,7 +126,7 @@ From the above results, the following observations can be made:
 
 * The Kelvin transformation works quite well in the 3D-Cylindrical and 2D-Planar cases: it seems much better than the shell transformation in first order simulations, and is comparable to the shell transformation in second order simulations.
 
-* The Kelvin transformation is more problematic in the 3D-Spherical and 2D-Axisymmetric cases: the only instance where it performs favorably is the first order 3D-Spherical case, while for the 2D-Axisymmetric case, something seems wrong and further investigation is required.
+* The Kelvin transformation is incomplete for the 3D-Spherical and 2D-Axisymmetric cases and further work is required in either the formulation or the GetDP source code.
 
 * The number of integration points also has an effect in certain scenarios: choosing the theoretical minimum number of points is sometimes advantageous (sometimes by a wide margin), while in other cases the values from the template show a slight improvement.
 
