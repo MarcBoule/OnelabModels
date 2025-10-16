@@ -1,0 +1,14 @@
+epsRelInsul=1 :
+L = 732.1793002 [nH/m]
+C = 18.12037932 [pF/m]
+epsRelInsul=2.25 :
+L = 732.1793002 [nH/m]
+C = 28.71633783 [pF/m]
+hasDefect=0
+I = 0.4790189599 [A]
+R = 104.380002 [mOhm/m] (two wires)
+Vol = 2.605863142 [mm^3] (two wires)
+hasDefect=1
+I = 0.4652854182 [A]
+R = 107.4609219 [mOhm/m] (two wires)
+Vol = 2.581019605 [mm^3] (two wires)

@@ -1,0 +1,26 @@
+N.B. Results below are with a fine mesh (s=1.0 in wirepair.geo)
+
+hasDefect=0, epsRelInsul=1 :
+I = 0.4790188264 [A]
+R = 104.3800311 [mOhm/m]
+L = 732.17827 [nH/m]
+C = 18.12051767 [pF/m]
+Vol = 2.605862416 [mm^3]
+hasDefect=0, epsRelInsul=2.25 :
+I = 0.4790188264 [A]
+R = 104.3800311 [mOhm/m]
+L = 732.17827 [nH/m]
+C = 28.71658404 [pF/m]
+Vol = 2.605862416 [mm^3]
+hasDefect=1, epsRelInsul=1 :
+I = 0.4652934513 [A]
+R = 107.4590667 [mOhm/m]
+L = 736.3354386 [nH/m]
+C = 18.09625476 [pF/m]
+Vol = 2.581018854 [mm^3]
+hasDefect=1, epsRelInsul=2.25 :
+I = 0.4652934513 [A]
+R = 107.4590667 [mOhm/m]
+L = 736.3354386 [nH/m]
+C = 27.65036262 [pF/m]
+Vol = 2.581018854 [mm^3]
