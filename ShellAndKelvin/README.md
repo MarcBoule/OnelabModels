@@ -1,5 +1,7 @@
 # Shell and Kelvin transformation benchmarking
 
+**Disclaimer**: This is still a work in progress for the spherical and axisymmetrical cases, where the Kelvin transformation requires extra considerations: a factor of 1/_r_ still needs to be accounted for, as is visible in equation (6) in the Chen 1997 TMAG paper titled _A review of finite element open boundary techniques for static and quasistatic electromagnetic field problems_.
+
 This directory contains examples for studying the Kelvin (inversion) and shell transformations in [GetDP](https://getdp.info/). Support for the Kelvin transformation was added in the development version of GetDP in early march 2025, thus a version _greater_ than 3.5.0 of GetDP is required (or a development version, until such a version is released). The examples cover the following cases on Form0 (scalar potential) function spaces:
 
 * [3D-Spherical](#3Dsperical)
@@ -14,7 +16,6 @@ More specifically, the electrostatic potential is simulated for a single perfect
 
 The electric field energy in the entire unbounded space is computed in both geometries, from which the capacitance can then be established. For the cylindrical case, it is the capacitance between the two wires, and in the spherical case, it is the capacitance with respect to infinity (i.e. an outer shell at infinity).
 
-*Disclaimer*: This is still a work in progress for the spherical and axisymmetrical cases, where the Kelvin transformation requires extra considerations: a factor of 1/_r_ still needs to be accounted for, as is visible in equation (6) in the Chen 1997 TMAG paper titled _A review of finite element open boundary techniques for static and quasistatic electromagnetic field problems_.
 
 
 ## General remarks
@@ -56,7 +57,7 @@ Relative difference in the capacitance of the simulation, when compared to the a
 | Second	| Kelvin		| -0.608%		| -0.263%	| 65817	|
 | Second	| Shell			| 0.000752%		| 0.000844%	| 92437	|
 
-Comments: First order Kelvin seems quite good; however, for second order simulations, Kelvin is not as good as first order and shell is the preferred transformation.
+Comments: The shell transformation is clearly preferable here and the axisymmetric Kelvin transformation requires further work.
 
 
 <a id="3Dcylindrical"></a>
@@ -96,7 +97,7 @@ Relative difference in the capacitance of the simulation, when compared to the a
 | Second	| Kelvin		| 66.0%			| 66.0%		| 3178	|
 | Second	| Shell			| 0.0000965%	| 0.000465%	| 3802	|
 
-Comments: The shell transformation is clearly preferable here and something likely needs to be improved with the axisymmetric Kelvin transformation.
+Comments: The shell transformation is clearly preferable here and the axisymmetric Kelvin transformation requires further work.
 
 
 <a id="2Dplanar"></a>
