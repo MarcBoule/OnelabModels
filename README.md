@@ -4,3 +4,4 @@ Example models for the [ONELAB](https://onelab.info/) finite element software (c
 List of examples:
 
 * [Shell and Kelvin transformation benchmarking](./ShellAndKelvin/)
+* [Wirepair RLC](./WirepairRLC/)
