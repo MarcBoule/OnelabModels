@@ -57,7 +57,7 @@ Relative difference in the capacitance of the simulation, when compared to the a
 | Second	| Kelvin		| -0.608%		| -0.263%	| 65817	|
 | Second	| Shell			| 0.000752%		| 0.000844%	| 92437	|
 
-Comments: The shell transformation is clearly preferable here and the axisymmetric Kelvin transformation requires further work.
+Comments: The Kelvin transformation is preferable here for first order simulations, while the shell transformation is preferable for second order simulations.
 
 
 <a id="3Dcylindrical"></a>
