@@ -1,0 +1,27 @@
+127658 triangles, 12th pass
+
+Wh:
+
+Scl : 0.0748614178805083
+Scl : *(*(RZIntegrate(Volume(Circle1), Dot(<0, 0, 320000>, <Hr,0,Hz>)), -0.5), 1.25663706143592E-06)
+
+Scl : 0.0748614179735366
+Scl : *(RZIntegrate(Volume(AllObjects), Dot(mu*(<Hr,0,Hz>), <Hr,0,Hz>)), 0.5)
+
+
+Wb:
+
+Scl : 0.0935766233671286
+Scl : *(*(RZIntegrate(Volume(Circle1), Dot(<0, 0, 320000>, 1/mu*(<Br,0,Bz>))), 0.5), 1.25663706143592E-06)
+
+Scl : 0.0935766233208974
+Scl : *(RZIntegrate(Volume(AllObjects), Dot(1/mu*(<Br,0,Bz>), <Br,0,Bz>)), 0.5)
+
+
+other:
+
+Scl : 0.0748614185724079
+Scl : RZIntegrate(Volume(AllObjects), <Energy>)
+
+Scl : 0.0748614185724079
+Scl : RZIntegrate(Volume(AllObjects), <CoEnergy>)

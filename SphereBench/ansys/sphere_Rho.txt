@@ -1,0 +1,13 @@
+128478 triangles, 12th pass
+
+Scl : 5.371629354832E-08
+Scl : *(RZIntegrate(Volume(Circle1), *(8E-05, VOLTAGE)), 0.5)
+
+Scl : 5.37162935511091E-08
+Scl : *(RZIntegrate(Volume(AllObjects), Dot(<Er,0,Ez>, <Dr,0,Dz>)), 0.5)
+
+
+other:
+
+Scl : 5.37162935511091E-08
+Scl : RZIntegrate(Volume(AllObjects), <energy>)

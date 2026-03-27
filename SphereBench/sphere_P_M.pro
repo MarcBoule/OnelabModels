@@ -1,0 +1,345 @@
+// How to run: see main.pro
+
+// Uniformly polarized and magnetized full sphere
+
+
+ScalarMagPotential = 0; // 1 = scalar mag potential, 0 = vector mag potential
+
+
+Group { 
+	SurDiriV -= #{SurExt4}; // remove since Neumann V
+	If (axisP == 1)
+		SurDiriV += #{SurYZ};
+	ElseIf (axisP == 2)
+		SurDiriV += #{SurXZ};
+	Else // (axisP == 3)
+	EndIf
+}
+
+
+Function {
+	P[VolSphere] = Pp * uP[];
+	P[All] = Vector[0,0,0]; // All others
+
+	M[VolSphere] = Mp * u[]; 
+	M[All] = Vector[0,0,0]; // All others
+
+	Call EpsNeumannScalar; 
+
+	// Exact results (for post analysis):
+	We[] = 2*Pi * rs^3 * Pp^2  / (3*eps0*(epsR+2));
+	Wd[] = 4*Pi * rs^3 * Pp^2  / (3*eps0*epsR*(epsR+2)); 
+	Wb[] = 4*Pi * rs^3 * Mp^2  * mu0 / (3*muR*(muR+2));
+	Wh[] = 2*Pi * rs^3 * Mp^2  * mu0 / (3*(muR+2));
+	p[]  = 4*Pi * rs^3 * Mp*Pp * mu0 / ((epsR+2)*(muR+2)); 
+}
+
+
+Constraint {
+	{ Name CstV; Case { // Neumann: any SurExt4, SurXZ or SurYZ not in SurDiriV
+		{ Region SurDiriV; Value 0; }
+	}}
+	{ Name CstPhi; Case { // Neumann: SurExt4 and any SurXZ or SurYZ not in SurDiriPhi
+		{ Region SurDiriPhi; Value 0; } 
+	}} 
+	{ Name CstA; Case { // Neumann: any SurXZ or SurYZ not in SurDiriA
+		{ Region SurDiriA; Value 0; }
+	}} 
+	{ Name CstGaugeA; Case {
+		{ Region VolAll; SubRegion SurDiriA; Value 0; }
+	}}
+}
+
+
+FunctionSpace {
+	{ Name HgradV; Type Form0; // electric scalar potential
+		BasisFunction {
+			{ Name sn; NameOfCoef vn; Support VolAll; 
+				Function BF_Node; Entity NodesOf[All]; }
+		}
+		Constraint {
+			{ NameOfCoef vn; EntityType NodesOf; NameOfConstraint CstV; }
+		}
+	}
+	{ Name HcurlA; Type Form1; // magnetic vector potential
+		BasisFunction {
+			{ Name se; NameOfCoef ae; Support VolAll; 
+				Function BF_Edge; Entity EdgesOf[All]; }
+			If (order >= 2)
+			{ Name s3a; NameOfCoef a3a; Support VolAll;
+				Function BF_Edge_3F_a; Entity FacetsOf[All]; }
+			{ Name s3b; NameOfCoef a3b; Support VolAll;
+				Function BF_Edge_3F_b; Entity FacetsOf[All]; }
+			EndIf
+		}
+		Constraint {
+			{ NameOfCoef ae; EntityType EdgesOf; NameOfConstraint CstA; }
+			If (order >= 2)
+			{ NameOfCoef a3a; EntityType FacetsOf; NameOfConstraint CstA; }
+			{ NameOfCoef a3b; EntityType FacetsOf; NameOfConstraint CstA; }
+			EndIf
+			{ NameOfCoef ae; EntityType EdgesOfTreeIn; 
+				EntitySubType StartingOn; NameOfConstraint CstGaugeA; }
+		}
+	}
+	{ Name HgradPhi; Type Form0; // magnetic scalar potential
+		BasisFunction {
+			{ Name sn; NameOfCoef pn; Support VolAll; 
+				Function BF_Node; Entity NodesOf[All]; }
+		}
+		Constraint {
+			{ NameOfCoef pn; EntityType NodesOf; NameOfConstraint CstPhi; }
+		}
+	}
+}
+
+
+Formulation {
+	{ Name FrmV; Type FemEquation;
+		Quantity {
+			{ Name v; Type Local; NameOfSpace HgradV; }
+		}
+		Equation {
+			Integral { [ eps[] * Dof{d v}, {d v} ]; 
+			Integration I1; Jacobian J1; In VolAll; }
+			Integral { [ -P[], {d v} ]; 
+			Integration I1; Jacobian J1; In VolSphere; }
+		}
+	} 
+	{ Name FrmPhi; Type FemEquation;
+		Quantity {
+			{ Name v; Type Local; NameOfSpace HgradV; }
+			{ Name p; Type Local; NameOfSpace HgradPhi; }
+		}
+		Equation {
+			Integral { [ mu[] * Dof{d p}, {d p} ];
+			Integration I1; Jacobian J1; In VolAll; }
+			Integral { [ -M[]*mu0, {d p} ]; // -Br
+			Integration I1; Jacobian J1; In VolSphere; }
+		}
+	}
+	{ Name FrmA; Type FemEquation;
+		Quantity {
+			{ Name v; Type Local; NameOfSpace HgradV; }
+			{ Name a; Type Local; NameOfSpace HcurlA; }
+		}
+		Equation {
+			Integral { [ 1 / mu[] * Dof{d a}, {d a} ];
+			Integration I1; Jacobian J1; In VolAll; }
+			Integral { [ -M[]*mu0/mu[], {d a} ]; // -Br/mu (=-Hc)
+			Integration I1; Jacobian J1; In VolSphere; }
+		}
+	}
+}
+
+
+Resolution {
+	{ Name ResMain;
+		System {
+			{ Name SV; NameOfFormulation FrmV; }
+			If (ScalarMagPotential) 
+			{ Name SP; NameOfFormulation FrmPhi; }
+			Else
+			{ Name SA; NameOfFormulation FrmA; }
+			EndIf
+		}
+		Operation {
+			Generate[SV]; Solve[SV]; SaveSolution[SV];
+			If (ScalarMagPotential) 
+			Generate[SP]; Solve[SP]; SaveSolution[SP];
+			Else
+			Generate[SA]; Solve[SA]; SaveSolution[SA];
+			EndIf
+		}
+	}
+}
+
+
+PostProcessing {
+	If (ScalarMagPotential)
+		{ Name PostMain; NameOfFormulation FrmPhi; }
+	Else
+		{ Name PostMain; NameOfFormulation FrmA; }
+	EndIf
+
+	{ Append; Name PostMain;
+		Quantity {
+			{ Name E; Value {Local {
+				[ -{d v} ]; In VolAll; Jacobian J1; }}
+			}
+			{ Name D; Value {Local {
+				[ eps[]*(-{d v}) + P[] ]; In VolAll; Jacobian J1; }}
+			}
+			{ Name We; Value {Integral {Type Global; 
+				[ coef*(eps[]/2) * SquNorm[-{d v}] ]; 
+				Integration I1; Jacobian J1; In VolAll;}}
+			}
+			{ Name We2; Value {Integral {Type Global; 
+				[ coef* -1/2 * P[] * -{d v} ];
+				Integration I1; Jacobian J1; In VolSphere;}}
+			}
+			{ Name Wd; Value {Integral {Type Global; 
+				[ coef/(eps[]*2) * SquNorm[eps[]*(-{d v}) + P[]] ]; 
+				Integration I1; Jacobian J1; In VolAll;}}
+			}
+			{ Name Wd2; Value {Integral {Type Global; 
+				[ coef/(eps[]*2) * P[] * (eps[]*(-{d v}) + P[]) ];
+				Integration I1; Jacobian J1; In VolSphere;}}
+			}
+
+			If (ScalarMagPotential)
+
+			{ Name B; Value {Local {
+				[ mu0*M[]-mu[]*{d p} ]; In VolAll; Jacobian J1; }}
+			}
+			{ Name H; Value {Local {
+				[ -{d p} ]; In VolAll; Jacobian J1; }}
+			}
+
+			{ Name Wb; Value {Integral {Type Global; 
+				[ coef/(2*mu[]) * SquNorm[mu0*M[]-mu[]*{d p}] ]; 
+				Integration I1; Jacobian J1; In VolAll; }}
+			}
+			{ Name Wb2; Value {Integral {Type Global; 
+				[ coef* mu0/(2*mu[]) * M[] * (mu0*M[]-mu[]*{d p}) ]; 
+				Integration I1; Jacobian J1; In VolSphere; }}
+			}
+			{ Name Wh; Value {Integral {Type Global; 
+				[ coef*mu[]/2 * SquNorm[-{d p}] ]; 
+				Integration I1; Jacobian J1; In VolAll; }}
+			}
+			{ Name Wh2; Value {Integral {Type Global; 
+				[ coef* -mu0/2 * M[] * (-{d p}) ]; 
+				Integration I1; Jacobian J1; In VolSphere;}}
+			}
+
+			{ Name p; Value {Integral {Type Global; // needs iabc=0
+				[ coef*eps0 * Cross[-{d v}, mu0*M[]-mu[]*{d p}] ]; 
+				Integration I1; Jacobian J1; In VolAll; }} 
+			}
+			{ Name p2; Value {Integral {Type Global; 
+				[ coef* mu0*eps0 * Cross[-{d v}, (mu[]/mu0-1)*(-{d p}) + M[]] ];
+				Integration I1; Jacobian J1; In VolSphere; }}
+			}
+			{ Name p3; Value {Integral {Type Global; 
+				[ coef* -1/2 * Cross[eps0*(eps[]/eps0-1)*(-{d v}) + P[], mu0*M[]-mu[]*{d p}] ]; 
+				Integration I1; Jacobian J1; In VolSphere; }}
+			}
+
+			Else // (ScalarMagPotential == 0)
+
+			{ Name B; Value {Local {
+				[ {d a} ]; In VolAll; Jacobian J1; }}
+			}
+			{ Name H; Value {Local {
+				[ ({d a}-mu0*M[])/mu[] ]; In VolAll; Jacobian J1; }}
+			}
+
+			{ Name Wb; Value {Integral {Type Global; 
+				[ coef/(2*mu[]) * SquNorm[{d a}] ];
+				Integration I1; Jacobian J1; In VolAll; }}
+			}
+			{ Name Wb2; Value {Integral {Type Global;
+				[ coef* mu0/(2*mu[]) * M[] * {d a} ];
+				Integration I1; Jacobian J1; In VolSphere; }}
+			}
+			{ Name Wh; Value {Integral {Type Global; 
+				[ coef*mu[]/2 * SquNorm[({d a}-mu0*M[])/mu[] ] ]; 
+				Integration I1; Jacobian J1; In VolAll; }}
+			}
+			{ Name Wh2; Value {Integral {Type Global; 
+				[ coef* -mu0/2 * M[] * (({d a}-mu0*M[])/mu[]) ];
+				Integration I1; Jacobian J1; In VolSphere;}}
+			}
+
+			{ Name p; Value {Integral {Type Global; // needs iabc=0 
+				[ coef*eps0 * Cross[-{d v}, {d a}] ];
+				Integration I1; Jacobian J1; In VolAll; }} 
+			}
+			{ Name p2; Value {Integral {Type Global; 
+				[ coef* mu0*eps0 * Cross[-{d v}, (mu[]/mu0-1)*({d a}-mu0*M[])/mu[] + M[]] ];
+				Integration I1; Jacobian J1; In VolSphere; }}
+			}
+			{ Name p3; Value {Integral {Type Global; 
+				[ coef* -1/2 * Cross[eps0*(eps[]/eps0-1)*(-{d v}) + P[], {d a}] ]; 
+				Integration I1; Jacobian J1; In VolSphere; }}
+			}
+
+			EndIf   
+
+		}
+	}
+}
+
+
+PostOperation {
+	{ Name PostMain; NameOfPostProcessing PostMain; 
+		Format Table;
+		Operation {
+			Print[{prob, quarters, axis, iabc, epsR, muR, ScalarMagPotential}, Format "Prob=%g, Quarters=%g, Axis=%g, IABC=%g, epsR=%g, muR=%g, Phi=%g:", File > "output.txt"]; 
+
+			Print[ We, OnGlobal, StoreInVariable $We ];
+			Print[ {$We, We[], ($We-We[])/We[]*10^6}, Format 
+			" We  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+
+			Print[ We2, OnGlobal, StoreInVariable $We2 ];
+			Print[ {$We2, We[], ($We2-We[])/We[]*10^6}, Format 
+			" We2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+
+			Print[ Wd, OnGlobal, StoreInVariable $Wd ];
+			Print[ {$Wd, Wd[], ($Wd-Wd[])/Wd[]*10^6}, Format 
+			" Wd  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+
+			Print[ Wd2, OnGlobal, StoreInVariable $Wd2 ];
+			Print[ {$Wd2, Wd[], ($Wd2-Wd[])/Wd[]*10^6}, Format 
+			" Wd2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+
+			Print[ Wb, OnGlobal, StoreInVariable $Wb ];
+			Print[ {$Wb, Wb[], ($Wb-Wb[])/Wb[]*10^6}, Format 
+			" Wb  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+
+			Print[ Wb2, OnGlobal, StoreInVariable $Wb2 ];
+			Print[ {$Wb2, Wb[], ($Wb2-Wb[])/Wb[]*10^6}, Format 
+			" Wb2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+
+			Print[ Wh, OnGlobal, StoreInVariable $Wh ];
+			Print[ {$Wh, Wh[], ($Wh-Wh[])/Wh[]*10^6}, Format 
+			" Wh  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+
+			Print[ Wh2, OnGlobal, StoreInVariable $Wh2 ];
+			Print[ {$Wh2, Wh[], ($Wh2-Wh[])/Wh[]*10^6}, Format 
+			" Wh2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+
+			If (iabc == 0)
+			Print[ p, OnGlobal, StoreInVariable $p ];
+			Print[ {CompX[$p], p[], (CompX[$p]-p[])/p[]*10^6}, Format 
+			" pX  = %.8g [kg*m/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			Else
+			Echo[ " pX  = [needs iabc = 0]", File > "output.txt" ];
+			EndIf
+
+			Print[ p2, OnGlobal, StoreInVariable $p2 ]; 
+			Print[ {CompX[$p2], p[], (CompX[$p2]-p[])/p[]*10^6}, Format 
+			" pX2 = %.8g [kg*m/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+
+			Print[ p3, OnGlobal, StoreInVariable $p3 ]; 
+			Print[ {CompX[$p3], p[], (CompX[$p3]-p[])/p[]*10^6}, Format 
+			" pX3 = %.8g [kg*m/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+		}
+	} 
+	{ Name PostFields; NameOfPostProcessing PostMain; 
+		Operation {
+			//Print[ Phi, OnElementsOf VolAll, File "sphere_Phi.pos" ];
+			// Print[ B, OnElementsOf VolSphere, File "sphere_B.pos" ];
+			// Print[ H, OnElementsOf VolSphere, File "sphere_H.pos" ];
+			// Print[ E, OnPoint {xs+rs/2,ys,zs},
+			// Format TimeTable, File > "sphere_pts.txt" ];
+			// Print[ D, OnPoint {xs+rs/2,ys,zs},
+			// Format TimeTable, File > "sphere_pts.txt" ];
+			// Print[ E, OnPoint {xs+rs*1.5,ys,zs},
+			// Format TimeTable, File > "sphere_pts.txt" ];
+			// Print[ D, OnPoint {xs+rs*1.5,ys,zs},
+			// Format TimeTable, File > "sphere_pts.txt" ];
+		}
+	}
+}
