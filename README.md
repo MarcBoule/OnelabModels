@@ -5,3 +5,4 @@ List of examples:
 
 * [Shell and Kelvin transformation benchmarking](./ShellAndKelvin/)
 * [Wirepair RLC](./WirepairRLC/)
+* [Sphere energy and momentum benchmarking](./SphereBench/)
