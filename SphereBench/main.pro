@@ -2,6 +2,7 @@
 // * adjust the desired flags and constants here and in main_common.pro
 // * open this file (sphere.pro) in Gmsh
 // * press the Run button
+// * results are appended in output.txt
 
 Include "main_common.pro";
 
@@ -34,7 +35,7 @@ Pp    = 5E-5;  // electric dipole moment per unit volume (C/m^2)
 Mp    = 3.2E5; // magnetic dipole moment per unit volume (A/m)
 rho   = 8E-5;  // volume charge density (C/m^3)
 V     = 100;   // electric potential (V)
-sigma = 100.0 * eps0 / rs; // surface charge density (C/m^2)
+sigma = V * eps0 / rs; // surface charge density (C/m^2)
 omega = 1E3;   // angular speed (rad/s)
 axis  = 2;     // Mp and omega axis (1=X, 2=Y, 3=Z)
 axisP = (axis == 3 ? 1 : axis + 1); // Pp axis (1=X, 2=Y, 3=Z)
