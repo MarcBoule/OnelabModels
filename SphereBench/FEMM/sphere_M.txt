@@ -1,0 +1,8 @@
+Open space: 
+Magnetic field energy: 0.0750268 Joules   (WH)
+Magnetic field coenergy: 0.0933991 Joules (WB)
+
+Finite space:
+Integral of B over block: 9.34003e-007 Tesla meter^3
+multiplying this by mu0/(2*mu)*Mp gives 0.0934003 Joules (WB)
+

@@ -1,0 +1,6 @@
+Open space: 
+Stored energy: 5.56366e-009 Joules (WE=WD)
+
+Finite space:
+Line integral D.n: Electric Flux = 1.10979e-010 Coulombs
+multiplying this by V/2 gives 5.54895e-009 Joules (WE=WD)

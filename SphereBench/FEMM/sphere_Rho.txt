@@ -1,0 +1,5 @@
+Open space: 
+Stored energy: 5.37144e-008 Joules (WE=WD)
+
+Finite space:
+none
