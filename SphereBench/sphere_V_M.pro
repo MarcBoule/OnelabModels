@@ -7,8 +7,6 @@
 
 ScalarMagPotential = 0; // 1 = scalar mag potential, 0 = vector mag potential
 
-V = 100.0;  // volts
-
 
 Group {
 	VolExSphere = #{VolAll,-VolSphere};
