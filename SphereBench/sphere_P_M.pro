@@ -25,7 +25,7 @@ Function {
 	M[All] = Vector[0,0,0]; // All that are unassigned
 
 	If (iabc == 1) 
-		Call EpsIabcDiriScal;
+		Call EpsIabcNeumScal;
 		Call MuIabcDiriVectAndNeumScal;
 	EndIf
 
