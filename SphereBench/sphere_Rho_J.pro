@@ -1,7 +1,7 @@
 // How to run: see main.pro
 
-// Spinning uniformly volumetrically charged nonconducting full sphere
-// epsilon_r = mu_r = 1 only for mag and momentum (or else there will be spinning bound charges and currents which would complexify things)
+// Spinning uniformly volume-charged nonconducting full sphere
+// epsilon_r = mu_r = 1 for mag and momentum (or else there will be spinning bound charges and currents which would complicate things)
 
 
 Group {
@@ -10,14 +10,20 @@ Group {
 
 Function {
 	v[] = Cross[ omega*u[], r[] ];
-	J[] = rho * v[];
+	J[] = rho_f * v[];
 
-	Call EpsDirichletScalar;
+	If (iabc == 1) 
+		Call EpsIabcDiriScal;
+		Call MuIabcDiriVectAndNeumScal;
+	EndIf
+
+	eps[All] = eps0; // All that are unassigned
+	mu[All]  = mu0; // All that are unassigned
 
 	// Exact results (for post analysis):
-	We[] = 4*Pi  * rs^5 * rho^2           / (15*eps0);
-	Wb[] = 8*Pi  * rs^7 * rho^2 * omega^2 * (mu0/315);
-	Lc[] = 16*Pi * rs^7 * rho^2 * omega   * (mu0/315);
+	We[] = 4*Pi  * rs^5 * rho_f^2           / (15*eps0);
+	Wb[] = 8*Pi  * rs^7 * rho_f^2 * omega^2 * (mu0/315);
+	Lc[] = 16*Pi * rs^7 * rho_f^2 * omega   * (mu0/315);
 }
 
 
@@ -76,7 +82,7 @@ Formulation {
 		Equation {
 			Integral { [ eps[] * Dof{d v}, {d v} ]; 
 			Integration I1; Jacobian J1; In VolAll; }
-			Integral { [ -rho, {v} ]; 
+			Integral { [ -rho_f, {v} ]; 
 			Integration I1; Jacobian J1; In VolSphere; }
 		}
 	} 
@@ -133,7 +139,7 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name We2; Value {Integral {Type Global; 
-				[ coef/2 * rho * {v} ]; 
+				[ coef/2 * rho_f * {v} ]; // rho_f for linear dielectrics (Griffiths 5ed p.198)
 				Integration I1; Jacobian J1; In VolSphere;}}
 			}
 
@@ -151,7 +157,7 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name Lc2; Value {Integral {Type Global;
-				[ coef*Cross[ r[], rho * {a} ] ]; // needs gauging
+				[ coef*Cross[ r[], rho_f * {a} ] ]; // needs gauging; assumes rho=rho_free
 				Integration I1; Jacobian J1; In VolSphere;}}
 			}
 		}
@@ -173,31 +179,26 @@ PostOperation {
 			Print[ {$We2, We[], ($We2-We[])/We[]*10^6}, Format
 			" We2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 	
-			If (epsR != 1 || muR != 1)
-				Echo[ " [needs epsR = 1 and muR = 1 for other results]", File > "output.txt" ];
-			Else
-				
-				Print[ Wb, OnGlobal, StoreInVariable $Wb ];
-				Print[ {$Wb, Wb[], ($Wb-Wb[])/Wb[]*10^6}, Format 
-				" Wb  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			Print[ Wb, OnGlobal, StoreInVariable $Wb ];
+			Print[ {$Wb, Wb[], ($Wb-Wb[])/Wb[]*10^6}, Format 
+			" Wb  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 
-				Print[ Wb2, OnGlobal, StoreInVariable $Wb2 ];
-				Print[ {$Wb2, Wb[], ($Wb2-Wb[])/Wb[]*10^6}, Format 
-				" Wb2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			Print[ Wb2, OnGlobal, StoreInVariable $Wb2 ];
+			Print[ {$Wb2, Wb[], ($Wb2-Wb[])/Wb[]*10^6}, Format 
+			" Wb2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 
-				If (iabc == 0)
+			If (iabc == 0)
 				Print[ Lc, OnGlobal, StoreInVariable $Lc ]; 
 				Print[ {CompY[$Lc], Lc[], (CompY[$Lc]-Lc[])/Lc[]*10^6}, Format 
 				" LcY = %.8g [kg*m^2/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
-				Else
+			Else
 				Echo[ " LcY = [needs iabc = 0]", File > "output.txt" ];
-				EndIf
-
-				Print[ Lc2, OnGlobal, StoreInVariable $Lc2 ];
-				Print[ {CompY[$Lc2], Lc[], (CompY[$Lc2]-Lc[])/Lc[]*10^6}, Format 
-				" LcY2 = %.8g [kg*m^2/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
-				
 			EndIf
+
+			Print[ Lc2, OnGlobal, StoreInVariable $Lc2 ];
+			Print[ {CompY[$Lc2], Lc[], (CompY[$Lc2]-Lc[])/Lc[]*10^6}, Format 
+			" LcY2 = %.8g [kg*m^2/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			
 		}
 	} 
 	{ Name PostFields; NameOfPostProcessing PostMain; 

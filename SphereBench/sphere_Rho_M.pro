@@ -1,7 +1,7 @@
 // How to run: see main.pro
 
 // Non-conducting uniformly charged and magnetized full sphere
-// Needs epsR=1 so that rho = rho_free
+// Needs epsR=1 when momentum, since Lc2 assumes rho = rho_f (formula requires total charge density, Zangwill prob. 15.24a)
 // Lc2 not applicable in phi formulation since no A
 
 
@@ -14,15 +14,26 @@ Group {
 
 Function {
 	M[VolSphere] = Mp * u[]; 
-	M[All] = Vector[0,0,0]; // All others
+	M[All] = Vector[0,0,0]; // All that are unassigned
 
-	Call EpsDirichletScalar; 
+	If (iabc == 1) 
+		Call EpsIabcDiriScal;
+		Call MuIabcDiriVectAndNeumScal;
+	EndIf
+	
+	//epsR = 1; // uncomment this line when momentum is wanted
+	eps[VolSphere] = eps0 * epsR;
+	mu[VolSphere]  = mu0  * muR;
+	
+	eps[All] = eps0; // All that are unassigned
+	mu[All]  = mu0; // All that are unassigned
+
 
 	// Exact results (for post analysis):
-	We[] = 2*Pi * rs^5 * rho^2    / (9*eps0) * (1/(5*epsR)+1);
-	Wb[] = 4*Pi * rs^3 * Mp^2     * mu0 / (3*muR*(muR+2));
-	Wh[] = 2*Pi * rs^3 * Mp^2     * mu0 / (3*(muR+2));
-	Lc[] = 8*Pi * rs^5 * Mp * rho * mu0 * (5*epsR-2)/(45*epsR*(muR+2));
+	We[] = 2*Pi * rs^5 * rho_f^2    / (9*eps0) * (1/(5*epsR)+1);
+	Wb[] = 4*Pi * rs^3 * Mp^2       * mu0 / (3*muR*(muR+2));
+	Wh[] = 2*Pi * rs^3 * Mp^2       * mu0 / (3*(muR+2));
+	Lc[] = 8*Pi * rs^5 * Mp * rho_f * mu0 * (5*epsR-2)/(45*epsR*(muR+2));
 }
 
 
@@ -93,7 +104,7 @@ Formulation {
 		Equation {
 			Integral { [ eps[] * Dof{d v}, {d v} ]; 
 			Integration I1; Jacobian J1; In VolAll; }
-			Integral { [ -rho, {v} ]; 
+			Integral { [ -rho_f, {v} ]; 
 			Integration I1; Jacobian J1; In VolSphere; }
 		}
 	} 
@@ -129,17 +140,17 @@ Resolution {
 		System {
 			{ Name SV; NameOfFormulation FrmV; }
 			If (ScalarMagPotential) 
-			{ Name SP; NameOfFormulation FrmPhi; }
+				{ Name SP; NameOfFormulation FrmPhi; }
 			Else
-			{ Name SA; NameOfFormulation FrmA; }
+				{ Name SA; NameOfFormulation FrmA; }
 			EndIf
 		}
 		Operation {
 			Generate[SV]; Solve[SV]; SaveSolution[SV];
 			If (ScalarMagPotential) 
-			Generate[SP]; Solve[SP]; SaveSolution[SP];
+				Generate[SP]; Solve[SP]; SaveSolution[SP];
 			Else
-			Generate[SA]; Solve[SA]; SaveSolution[SA];
+				Generate[SA]; Solve[SA]; SaveSolution[SA];
 			EndIf
 		}
 	}
@@ -163,7 +174,7 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name We2; Value {Integral {Type Global; 
-				[ coef/2 * rho * {v} ]; 
+				[ coef/2 * rho_f * {v} ]; // rho_f for linear dielectrics (Griffiths 5ed p.198)
 				Integration I1; Jacobian J1; In VolSphere;}}
 			}
 
@@ -200,7 +211,7 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name Lc2; Value {Integral {Type Global; // needs epsr=1
-			// [ coef*Cross[ r[], rho * {a} ] ]; // needs gauging. Assumes rho=rho_free
+			// [ coef*Cross[ r[], rho_f * {a} ] ]; // needs gauging; assumes rho=rho_free
 				[ Vector[0,0,0] ]; // can't use above line here since no A
 				Integration I1; Jacobian J1; In VolSphere;}}
 			}
@@ -236,7 +247,7 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name Lc2; Value {Integral {Type Global; // needs epsr=1
-				[ coef*Cross[ r[], rho * {a} ] ]; // needs gauging. Assumes rho=rho_free
+				[ coef*Cross[ r[], rho_f * {a} ] ]; // needs gauging; assumes rho=rho_free
 				Integration I1; Jacobian J1; In VolSphere;}}
 			}
 
@@ -278,19 +289,19 @@ PostOperation {
 			" Wh2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 
 			If (iabc == 0)
-			Print[ Lc, OnGlobal, StoreInVariable $Lc ]; 
-			Print[ {CompY[$Lc], Lc[], (CompY[$Lc]-Lc[])/Lc[]*10^6}, Format 
-			" LcY = %.8g [kg*m^2/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+				Print[ Lc, OnGlobal, StoreInVariable $Lc ]; 
+				Print[ {CompY[$Lc], Lc[], (CompY[$Lc]-Lc[])/Lc[]*10^6}, Format 
+				" LcY = %.8g [kg*m^2/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 			Else
-			Echo[ " Lcy = [needs iabc = 0]", File > "output.txt" ];
+				Echo[ " Lcy = [needs iabc = 0]", File > "output.txt" ];
 			EndIf
 
 			If (epsR == 1 && ScalarMagPotential == 0)
-			Print[ Lc2, OnGlobal, StoreInVariable $Lc2 ]; 
-			Print[ {CompY[$Lc2], Lc[], (CompY[$Lc2]-Lc[])/Lc[]*10^6}, Format 
-			" LcY2 = %.8g [kg*m^2/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+				Print[ Lc2, OnGlobal, StoreInVariable $Lc2 ]; 
+				Print[ {CompY[$Lc2], Lc[], (CompY[$Lc2]-Lc[])/Lc[]*10^6}, Format 
+				" LcY2 = %.8g [kg*m^2/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 			Else
-			Echo[ " Lcy2 = [needs epsR = 1 and ScalarMagPotential = 0]", File > "output.txt" ];
+				Echo[ " Lcy2 = [needs epsR = 1 and ScalarMagPotential = 0]", File > "output.txt" ];
 			EndIf
 
 			//Print[ Lc, OnGlobal, File > "output.txt" ];

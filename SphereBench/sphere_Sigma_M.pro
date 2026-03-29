@@ -1,8 +1,8 @@
 // How to run: see main.pro
 
 // Conducting or non-conducting (sigma) and magnetized full sphere
+// Lc2 not applicable in phi formulation since no A. Ok in A formulation, and no Lagrange mult nor mixed needed since A happens to be parallel to the surface of the sphere
 // epsilon_r = mu_r = 1 for momentum
-// Lc2 not applicable in phi formulation since no A. Ok in A formulation, and no lag mult nor mixed needed since A happens to be parallel to the surface of the sphere!
 
 
 ScalarMagPotential = 0; // 1 = scalar mag potential, 0 = vector mag potential
@@ -14,15 +14,24 @@ Group {
 
 Function {
 	M[VolSphere] = Mp * u[]; 
-	M[All] = Vector[0,0,0]; // All others
+	M[All] = Vector[0,0,0]; // All that are unassigned
 
-	Call EpsDirichletScalar; 
+	If (iabc == 1) 
+		Call EpsIabcDiriScal;
+		Call MuIabcDiriVectAndNeumScal;
+	EndIf
+	
+	eps[VolSphere] = eps0 * epsR;
+	mu[VolSphere]  = mu0  * muR;
+	
+	eps[All] = eps0; // All that are unassigned
+	mu[All]  = mu0; // All that are unassigned
 
 	// Exact results (for post analysis):
-	We[] = 2*Pi * rs^3 * sigma^2    / eps0; 
-	Wb[] = 4*Pi * rs^3 * Mp^2       * mu0 / (3*muR*(muR+2)); 
-	Wh[] = 2*Pi * rs^3 * Mp^2       * mu0 / (3*(muR+2)); 
-	Lc[] = 8*Pi * rs^4 * sigma * Mp * mu0 / (3*(muR+2)); 
+	We[] = 2*Pi * rs^3 * sigma_f^2    / eps0; 
+	Wb[] = 4*Pi * rs^3 * Mp^2         * mu0 / (3*muR*(muR+2)); 
+	Wh[] = 2*Pi * rs^3 * Mp^2         * mu0 / (3*(muR+2)); 
+	Lc[] = 8*Pi * rs^4 * sigma_f * Mp * mu0 / (3*(muR+2)); 
 }
 
 
@@ -93,7 +102,7 @@ Formulation {
 		Equation {
 			Integral { [ eps[] * Dof{d v}, {d v} ]; 
 			Integration I1; Jacobian J1; In VolAll; }
-			Integral{ [ -sigma, {v}]; // this works because when we add the weak equations for each region considered separately (VolSphere and VolExSphere), which are separated by SurSphere, we can consider SurSphere as a Neumann term for each side; when added, the two Neumann terms on SurSphere end up representing precisely the matching condition "n dot (D1-D2) = sigma"
+			Integral{ [ -sigma_f, {v}]; // this works because when we add the weak equations for each region considered separately (VolSphere and VolExSphere), which are separated by SurSphere, we can consider SurSphere as a Neumann term for each side; when added, the two Neumann terms on SurSphere end up representing precisely the matching condition "n dot (D1-D2) = sigma"
 			Integration I1; Jacobian J1; In SurSphere; }
 		}
 	} 
@@ -129,17 +138,17 @@ Resolution {
 		System {
 			{ Name SV; NameOfFormulation FrmV; }
 			If (ScalarMagPotential) 
-			{ Name SP; NameOfFormulation FrmPhi; }
+				{ Name SP; NameOfFormulation FrmPhi; }
 			Else
-			{ Name SA; NameOfFormulation FrmA; }
+				{ Name SA; NameOfFormulation FrmA; }
 			EndIf
 		}
 		Operation {
 			Generate[SV]; Solve[SV]; SaveSolution[SV];
 			If (ScalarMagPotential) 
-			Generate[SP]; Solve[SP]; SaveSolution[SP];
+				Generate[SP]; Solve[SP]; SaveSolution[SP];
 			Else
-			Generate[SA]; Solve[SA]; SaveSolution[SA];
+				Generate[SA]; Solve[SA]; SaveSolution[SA];
 			EndIf
 		}
 	}
@@ -163,7 +172,7 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name We2; Value {Integral {Type Global; 
-				[ coef/2 * sigma * {v} ]; 
+				[ coef/2 * sigma_f * {v} ]; // free charge density for linear dielectrics (Griffiths 5ed p.198)
 				Integration I1; Jacobian J1; In SurSphere;}}
 			}
 
@@ -200,7 +209,7 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name Lc2; Value {Integral {Type Global;
-			// [ coef*Cross[ r[], sigma * {a} ] ]; // needs gauging
+			// [ coef*Cross[ r[], sigma_f * {a} ] ]; // needs gauging; assumes sigma=sigma_free
 				[ Vector[0,0,0] ]; // can't use above line here since no A
 				Integration I1; Jacobian J1; In SurSphere;}}
 			}
@@ -235,7 +244,7 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name Lc2; Value {Integral {Type Global;
-				[ coef*Cross[ r[], sigma * {a} ] ]; // needs gauging. Lagrange mult or mixed formulation not needed since vecA happens to be parallel to surface, so we can use vecA directly in surface integral
+				[ coef*Cross[ r[], sigma_f * {a} ] ]; // needs gauging; assumes sigma=sigma_f; Lagrange mult or mixed formulation not needed since vecA happens to be parallel to surface, so we can use vecA directly in surface integral
 				Integration I1; Jacobian J1; In SurSphere;}}
 			}
 
@@ -277,19 +286,19 @@ PostOperation {
 			" Wh2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 
 			If (iabc == 0)
-			Print[ Lc, OnGlobal, StoreInVariable $Lc ]; 
-			Print[ {CompY[$Lc], Lc[], (CompY[$Lc]-Lc[])/Lc[]*10^6}, Format 
-			" LcY = %.8g [kg*m^2/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+				Print[ Lc, OnGlobal, StoreInVariable $Lc ]; 
+				Print[ {CompY[$Lc], Lc[], (CompY[$Lc]-Lc[])/Lc[]*10^6}, Format 
+				" LcY = %.8g [kg*m^2/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 			Else
-			Echo[ " Lcy = [needs iabc = 0]", File > "output.txt" ];
+				Echo[ " Lcy = [needs iabc = 0]", File > "output.txt" ];
 			EndIf
 
 			If (ScalarMagPotential == 0)
-			Print[ Lc2, OnGlobal, StoreInVariable $Lc2 ]; 
-			Print[ {CompY[$Lc2], Lc[], (CompY[$Lc2]-Lc[])/Lc[]*10^6}, Format 
-			" LcY2 = %.8g [kg*m^2/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+				Print[ Lc2, OnGlobal, StoreInVariable $Lc2 ]; 
+				Print[ {CompY[$Lc2], Lc[], (CompY[$Lc2]-Lc[])/Lc[]*10^6}, Format 
+				" LcY2 = %.8g [kg*m^2/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 			Else
-			Echo[ " Lcy2 = [needs ScalarMagPotential = 0]", File > "output.txt" ];
+				Echo[ " Lcy2 = [needs ScalarMagPotential = 0]", File > "output.txt" ];
 			EndIf
 
 			//Print[ Lc, OnGlobal, File > "output.txt" ];

@@ -2,7 +2,7 @@
 // * adjust the desired flags and constants here and in main_common.pro
 // * open this file (sphere.pro) in Gmsh
 // * press the Run button
-// * results are appended in output.txt
+// * results are appended to output.txt
 
 Include "main_common.pro";
 
@@ -29,16 +29,16 @@ DefineConstant[prob = {PROB_SPHERE_RHO_M, Name "Input/0Problem type",
 			PROB_FEYNMAN        = "Feynman"}}];
 
 // Simulation parameters
-epsR  = 3.1;   // relative permittivity (unitless)
-muR   = 1.6;   // relative permeability (unitless)
-Pp    = 5E-5;  // electric dipole moment per unit volume (C/m^2)
-Mp    = 3.2E5; // magnetic dipole moment per unit volume (A/m)
-rho   = 8E-5;  // volume charge density (C/m^3)
-V     = 100;   // electric potential (V)
-sigma = V * eps0 / rs; // surface charge density (C/m^2)
-omega = 1E3;   // angular speed (rad/s)
-axis  = 2;     // Mp and omega axis (1=X, 2=Y, 3=Z)
-axisP = (axis == 3 ? 1 : axis + 1); // Pp axis (1=X, 2=Y, 3=Z)
+epsR    = 3.1;   // relative permittivity (unitless)
+muR     = 1.6;   // relative permeability (unitless)
+Pp      = 5E-5;  // permanent electric dipole moment per unit volume (C/m^2)
+Mp      = 3.2E5; // permanent magnetic dipole moment per unit volume (A/m)
+rho_f   = 8E-5;  // volume free charge density (C/m^3)
+V       = 100;   // electric potential (V)
+sigma_f = V * eps0 / rs; // surface free charge density (C/m^2)
+omega   = 1E3;   // angular speed (rad/s)
+axis    = 2;     // Mp and omega axis (1=X, 2=Y, 3=Z)
+axisP   = (axis == 3 ? 1 : axis + 1); // Pp axis (1=X, 2=Y, 3=Z)
 
 
 Group {
@@ -77,36 +77,31 @@ Group {
 
 
 Function {
-	mu[VolSphere] = mu0*muR;
-	mu[VolCylinder] = mu0;
-	mu[VolVacInt] = mu0;
-	// Dirichlet-vector and Neumann-scalar:
-	mu[VolExt1]  = (iabc ? 0.801713 : 1) * mu0; 
-	mu[VolExt2]  = (iabc ? 2.88849 : 1) * mu0;
-	mu[VolExt3]  = (iabc ? 0.163862 : 1) * mu0;
-	mu[VolExt4]  = (iabc ? 37.8756 : 1) * mu0;
-
-	eps[VolSphere] = eps0*epsR;
-	eps[VolCylinder] = eps0;
-	eps[VolVacInt] = eps0;
-	// VolExt1-VolExt4 done separately in subproblems via calls of:
-	Macro EpsNeumannScalar
-		eps[VolExt1] = (iabc ? 0.801713 : 1) * eps0;
-		eps[VolExt2] = (iabc ? 2.88849 : 1) * eps0;
-		eps[VolExt3] = (iabc ? 0.163862 : 1) * eps0;
-		eps[VolExt4] = (iabc ? 37.8756 : 1) * eps0;
+	// IABC coefficients
+	Macro MuIabcDiriVectAndNeumScal
+		mu[VolExt1]  = mu0 * 0.801713; 
+		mu[VolExt2]  = mu0 * 2.88849;
+		mu[VolExt3]  = mu0 * 0.163862;
+		mu[VolExt4]  = mu0 * 37.8756;
 	Return
-	Macro EpsDirichletScalar
-		eps[VolExt1] = (iabc ? 1.5363 : 1) * eps0;
-		eps[VolExt2] = (iabc ? 0.2472 : 1) * eps0;
-		eps[VolExt3] = (iabc ? 14.892 : 1) * eps0;
-		eps[VolExt4] = (iabc ? 0.0872062 : 1) * eps0;
+	Macro EpsIabcNeumScal
+		eps[VolExt1] = eps0 * 0.801713;
+		eps[VolExt2] = eps0 * 2.88849;
+		eps[VolExt3] = eps0 * 0.163862;
+		eps[VolExt4] = eps0 * 37.8756;
+	Return
+	Macro EpsIabcDiriScal
+		eps[VolExt1] = eps0 * 1.5363;
+		eps[VolExt2] = eps0 * 0.2472;
+		eps[VolExt3] = eps0 * 14.892;
+		eps[VolExt4] = eps0 * 0.0872062;
 	Return
 
+	// Vectors
 	u[]  = Vector[axis  == 1, axis  == 2, axis  == 3];// for Mp and omega vectors 
 	uP[] = Vector[axisP == 1, axisP == 2, axisP == 3];// for Pp vector
 	c[]  = Vector[xs, ys, zs]; // Center of sphere
-	r[]  = XYZ[] - c[];
+	r[]  = XYZ[] - c[]; // Position from center of sphere
 
 	// Position vector for angular momentum calculation (when shell transform)
 	//  angular momentum is calculated about the center of the sphere
@@ -115,19 +110,17 @@ Function {
 		XYZ[] * rb*(re-rb) / (nXYZ[]*(re-nXYZ[])) // shell transform
 		:
 		XYZ[]; // no transform
-	tr[] = tXYZ[] - c[];
+	tr[] = tXYZ[] - c[]; // Transformed position vector from center of sphere
 }
 
 
 Jacobian {
 	{ Name J1; Case { 
 		{ Region SurSphere; Jacobian Sur; }
-		{ Region #{VolAll,-VolExts}; Jacobian Vol; }
-		If (iabc)
-			{ Region VolExts; Jacobian Vol; }
-		Else
-			{ Region VolExts; Jacobian VolSphShell{rb, re}; }
+		If (iabc == 0)
+			{ Region VolExts; Jacobian VolSphShell{rb, re}; }// Shell transformation when not IABC
 		EndIf
+		{ Region All; Jacobian Vol; }// All that are unassigned
 	}}      
 }
 

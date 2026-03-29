@@ -4,7 +4,7 @@
 
 // Notes for generating the Feynman image
 
-// parameters: iabc = 0, quarters = 2, order = 1, epsR = 1, muR = 1
+// parameters: iabc = 0, quarters = 2, order = 1
 // in .geo: comment out the scaled mesh and use "MeshSize{:} = 0.2*cm;"
 // After main.pro is loaded, select the Feynman problem type
 // Press the run button
@@ -25,7 +25,13 @@ Function {
 	M[VolCylinder] = Mp * u[]; 
 	M[All] = Vector[0,0,0]; // All others
 
-	Call EpsDirichletScalar; 
+	If (iabc == 1) 
+		Call EpsIabcDiriScal;
+		Call MuIabcDiriVectAndNeumScal;
+	EndIf
+	
+	eps[All] = eps0; // All that are unassigned
+	mu[All]  = mu0; // All that are unassigned
 }
 
 
@@ -69,7 +75,7 @@ Formulation {
 		Equation {
 			Integral { [ eps[] * Dof{d v}, {d v} ]; 
 			Integration I1; Jacobian J1; In VolAll; }
-			Integral { [ -rho, {v} ]; 
+			Integral { [ -rho_f, {v} ]; 
 			Integration I1; Jacobian J1; In VolSphere; }
 		}
 	}  
@@ -137,12 +143,11 @@ PostOperation {
 			Print[{prob, quarters, axis, iabc, epsR, muR}, Format "Prob=%g, Quarters=%g, Axis=%g, IABC=%g, epsR=%g, muR=%g:", File > "output.txt"]; 
 
 			If (iabc == 0)
-			Print[ Lc, OnGlobal, StoreInVariable $Lc ]; 
-			Print[ {CompY[$Lc]}, Format " LcY = %.8g [kg*m^2/s]", File > "output.txt" ];
+				Print[ Lc, OnGlobal, StoreInVariable $Lc ]; 
+				Print[ {CompY[$Lc]}, Format " LcY = %.8g [kg*m^2/s]", File > "output.txt" ];
 			Else
-			Echo[ " LcY = [needs iabc = 0]", File > "output.txt" ];
+				Echo[ " LcY = [needs iabc = 0]", File > "output.txt" ];
 			EndIf
-
 
 			// Echo[ "Lc = ", Format Table, File > "output.txt"] ;
 			// Print[ Lc, OnGlobal, Format Table, File > "output.txt" ];

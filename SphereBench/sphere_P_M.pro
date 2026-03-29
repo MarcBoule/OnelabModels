@@ -19,12 +19,21 @@ Group {
 
 Function {
 	P[VolSphere] = Pp * uP[];
-	P[All] = Vector[0,0,0]; // All others
+	P[All] = Vector[0,0,0]; // All that are unassigned
 
 	M[VolSphere] = Mp * u[]; 
-	M[All] = Vector[0,0,0]; // All others
+	M[All] = Vector[0,0,0]; // All that are unassigned
 
-	Call EpsNeumannScalar; 
+	If (iabc == 1) 
+		Call EpsIabcDiriScal;
+		Call MuIabcDiriVectAndNeumScal;
+	EndIf
+
+	eps[VolSphere] = eps0 * epsR;
+	mu[VolSphere]  = mu0  * muR;
+	
+	eps[All] = eps0; // All that are unassigned
+	mu[All]  = mu0; // All that are unassigned
 
 	// Exact results (for post analysis):
 	We[] = 2*Pi * rs^3 * Pp^2  / (3*eps0*(epsR+2));
@@ -138,17 +147,17 @@ Resolution {
 		System {
 			{ Name SV; NameOfFormulation FrmV; }
 			If (ScalarMagPotential) 
-			{ Name SP; NameOfFormulation FrmPhi; }
+				{ Name SP; NameOfFormulation FrmPhi; }
 			Else
-			{ Name SA; NameOfFormulation FrmA; }
+				{ Name SA; NameOfFormulation FrmA; }
 			EndIf
 		}
 		Operation {
 			Generate[SV]; Solve[SV]; SaveSolution[SV];
 			If (ScalarMagPotential) 
-			Generate[SP]; Solve[SP]; SaveSolution[SP];
+				Generate[SP]; Solve[SP]; SaveSolution[SP];
 			Else
-			Generate[SA]; Solve[SA]; SaveSolution[SA];
+				Generate[SA]; Solve[SA]; SaveSolution[SA];
 			EndIf
 		}
 	}
@@ -311,11 +320,11 @@ PostOperation {
 			" Wh2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 
 			If (iabc == 0)
-			Print[ p, OnGlobal, StoreInVariable $p ];
-			Print[ {CompX[$p], p[], (CompX[$p]-p[])/p[]*10^6}, Format 
-			" pX  = %.8g [kg*m/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+				Print[ p, OnGlobal, StoreInVariable $p ];
+				Print[ {CompX[$p], p[], (CompX[$p]-p[])/p[]*10^6}, Format 
+				" pX  = %.8g [kg*m/s] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 			Else
-			Echo[ " pX  = [needs iabc = 0]", File > "output.txt" ];
+				Echo[ " pX  = [needs iabc = 0]", File > "output.txt" ];
 			EndIf
 
 			Print[ p2, OnGlobal, StoreInVariable $p2 ]; 

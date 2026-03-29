@@ -5,3 +5,11 @@
 /ShellAndKelvin/*.res
 /ShellAndKelvin/*.txt
 /ShellAndKelvin/*.pos
+
+/SphereBench/*.msh
+/SphereBench/*.db
+/SphereBench/*.json
+/SphereBench/*.pre
+/SphereBench/*.res
+/SphereBench/*.pos
+/SphereBench/output.txt
