@@ -1,12 +1,3 @@
-Prob=1, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6, Phi=0:
- We  = 5.3717167e-08 [J] (analyt 5.3718125e-08, -17.8 ppm)
- We2 = 5.3717167e-08 [J] (analyt 5.3718125e-08, -17.8 ppm)
- Wb  = 0.093577031 [J] (analyt 0.093578471, -15.4 ppm)
- Wb2 = 0.093577031 [J] (analyt 0.093578471, -15.4 ppm)
- Wh  = 0.074864073 [J] (analyt 0.074862777, 17.3 ppm)
- Wh2 = 0.074864073 [J] (analyt 0.074862777, 17.3 ppm)
- LcY  = 2.1733986e-15 [kg*m^2/s] (analyt 2.1734355e-15, -17 ppm)
- LcY2  = 1.4972308e-15 [kg*m^2/s] (analyt 2.1734355e-15, -3.11e+05 ppm)
 Prob=1, Quarters=1, Axis=2, IABC=0, epsR=1, muR=1.6, Phi=0:
  We  = 6.0554004e-08 [J] (analyt 6.0554978e-08, -16.1 ppm)
  We2 = 6.0554004e-08 [J] (analyt 6.0554978e-08, -16.1 ppm)
@@ -14,9 +5,17 @@ Prob=1, Quarters=1, Axis=2, IABC=0, epsR=1, muR=1.6, Phi=0:
  Wb2 = 0.093577031 [J] (analyt 0.093578471, -15.4 ppm)
  Wh  = 0.074864073 [J] (analyt 0.074862777, 17.3 ppm)
  Wh2 = 0.074864073 [J] (analyt 0.074862777, 17.3 ppm)
- LcY  = 1.4972301e-15 [kg*m^2/s] (analyt 1.4972555e-15, -17 ppm)
- LcY2  = 1.4972308e-15 [kg*m^2/s] (analyt 1.4972555e-15, -16.5 ppm)
-
+ LcY = 1.4972301e-15 [kg*m^2/s] (analyt 1.4972555e-15, -17 ppm)
+ LcY2 = 1.4972308e-15 [kg*m^2/s] (analyt 1.4972555e-15, -16.5 ppm)
+Prob=1, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6, Phi=0:
+ We  = 5.3717167e-08 [J] (analyt 5.3718125e-08, -17.8 ppm)
+ We2 = 5.3717167e-08 [J] (analyt 5.3718125e-08, -17.8 ppm)
+ Wb  = 0.093577031 [J] (analyt 0.093578471, -15.4 ppm)
+ Wb2 = 0.093577031 [J] (analyt 0.093578471, -15.4 ppm)
+ Wh  = 0.074864073 [J] (analyt 0.074862777, 17.3 ppm)
+ Wh2 = 0.074864073 [J] (analyt 0.074862777, 17.3 ppm)
+ LcY = 2.1733986e-15 [kg*m^2/s] (analyt 2.1734355e-15, -17 ppm)
+ Lcy2 = [needs epsR = 1 and ScalarMagPotential = 0]
 Prob=2, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6, Phi=0:
  We  = 5.5633456e-09 [J] (analyt 5.5632503e-09, 17.1 ppm)
  We2 = 5.5633456e-09 [J] (analyt 5.5632503e-09, 17.1 ppm)
@@ -24,9 +23,8 @@ Prob=2, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6, Phi=0:
  Wb2 = 0.093577031 [J] (analyt 0.093578471, -15.4 ppm)
  Wh  = 0.074864073 [J] (analyt 0.074862777, 17.3 ppm)
  Wh2 = 0.074864073 [J] (analyt 0.074862777, 17.3 ppm)
- LcY  = 8.2856217e-16 [kg*m^2/s] (analyt 8.2856136e-16, 0.976 ppm)
- LcY2  = 8.2887699e-16 [kg*m^2/s] (analyt 8.2856136e-16, 381 ppm)
-
+ LcY = 8.2856217e-16 [kg*m^2/s] (analyt 8.2856136e-16, 0.976 ppm)
+ LcY2 = 8.2887699e-16 [kg*m^2/s] (analyt 8.2856136e-16, 381 ppm)
 Prob=3, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6, Phi=0:
  We  = 5.5631497e-09 [J] (analyt 5.5632503e-09, -18.1 ppm)
  We2 = 5.5631497e-09 [J] (analyt 5.5632503e-09, -18.1 ppm)
@@ -34,9 +32,8 @@ Prob=3, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6, Phi=0:
  Wb2 = 0.093577031 [J] (analyt 0.093578471, -15.4 ppm)
  Wh  = 0.074864073 [J] (analyt 0.074862777, 17.3 ppm)
  Wh2 = 0.074864073 [J] (analyt 0.074862777, 17.3 ppm)
- LcY  = 8.2854767e-16 [kg*m^2/s] (analyt 8.2856136e-16, -16.5 ppm)
- LcY2  = 8.2854832e-16 [kg*m^2/s] (analyt 8.2856136e-16, -15.7 ppm)
-
+ LcY = 8.2854767e-16 [kg*m^2/s] (analyt 8.2856136e-16, -16.5 ppm)
+ LcY2 = 8.2854832e-16 [kg*m^2/s] (analyt 8.2856136e-16, -15.7 ppm)
 Prob=4, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6, Phi=0:
  We  = 0.0001159495 [J] (analyt 0.00011595239, -25 ppm)
  We2 = 0.0001159495 [J] (analyt 0.00011595239, -25 ppm)
@@ -49,20 +46,17 @@ Prob=4, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6, Phi=0:
  pX  = 1.3761148e-11 [kg*m/s] (analyt 1.376154e-11, -28.5 ppm)
  pX2 = 1.3761146e-11 [kg*m/s] (analyt 1.376154e-11, -28.6 ppm)
  pX3 = 1.376156e-11 [kg*m/s] (analyt 1.376154e-11, 1.47 ppm)
-
-Prob=5, Quarters=1, Axis=2, IABC=0, epsR=1, muR=1:
+Prob=5, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6:
  We  = 6.0554004e-08 [J] (analyt 6.0554978e-08, -16.1 ppm)
  We2 = 6.0554004e-08 [J] (analyt 6.0554978e-08, -16.1 ppm)
  Wb  = 6.4167368e-24 [J] (analyt 6.4168095e-24, -11.3 ppm)
  Wb2 = 6.4167368e-24 [J] (analyt 6.4168095e-24, -11.3 ppm)
- LcY  = 1.2833435e-26 [kg*m^2/s] (analyt 1.2833619e-26, -14.3 ppm)
+ LcY = 1.2833435e-26 [kg*m^2/s] (analyt 1.2833619e-26, -14.3 ppm)
  LcY2 = 1.2833474e-26 [kg*m^2/s] (analyt 1.2833619e-26, -11.3 ppm)
-
-Prob=6, Quarters=1, Axis=2, IABC=0, epsR=1, muR=1:
+Prob=6, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6:
  We  = 5.5631498e-09 [J] (analyt 5.5632503e-09, -18.1 ppm)
  We2 = 5.5631498e-09 [J] (analyt 5.5632503e-09, -18.1 ppm)
  Wb  = 1.3755275e-24 [J] (analyt 1.3755446e-24, -12.5 ppm)
  Wb2 = 1.3755275e-24 [J] (analyt 1.3755446e-24, -12.5 ppm)
- LcY  = 2.751053e-27 [kg*m^2/s] (analyt 2.7510892e-27, -13.2 ppm)
- LcY2  = 2.751055e-27 [kg*m^2/s] (analyt 2.7510892e-27, -12.5 ppm)
-
+ LcY = 2.751053e-27 [kg*m^2/s] (analyt 2.7510892e-27, -13.2 ppm)
+ LcY2 = 2.751055e-27 [kg*m^2/s] (analyt 2.7510892e-27, -12.5 ppm)

@@ -1,7 +1,7 @@
 // How to run: see main.pro
 
 // Non-conducting uniformly charged and magnetized full sphere
-// Needs epsR=1 when momentum, since Lc2 assumes rho = rho_f (formula requires total charge density, Zangwill prob. 15.24a)
+// Needs epsR=1 when momentum (see L24 below), since Lc2 assumes rho = rho_f (formula requires total charge density, Zangwill prob. 15.24a)
 // Lc2 not applicable in phi formulation since no A
 
 
@@ -21,7 +21,7 @@ Function {
 		Call MuIabcDiriVectAndNeumScal;
 	EndIf
 	
-	//epsR = 1; // uncomment this line when momentum is wanted
+	// epsR = 1; // uncomment this line when momentum is wanted
 	eps[VolSphere] = eps0 * epsR;
 	mu[VolSphere]  = mu0  * muR;
 	

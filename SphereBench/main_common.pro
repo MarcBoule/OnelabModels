@@ -2,7 +2,7 @@
 
 // Geometrical constants (Gmsh and GetDP)
 
-iabc     = 1;    // 1 = IABC, 0 = shell
+iabc     = 0;    // 1 = IABC, 0 = shell
 quarters = 1;    // 1 = quarter-of-domain, 2 = half, 4 = full
 order    = 2;    // geometrical element order and basis function interpolation order (1 or 2)
 
