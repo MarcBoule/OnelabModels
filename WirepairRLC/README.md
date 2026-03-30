@@ -1,6 +1,6 @@
 # Wirepair RLC
 
-This folder contains the [ONELAB](https://onelab.info/) simulation code that can be used to compute the DC (or low frequency) [RLC parameters of a two wire line using a 3D FEM simulation](https://arxiv.org/abs/2601.09829).
+This folder contains the [ONELAB](https://onelab.info/) simulation code that can be used to compute the DC (or low frequency) [RLC parameters of a two wire line using a 3D FEM simulation](https://arxiv.org/pdf/2601.09829).
 
 To run the simulation, open `wirepair.pro` in Gmsh and press the Run button.
 
