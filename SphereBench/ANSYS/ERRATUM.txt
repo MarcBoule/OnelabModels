@@ -1,0 +1,15 @@
+*** Update regarding manuscript ***
+
+ANSYS _can_ use the mesh of one design in another design.
+
+Status of the ANSYS simulations regarding the momentum simulations:
+
+The open space integrals do not apply with IABC, and the finite space integrals can be done as follows:
+
+* V_M: a new file was added showing the angular momentum calculation with results from both V and M simulations
+ 
+* rho_M, sigma_M, rho_J and sigma_K: these can actually be done in the magnetic simulations (no mixed E&M is required) since rho and sigma are imposed and such values can be used directly in postprocessing (only A is needed). These results are TODO (in progress).
+
+* P_M: can't be done since permanent polarization can't be specified in ANSYS Maxwell
+
+Adding these results to table V is planned for the next revision of the manuscript
