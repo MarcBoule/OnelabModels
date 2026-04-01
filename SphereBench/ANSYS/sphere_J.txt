@@ -1,16 +1,21 @@
 127620 triangles, 12th pass
 
+energy (Wb=Wh):
+
 Scl : 6.41652203040608E-24
 Scl : *(RZIntegrate(Volume(Circle1), Dot(<0,Aphi,0>, <0,Jphi,0>)), 0.5)
 
 Scl : 6.41652200941661E-24
 Scl : *(RZIntegrate(Volume(AllObjects), Dot(<Hr,0,Hz>, <Br,0,Bz>)), 0.5)
 
-
-others:
-
 Scl : 6.31668303901966E-24
 Scl : RZIntegrate(Volume(AllObjects), <Energy>)
 
 Scl : 6.31668303901966E-24
 Scl : RZIntegrate(Volume(AllObjects), <CoEnergy>)
+
+
+momentum (L):
+
+Scl : 1.28330440589944E-26
+Scl : RZIntegrate(Volume(Circle1), *(ScalarZ(Cross(<R, PHI, Z>, <0,Aphi,0>)), 8E-05))

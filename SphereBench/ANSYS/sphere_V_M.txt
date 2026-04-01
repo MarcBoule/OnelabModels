@@ -1,8 +1,10 @@
-Momentum
+momentum (L):
 
-* run magnetostatic and write A to file in fields calculator
-* in electrostatic, Analysis->Setup1->Properties->Solver->ImportMesh (check and setup to use magnetostatic design's mesh)
-* run magnetostatic
+* clone sphere_M.aedt
+* duplicate the (magnetostatic) design and change the duplicate to electrostatics (adjust all parameters as required)
+* in electrostatic design, Analysis->Setup1->Properties->Solver->ImportMesh (check and setup to use magnetostatic design's mesh)
+* run magnetostatic design and write A to file in fields calculator
+* run electrostatic design and post-process:
 
 Scl : -8.28575266361224E-16
 Scl : RZIntegrate(Edge(Circle1), *(ScalarZ(Cross(<R, PHI, Z>, <0,Aphi,0> AOmega.fld)), Dot(<Dr,0,Dz>, LineNormal)))
