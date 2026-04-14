@@ -172,7 +172,7 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name We2; Value {Integral {Type Global; 
-				[ coef/2 * sigma_f * {v} ]; // free charge density for linear dielectrics (Griffiths 5ed p.198)
+				[ coef/2 * sigma_f * {v} ]; // sigma = sigma_f
 				Integration I1; Jacobian J1; In SurSphere;}}
 			}
 

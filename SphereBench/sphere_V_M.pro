@@ -186,7 +186,7 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolExSphere;}}
 			}
 			{ Name We2; Value {Integral {Type Global; 
-				[ coef/2 * {lam} * {v} ]; // free charge density for linear dielectrics (Griffiths 5ed p.198)
+				[ coef/2 * {lam} * {v} ]; // sigma = lam (Lagrange multiplier)
 				Integration I1; Jacobian J1; In SurSphere;}}
 			}
 
