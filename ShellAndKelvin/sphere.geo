@@ -49,7 +49,7 @@ Else // Kelvin
 
 
 	BooleanDifference(3) = { Volume{2}; Delete; }{ Volume{1}; Delete; };
-	Sphere(4) = {xe,0,0, rb, 0, Pi/2, Pi/2};// bnd ext
+	Sphere(4) = {0,ye,0, rb, 0, Pi/2, Pi/2};// bnd ext
 
 	If (Flag_3D == 1)
 	
@@ -60,7 +60,7 @@ Else // Kelvin
 		Physical Surface("Bnd int", 121) = {1};
 		Physical Surface("Bnd ext", 122) = {6};
 
-		Periodic Surface {6} = {1} Translate {xe, 0, 0};
+		Periodic Surface {6} = {1} Translate {0, ye, 0};
 
 		Physical Point("Pnt inf", 140) = {10};
 
@@ -77,7 +77,7 @@ Else // Kelvin
 		Physical Curve("Bnd int", 121) = {26};
 		Physical Curve("Bnd ext", 122) = {23};
 
-		Periodic Curve {23} = {26} Translate {xe, 0, 0};
+		Periodic Curve {23} = {26} Translate {0, ye, 0};
 
 		Physical Point("Pnt inf", 140) = {17};
 	

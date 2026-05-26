@@ -24,7 +24,7 @@ Constraint {
 		Else // Kelvin
 			{ Region    SurBndExt; Type Link; // Kelvin link
 			  RegionRef SurBndInt;  Coefficient 1.0;
-			  Function  Vector[ X[] - xe, Y[], Z[] ]; }
+			  Function  Vector[ X[], Y[] - ye, Z[] ]; }
 			{ Region PntInf; Type Assign; Value 0.0; }
 		EndIf
 		{ Region SurCond; Type Assign; Value vCond; }
@@ -51,14 +51,14 @@ Jacobian {
 			If(Flag_Shell == 1)
 				{ Region VolExt; Jacobian VolSphShell{rb,re}; }
 			Else // Kelvin
-				{ Region VolExt; Jacobian VolSphShell{rb,0, xe, 0, 0}; }
+				{ Region VolExt; Jacobian VolSphShell{rb,0, 0, ye, 0}; }
 			EndIf
 		Else // 2D
 			{ Region VolInt; Jacobian VolAxiSqu; }
 			If(Flag_Shell == 1)
 				{ Region VolExt; Jacobian VolAxiSquSphShell{rb,re}; }
 			Else // Kelvin
-				{ Region VolExt; Jacobian VolAxiSquSphShell{rb,0, xe, 0, 0}; }
+				{ Region VolExt; Jacobian VolAxiSquSphShell{rb,0, 0, ye, 0}; }
 			EndIf
 		EndIf
 	}}
@@ -112,8 +112,6 @@ PostProcessing {
 	}
 }
 
-e = rb/1000;
-f3d = 1;
 PostOperation {
 	If(Flag_Shell == 1)
 		outstr = "Output/Cap (Shell)";

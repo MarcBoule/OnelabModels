@@ -92,12 +92,12 @@ Relative difference in the capacitance of the simulation, when compared to the a
 | Order:	| Transform:	| Num int pts:	| 			| Dofs:	|
 | ---- | ---- | ---- | ---- | ---- |
 |			|  				| Minimum		| Template	| 		|
-| First		| Kelvin		| 66.1%			| 66.1%		| 3023	|
+| First		| Kelvin		| 0.665%		| 0.862%	| 3023	|
 | First		| Shell			| 0.223%		| 1.36%		| 3601	|
-| Second	| Kelvin		| 66.0%			| 66.0%		| 3178	|
+| Second	| Kelvin		| -0.222%		| -0.0580%	| 3174	|
 | Second	| Shell			| 0.0000965%	| 0.000465%	| 3802	|
 
-Comments: The shell transformation is clearly preferable here and the axisymmetric Kelvin transformation requires further considerations.
+Comments: The shell transformation is preferable here for second order simulations.
 
 
 <a id="2Dplanar"></a>
@@ -127,7 +127,7 @@ From the above results, the following observations can be made:
 
 * The Kelvin transformation works quite well in the 3D-Cylindrical and 2D-Planar cases: it seems much better than the shell transformation in first order simulations, and is comparable to the shell transformation in second order simulations.
 
-* The Kelvin transformation is incomplete for the 3D-Spherical and 2D-Axisymmetric cases and further work is required in either the formulation or the GetDP source code.
+* The Kelvin transformation is not as precise in second order simulations for the 3D-Spherical and 2D-Axisymmetric cases.
 
 * The number of integration points also has an effect in certain scenarios: choosing the theoretical minimum number of points is sometimes advantageous (sometimes by a wide margin), while in other cases the values from the template show a slight improvement.
 
