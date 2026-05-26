@@ -45,17 +45,14 @@ FunctionSpace {
 Jacobian {
 	{ Name J1; Case { 
 		{ Region VolInt; Jacobian Vol; }
-		If (Flag_3D == 1)
-			If(Flag_Shell == 1)
-				{ Region VolExt; Jacobian VolCylShell{rb,re}; }
-			Else // Kelvin
+		If (Flag_Shell == 1)
+			{ Region VolExt; Jacobian VolCylShell{rb,re}; } 
+		Else // Kelvin	
+			If (Flag_3D == 1)
 				{ Region VolExt; Jacobian VolCylShell{rb,0, 3, xe, 0, 0}; }
-			EndIf
-		Else // 2D
-			If(Flag_Shell == 1)
-				{ Region VolExt; Jacobian VolSphShell{rb,re}; }
-			Else // Kelvin
-				{ Region VolExt; Jacobian VolSphShell{rb,0, xe, 0, 0}; }
+			Else // 2D
+				{ Region VolExt; Jacobian VolCylShell{rb,0,    xe, 0, 0}; }
+				// Since VolCylShell reverts to VolSphShell in 2D, can't have axis parameter:
 			EndIf
 		EndIf
 	}}
