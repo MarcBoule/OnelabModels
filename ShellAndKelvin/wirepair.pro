@@ -107,7 +107,6 @@ PostProcessing {
 	}
 }
 
-e = rb/1000;
 PostOperation {
 	If(Flag_Shell == 1)
 		outstr = "Output/Cap (Shell)";
