@@ -1,6 +1,6 @@
 # Shell and Kelvin transformation benchmarking
 
-This directory contains examples for studying the Kelvin (inversion) and shell transformations in [GetDP](https://getdp.info/). Support for the Kelvin transformation was added in the development version of GetDP in early march 2025, thus a version _greater_ than 3.5.0 of GetDP is required (or a development version, until such a version is released). The examples cover the following cases on Form0 (scalar potential) function spaces:
+This directory contains examples for studying the Kelvin (inversion) and shell transformations in [GetDP](https://getdp.info/). Support for the Kelvin transformation was added in the development version of GetDP in early March 2025, thus a version _greater_ than 3.5.0 of GetDP is required (or a development version, until such a version is released). The examples cover the following cases on Form0 (scalar potential) function spaces:
 
 * [3D-Spherical](#3Dsperical)
 
@@ -115,7 +115,7 @@ Relative difference in the capacitance of the simulation, when compared to the a
 | Second	| Kelvin		| 0.000619%		| 0.000545%	| 2971	|
 | Second	| Shell			| 0.000630%		| 0.000565%	| 3647	|
 
-Comments: the first order Kelvin simulation is actually more accurate than the second order simulation, which is unexpected and perhaps only circumstantial.
+Comments: the fact that the first order Kelvin simulation is more accurate than the second order simulation is only circumstantial, reducing the mesh to 0.03 increases the relative difference by two orders of magnitude in the first line of the table.
 
 
 
