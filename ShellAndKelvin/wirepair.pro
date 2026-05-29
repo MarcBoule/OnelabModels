@@ -52,7 +52,8 @@ Jacobian {
 				{ Region VolExt; Jacobian VolCylShell{rb,0, 3, xe, 0, 0}; }
 			Else // 2D
 				{ Region VolExt; Jacobian VolCylShell{rb,0,    xe, 0, 0}; }
-				// Since VolCylShell reverts to VolSphShell in 2D, can't have axis parameter:
+				// Since VolCylShell reverts to VolSphShell in 2D, can't have axis parameter
+				// "Vol;" can also simply be used in 2D planar or 3D cylindrical Kelvin
 			EndIf
 		EndIf
 	}}
@@ -106,7 +107,6 @@ PostProcessing {
 	}
 }
 
-e = rb/1000;
 PostOperation {
 	If(Flag_Shell == 1)
 		outstr = "Output/Cap (Shell)";
