@@ -14,15 +14,17 @@ coef = 4.0 / quarters;   // for post-processing integrals
 PROB_SPHERE_RHO_M   = 1;
 PROB_SPHERE_V_M     = 2;
 PROB_SPHERE_SIGMA_M = 3;
-PROB_SPHERE_P_M     = 4;
-PROB_SPHERE_RHO_J   = 5;
-PROB_SPHERE_SIGMA_K = 6;
-PROB_FEYNMAN        = 7;
+PROB_SPHERE_Q_M     = 4;
+PROB_SPHERE_P_M     = 5;
+PROB_SPHERE_RHO_J   = 6;
+PROB_SPHERE_SIGMA_K = 7;
+PROB_FEYNMAN        = 8;
 
 DefineConstant[prob = {PROB_SPHERE_RHO_M, Name "Input/0Problem type",
 	Choices{PROB_SPHERE_RHO_M   = "Sphere Rho,M",
 			PROB_SPHERE_V_M     = "Sphere V,M",
 			PROB_SPHERE_SIGMA_M = "Sphere Sigma,M",
+			PROB_SPHERE_Q_M     = "Sphere Q,M",
 			PROB_SPHERE_P_M     = "Sphere P,M",
 			PROB_SPHERE_RHO_J   = "Sphere Rho,J",
 			PROB_SPHERE_SIGMA_K = "Sphere Sigma,K",
@@ -141,6 +143,8 @@ ElseIf (prob == PROB_SPHERE_V_M)
 	Include "sphere_V_M.pro";
 ElseIf (prob == PROB_SPHERE_SIGMA_M)
 	Include "sphere_Sigma_M.pro";
+ElseIf (prob == PROB_SPHERE_Q_M)
+	Include "sphere_Q_M.pro";
 ElseIf (prob == PROB_SPHERE_P_M)
 	Include "sphere_P_M.pro";
 ElseIf (prob == PROB_SPHERE_RHO_J)
