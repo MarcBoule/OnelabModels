@@ -10,12 +10,13 @@ Function {
 	TM[] = (SquDyadicProduct[$1] - SquNorm[$1] * TensorDiag[0.5, 0.5, 0.5]) * eps0;
 
 	// Analytical energy
-	Q = rho_f * 4/3*Pi*rs^3;
+	// Q = rho_f * 4/3*Pi*rs^3;
 	// We[] = Q*Q*(6*d[]-5*rs)/(20*Pi*eps0*rs*d[]);
 	We[] = 4*Pi * rs^5 * rho_f^2 * (6/5 - rs/d[]) / (9*eps0);
 
 	// Analytical force on top sphere
-	F[] = -1/(4*Pi*eps0)*Q*Q/(d[]*d[]);
+	// F[] = -1/(4*Pi*eps0)*Q*Q/(d[]*d[]);
+	F[] = -4*Pi * rs^6 * rho_f^2 / (9 * d[]*d[] * eps0);
 }
 
 
