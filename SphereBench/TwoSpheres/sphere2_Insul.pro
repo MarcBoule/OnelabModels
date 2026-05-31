@@ -11,7 +11,8 @@ Function {
 
 	// Analytical energy
 	Q = rho_f * 4/3*Pi*rs^3;
-	We[] = Q*Q*(6*d[]-5*rs)/(20*Pi*eps0*rs*d[]);
+	// We[] = Q*Q*(6*d[]-5*rs)/(20*Pi*eps0*rs*d[]);
+	We[] = 4*Pi * rs^5 * rho_f^2 * (6/5 - rs/d[]) / (9*eps0);
 
 	// Analytical force on top sphere
 	F[] = -1/(4*Pi*eps0)*Q*Q/(d[]*d[]);

@@ -7,9 +7,9 @@ Function {
 
 	// Analytical energy
 	k[] = d[]/(2*rs);
-	x[] = Sqrt[k[]*k[]-1];
-	y[] = k[] + x[];
-	argw[] = 1 / (y[]^(2*$1+1) - 1);
+	x[] = Sqrt[k[]*k[]-1]; // beta
+	y[] = k[] + x[];       // alpha
+	argw[] = 1 / (y[]^(2*$1+1) - 1); // w_i
 	We[] = 2*Pi*eps0*(2*V)^2*rs*x[] * (argw[0]+argw[1]+argw[2]+argw[3]+argw[4]+argw[5]+argw[6]+argw[7]+argw[8]+argw[9]+argw[10]);
 	
 	// Analytical force 

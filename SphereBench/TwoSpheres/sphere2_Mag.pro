@@ -1,4 +1,4 @@
-// Two non-conducting spheres
+// Two magnetized spheres
 // see constraints on u1[] and u2[] in main.pro when quarters < 4
 
 
@@ -12,10 +12,10 @@ Function {
 	TM[] = (SquDyadicProduct[$1] - SquNorm[$1] * TensorDiag[0.5, 0.5, 0.5]) / mu0;
 
 	// Analytical energies
-	Wb[] = 4*Pi * Mp^2 * mu0 / 9 * (2*rs^3 + rs^6 / d[]^3 * (3 * (u1[]*ud[])*(u2[]*ud[])-u1[]*u2[]) );
-	Wh[] = 4*Pi * Mp^2 * mu0 / 9 * (  rs^3 - rs^6 / d[]^3 * (3 * (u1[]*ud[])*(u2[]*ud[])-u1[]*u2[]) );
+	Wb[] = 4*Pi * rs^3 * Mp^2 * mu0 / 9 * (2 + (rs/d[])^3 * (3 * (u1[]*ud[])*(u2[]*ud[])-u1[]*u2[]) );
+	Wh[] = 4*Pi * rs^3 * Mp^2 * mu0 / 9 * (1 - (rs/d[])^3 * (3 * (u1[]*ud[])*(u2[]*ud[])-u1[]*u2[]) );
 
-	// Analytical force
+	// Analytical force on top sphere
 	F[] = 4*Pi * rs^6 * Mp^2 * mu0 / (3 * d[]^4) * (
 		ud[] * (u1[] *u2[]) +
 		u1[] * (ud[] *u2[]) +

@@ -14,9 +14,9 @@ re  = (iabc ? 1.4 : 2) * rb; // radius of exterior (infinite) boundary
 rs = 1.0*cm;     // radius
 xs = 0*cm * (quarters > 1); // x position of center
 ys = 0*cm * (quarters > 2); // y position of center
-zs = 2*cm;       // z position of center
+zs = 2.1*cm;       // z position of center
 
 // sphere2 (same radius):
 xs2 = 0*cm * (quarters > 1); // x position of center
 ys2 = 0*cm * (quarters > 2); // y position of center
-zs2 = -2*cm;     // z position of center
+zs2 = -2.1*cm;     // z position of center
