@@ -6,10 +6,18 @@
 /ShellAndKelvin/*.txt
 /ShellAndKelvin/*.pos
 
-/SphereBench/*.msh
-/SphereBench/*.db
-/SphereBench/*.json
-/SphereBench/*.pre
-/SphereBench/*.res
-/SphereBench/*.pos
-/SphereBench/output.txt
+/SphereBench/OneSphere/*.msh
+/SphereBench/OneSphere/*.db
+/SphereBench/OneSphere/*.json
+/SphereBench/OneSphere/*.pre
+/SphereBench/OneSphere/*.res
+/SphereBench/OneSphere/*.pos
+/SphereBench/OneSphere/output.txt
+
+/SphereBench/TwoSpheres/*.msh
+/SphereBench/TwoSpheres/*.db
+/SphereBench/TwoSpheres/*.json
+/SphereBench/TwoSpheres/*.pre
+/SphereBench/TwoSpheres/*.res
+/SphereBench/TwoSpheres/*.pos
+/SphereBench/TwoSpheres/output.txt
