@@ -5,7 +5,7 @@
 // Notes for generating the Feynman image
 
 // parameters: iabc = 0, quarters = 2, order = 1
-// in .geo: comment out the scaled mesh and use "MeshSize{:} = 0.2*cm;"
+// in .geo: comment out the scaled mesh and use "MeshSize{:} = 0.3*cm;"
 // After main.pro is loaded, select the Feynman problem type
 // Press the run button
 // Show mesh (Alt+M), then Alt+Shift+V to remove volume mesh (leaves only surface), then Ctrl+Shift+V and select only sphere and cylinder physical groups.
