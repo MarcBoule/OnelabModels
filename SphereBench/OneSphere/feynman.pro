@@ -8,12 +8,14 @@
 // in .geo: comment out the scaled mesh and use "MeshSize{:} = 0.2*cm;"
 // After main.pro is loaded, select the Feynman problem type
 // Press the run button
-// In the new view's options, General tab, choose Logarithmic
-// In the new view's options, Map tab, press 0 to 9 for different col maps
 // Show mesh (Alt+M), then Alt+Shift+V to remove volume mesh (leaves only surface), then Ctrl+Shift+V and select only sphere and cylinder physical groups.
+// In the new view's options, General tab, choose Logarithmic
+// In the new view's options, Aspect tab, set Arrow Size to 50 and 50
+// In the new view's options, Map tab, press 0 to 9 for different col maps as needed
 // Tools > Options > Geometry > Visibility: un-check all
 // Tools > Options > Mesh > Visibility: check 2D edges and 2D surfaces, 
-// Tools > Options > Mesh > Color: then color triangles as needed rgb=0.7,0.7,0.7; Enable lighting; Coloring Mode "By element type"
+// Tools > Options > Mesh > Color: Enable lighting; Coloring Mode "By element type"; then color triangles as needed rgb=0.7,0.7,0.7
+// Tools > Options > General > Color: set BackgroundGradient to 1,1,1
 
 
 Group {
