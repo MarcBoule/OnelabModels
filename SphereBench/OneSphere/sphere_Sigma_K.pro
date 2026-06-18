@@ -149,7 +149,7 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name Lc2; Value {Integral {Type Global;
-				[ coef*Cross[ r[], sigma_f * {a} ] ]; // needs gauging; assumes sigma=sigma_free; Lagrange mult or mixed  formulation not needed since vecA happens to be parallel to surface, so we can use vecA directly in surface integral
+				[ coef*Cross[ r[], sigma_f * {a} ] ]; // needs Coulomb gauging when sigma_f not uniform; assumes sigma=sigma_free; Lagrange mult or mixed  formulation not needed since vecA happens to be parallel to surface, so we can use vecA directly in surface integral
 				Integration I1; Jacobian J1; In SurSphere;}}
 			}
 		}

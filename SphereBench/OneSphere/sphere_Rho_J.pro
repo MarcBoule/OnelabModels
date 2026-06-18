@@ -157,7 +157,7 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name Lc2; Value {Integral {Type Global;
-				[ coef*Cross[ r[], rho_f * {a} ] ]; // needs gauging; assumes rho=rho_free
+				[ coef*Cross[ r[], rho_f * {a} ] ]; // needs Coulomb gauging when rho_f not uniform; assumes rho=rho_free
 				Integration I1; Jacobian J1; In VolSphere;}}
 			}
 		}
