@@ -2,15 +2,23 @@
 
 // Geometrical constants (Gmsh and GetDP)
 
+iabc     = 0;    // 1 = IABC, 0 = shell (for truncation, use 0 and comment out shell Jacobian)
 quarters = 1;    // 1 = quarter-of-domain, 2 = half, 4 = full
 order    = 2;    // geometrical element order and basis function interpolation order (1 or 2)
 
 cm  = 1E-2;      // units
 rb  = 5*cm;      // radius of interior boundary
-re  = 2*rb;      // radius of exterior (infinite) boundary
+re  = (iabc ? 1.4 : 2) * rb; // radius of exterior (infinite) boundary
 
 // sphere:
 rs = 1.0*cm;     // radius
 xs = 0*cm * (quarters > 1); // x position of center
 ys = 0*cm * (quarters > 2); // y position of center
-zs = -2.0*cm;      // z position of center
+zs = -2*cm;      // z position of center
+
+// cylinder:
+rc = 1.0*cm;     // radius
+hc = 4*cm;       // height
+xc = 0*cm * (quarters > 1); // x position of center
+yc = 0*cm * (quarters > 2); // y position of center
+zc = 2*cm;       // z position of center

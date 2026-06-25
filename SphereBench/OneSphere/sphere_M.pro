@@ -1,0 +1,265 @@
+// How to run: see main.pro
+
+// Uniformly magnetized full sphere
+
+
+ScalarMagPotential = 0; // 1 = scalar mag potential, 0 = vector mag potential
+
+
+Group { 
+	VolCoul = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ]; // Gauge only the outer layer for vector potential, since outer surface is the only place where vecA is used in ABC
+	If (bound == BOUND_ABC)
+		SurDiriA -= #{SurExt};
+	EndIf
+}
+
+
+Function {
+	M[VolSphere] = Mp * u[]; 
+	M[All] = Vector[0,0,0]; // All that are unassigned
+
+	If (bound == BOUND_IABC) 
+		Call MuIabcDiriVectAndNeumScal;
+	EndIf
+	mu[VolSphere]  = mu0  * muR;
+	mu[All]  = mu0; // All that are unassigned
+
+	// Exact results (for post analysis):
+	Wb[] = 4*Pi * rs^3 * Mp^2  * mu0 / (3*muR*(muR+2));
+	Wh[] = 2*Pi * rs^3 * Mp^2  * mu0 / (3*(muR+2));
+}
+
+
+Constraint {
+	{ Name CstPhi; Case { // Neumann: SurExt4 and any SurXZ or SurYZ not in SurDiriPhi
+		{ Region SurDiriPhi; Value 0; } 
+	}} 
+	{ Name CstA; Case { // Neumann: any SurXZ or SurYZ not in SurDiriA
+		{ Region SurDiriA; Value 0; }
+	}} 
+	// { Name CstGaugeA; Case {
+		// { Region VolAll; SubRegion SurDiriA; Value 0; }
+	// }}
+	// Boundary condition for the Coulomb gauge multiplier "xi" (only used when
+	// "bound == BOUND_IABC" or when L2 norm is wanted):
+	{ Name xi_Mag; Case {
+		{ Region #{SurDiriA,SurExt}; Value 0; }
+	}}
+}
+
+
+FunctionSpace {
+	{ Name HcurlA; Type Form1; // magnetic vector potential
+		BasisFunction {
+			{ Name se; NameOfCoef ae; Support #{VolAll,SurExt}; 
+				Function BF_Edge; Entity EdgesOf[All]; }
+			If (order >= 2)
+			{ Name s3a; NameOfCoef a3a; Support #{VolAll,SurExt};
+				Function BF_Edge_3F_a; Entity FacetsOf[All]; }
+			{ Name s3b; NameOfCoef a3b; Support #{VolAll,SurExt};
+				Function BF_Edge_3F_b; Entity FacetsOf[All]; }
+			EndIf
+		}
+		Constraint {
+			{ NameOfCoef ae; EntityType EdgesOf; NameOfConstraint CstA; }
+			If (order >= 2)
+			{ NameOfCoef a3a; EntityType FacetsOf; NameOfConstraint CstA; }
+			{ NameOfCoef a3b; EntityType FacetsOf; NameOfConstraint CstA; }
+			EndIf
+			// { NameOfCoef ae; EntityType EdgesOfTreeIn; 
+				// EntitySubType StartingOn; NameOfConstraint CstGaugeA; }
+		}
+	}
+	// Scalar Lagrange multiplier "xi" in H1_0 to enforce Coulomb gauge constraint
+	{ Name H1_xi_Mag; Type Form0;
+		BasisFunction {
+			{ Name sn; NameOfCoef xin; Support VolCoul;
+				 Function BF_Node; Entity NodesOf[All]; }
+		}
+		Constraint {
+			{ NameOfCoef xin; EntityType NodesOf; NameOfConstraint xi_Mag; }
+		}
+	}
+	{ Name HgradPhi; Type Form0; // magnetic scalar potential
+		BasisFunction {
+			{ Name sn; NameOfCoef pn; Support #{VolAll,SurExt}; 
+				Function BF_Node; Entity NodesOf[All]; }
+		}
+		Constraint {
+			{ NameOfCoef pn; EntityType NodesOf; NameOfConstraint CstPhi; }
+		}
+	}
+}
+
+
+Formulation {
+	{ Name FrmPhi; Type FemEquation;
+		Quantity {
+			{ Name p; Type Local; NameOfSpace HgradPhi; }
+		}
+		Equation {
+			Integral { [ mu[] * Dof{d p}, {d p} ];
+			Integration I1; Jacobian J1; In VolAll; }
+			Integral { [ -M[]*mu0, {d p} ]; // -Br
+			Integration I1; Jacobian J1; In VolSphere; }
+
+			If (bound == BOUND_ABC)
+				Integral{ [ mu0 * 2 / (re) * Dof{p}, {p}];  // 2 since dipole is leading harmonic
+				Integration I1; Jacobian J1; In SurExt; }
+			EndIf
+		}
+	}
+	{ Name FrmA; Type FemEquation;
+		Quantity {
+			{ Name a; Type Local; NameOfSpace HcurlA; }
+			{ Name xi; Type Local; NameOfSpace H1_xi_Mag; }
+		}
+		Equation {
+			Integral { [ 1 / mu[] * Dof{d a}, {d a} ];
+			Integration I1; Jacobian J1; In VolAll; }
+			Integral { [ -M[]*mu0/mu[], {d a} ]; // -Br/mu (=-Hc)
+			Integration I1; Jacobian J1; In VolSphere; }
+
+			If (bound == BOUND_ABC)
+				Integral{ [ 1 / (mu0*re) * Dof{a}, {a}]; 
+				Integration I1; Jacobian J1; In SurExt; }
+
+				// Coulomb Gauge
+				Integral { [ Dof{a}, {d xi} ] ;
+				In VolCoul; Jacobian J1; Integration I1; }
+				Integral { [ Dof{d xi}, {a} ] ;
+				In VolCoul; Jacobian J1; Integration I1; }
+				If (order > 1)
+					// Penalty factor for stabilization when higher order
+					Integral { [ -1E-6 * Dof{d xi}, {d xi} ] ; 
+					In VolCoul; Jacobian J1; Integration I1; }
+				EndIf
+			EndIf
+		}
+	}
+}
+
+
+Resolution {
+	{ Name ResMain;
+		System {
+			If (ScalarMagPotential) 
+				{ Name SP; NameOfFormulation FrmPhi; }
+			Else
+				{ Name SA; NameOfFormulation FrmA; }
+			EndIf
+		}
+		Operation {
+			If (ScalarMagPotential) 
+				Generate[SP]; Solve[SP]; SaveSolution[SP];
+			Else
+				Generate[SA]; Solve[SA]; SaveSolution[SA];
+			EndIf
+		}
+	}
+}
+
+
+PostProcessing {
+	If (ScalarMagPotential)
+		{ Name PostMain; NameOfFormulation FrmPhi; }
+	Else
+		{ Name PostMain; NameOfFormulation FrmA; }
+	EndIf
+
+	{ Append; Name PostMain;
+		Quantity {
+			If (ScalarMagPotential)
+
+			/*{ Name B; Value {Local {
+				[ mu0*M[]-mu[]*{d p} ]; In VolAll; Jacobian J1; }}
+			}
+			{ Name H; Value {Local {
+				[ -{d p} ]; In VolAll; Jacobian J1; }}
+			}*/
+
+			{ Name Wb; Value {Integral {Type Global; 
+				[ coef/(2*mu[]) * SquNorm[mu0*M[]-mu[]*{d p}] ]; 
+				Integration I1; Jacobian J1; In VolAll; }}
+			}
+			{ Name Wb2; Value {Integral {Type Global; 
+				[ coef* mu0/(2*mu[]) * M[] * (mu0*M[]-mu[]*{d p}) ]; 
+				Integration I1; Jacobian J1; In VolSphere; }}
+			}
+			{ Name Wh; Value {Integral {Type Global; 
+				[ coef*mu[]/2 * SquNorm[-{d p}] ]; 
+				Integration I1; Jacobian J1; In VolAll; }}
+			}
+			{ Name Wh2; Value {Integral {Type Global; 
+				[ coef* -mu0/2 * M[] * (-{d p}) ]; 
+				Integration I1; Jacobian J1; In VolSphere;}}
+			}
+
+			Else // (ScalarMagPotential == 0)
+
+			/*{ Name B; Value {Local {
+				[ {d a} ]; In VolAll; Jacobian J1; }}
+			}
+			{ Name H; Value {Local {
+				[ ({d a}-mu0*M[])/mu[] ]; In VolAll; Jacobian J1; }}
+			}*/
+
+			{ Name Wb; Value {Integral {Type Global; 
+				[ coef/(2*mu[]) * SquNorm[{d a}] ];
+				Integration I1; Jacobian J1; In VolAll; }}
+			}
+			{ Name Wb2; Value {Integral {Type Global;
+				[ coef* mu0/(2*mu[]) * M[] * {d a} ];
+				Integration I1; Jacobian J1; In VolSphere; }}
+			}
+			{ Name Wh; Value {Integral {Type Global; 
+				[ coef*mu[]/2 * SquNorm[({d a}-mu0*M[])/mu[] ] ]; 
+				Integration I1; Jacobian J1; In VolAll; }}
+			}
+			{ Name Wh2; Value {Integral {Type Global; 
+				[ coef* -mu0/2 * M[] * (({d a}-mu0*M[])/mu[]) ];
+				Integration I1; Jacobian J1; In VolSphere;}}
+			}
+
+			EndIf   
+
+		}
+	}
+}
+
+
+PostOperation {
+	{ Name PostMain; NameOfPostProcessing PostMain; 
+		Format Table;
+		Operation {
+			Print[{prob, quarters, axis, bound, muR, ScalarMagPotential}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, muR=%g, Phi=%g:", File > "output.txt"]; 
+
+			If (bound != BOUND_ABC)
+				Print[ Wb, OnGlobal, StoreInVariable $Wb ];
+				Print[ {$Wb, Wb[], ($Wb-Wb[])/Wb[]*10^6}, Format 
+				" Wb  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			EndIf
+
+			Print[ Wb2, OnGlobal, StoreInVariable $Wb2 ];
+			Print[ {$Wb2, Wb[], ($Wb2-Wb[])/Wb[]*10^6}, Format 
+			" Wb2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+
+			If (bound != BOUND_ABC)
+				Print[ Wh, OnGlobal, StoreInVariable $Wh ];
+				Print[ {$Wh, Wh[], ($Wh-Wh[])/Wh[]*10^6}, Format 
+				" Wh  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			EndIf
+
+			Print[ Wh2, OnGlobal, StoreInVariable $Wh2 ];
+			Print[ {$Wh2, Wh[], ($Wh2-Wh[])/Wh[]*10^6}, Format 
+			" Wh2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+		}
+	} 
+	{ Name PostFields; NameOfPostProcessing PostMain; 
+		Operation {
+			// Print[ Phi, OnElementsOf VolAll, File "sphere_Phi.pos" ];
+			// Print[ B, OnElementsOf VolSphere, File "sphere_B.pos" ];
+			// Print[ H, OnElementsOf VolSphere, File "sphere_H.pos" ];
+		}
+	}
+}
