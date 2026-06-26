@@ -1,7 +1,7 @@
 // How to run: see main.pro
 
 // Conducting (V) full sphere
-// Note: this is imposed Q on conductor face only, since imposing surface Q or volume Q on insulator is same as (and is done by) imposing equivalent uniform sigma or rho.
+// Note: this is imposed Q on conductor only, since imposing uniform Q on insulator can be done by imposing an equivalent sigma or rho.
 
 
 Qf = sigma_f * 4*Pi*rs^2 / coef;

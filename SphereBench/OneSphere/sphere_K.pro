@@ -5,7 +5,8 @@
 
 
 Group { 
-	VolCoul = #{VolAll};//ElementsOf[ VolExt3, OnNegativeSideOf SurExt ]; // Gauge only the outer layer for vector potential, since outer surface is the only place where vecA is used in ABC
+	VolExt3Shell = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ];
+	VolCoul = #{VolSphere,VolExt3Shell};
 	If (bound == BOUND_ABC)
 		SurDiriA -= #{SurExt};
 	EndIf
@@ -22,6 +23,8 @@ Function {
 	mu[All]  = mu0; // All that are unassigned
 
 	// Exact results (for post analysis):
+	Aex[VolSphere] = rs   * K[] * (mu0/3);
+	Aex[VolVacInt] = rs^4 * K[] * (mu0/(3*nr[]^3));
 	Wb[] = 4*Pi  * rs^5 * sigma_f^2 * omega^2 * (mu0/9); 
 }
 
@@ -34,9 +37,9 @@ Constraint {
 		{ Region VolAll; SubRegion SurDiriA; Value 0; }
 	}}
 	// Boundary condition for the Coulomb gauge multiplier "xi" (only used when
-	// "bound == BOUND_IABC" or when L2 norm is wanted):
+	// "bound == BOUND_ABC" or when L2 norm is wanted):
 	{ Name xi_Mag; Case {
-		{ Region #{SurDiriA,SurExt}; Value 0; }
+		{ Region #{SurDiriA,SurExt,SurSphere}; Value 0; }
 	}}
 }
 

@@ -21,7 +21,7 @@ PROB_SPHERE_SIGMA = 5;
 PROB_SPHERE_M     = 6;
 PROB_SPHERE_J     = 7;
 PROB_SPHERE_K     = 8;
-DefineConstant[prob = {PROB_SPHERE_K, Name "Input/0Problem type",
+DefineConstant[prob = {PROB_SPHERE_J, Name "Input/0Problem type",
 	Choices{PROB_SPHERE_P       = "Sphere P",
 			PROB_SPHERE_RHO     = "Sphere Rho",
 			PROB_SPHERE_V       = "Sphere V",
@@ -36,7 +36,7 @@ BOUND_TRUNC = 1;
 BOUND_ABC   = 2;
 BOUND_IABC  = 3;
 BOUND_SHELL = 4;
-DefineConstant[bound = {BOUND_TRUNC, Name "Input/1Boundary type",
+DefineConstant[bound = {BOUND_SHELL, Name "Input/1Boundary type",
 	Choices{BOUND_TRUNC = "Truncation",
 			BOUND_ABC   = "ABC 1st order",
 			BOUND_IABC  = "IABC 3rd order",
@@ -51,8 +51,8 @@ rho_f   = 8E-5;  // volume free charge density (C/m^3)
 V       = 100;   // electric potential (V)
 sigma_f = V * eps0 / rs; // surface free charge density (C/m^2)
 omega   = 1E3;   // angular speed (rad/s)
-axis    = 2;     // Mp and omega axis (1=X, 2=Y, 3=Z)
-axisP   = (axis == 3 ? 1 : axis + 1); // Pp axis (1=X, 2=Y, 3=Z)
+axis    = 3;     // Mp and omega axis (1=X, 2=Y, 3=Z)
+axisP   = 3;     // Pp axis (1=X, 2=Y, 3=Z)
 
 
 Group {

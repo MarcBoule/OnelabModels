@@ -41,7 +41,7 @@ Constraint {
 		// { Region VolAll; SubRegion SurDiriA; Value 0; }
 	// }}
 	// Boundary condition for the Coulomb gauge multiplier "xi" (only used when
-	// "bound == BOUND_IABC" or when L2 norm is wanted):
+	// "bound == BOUND_ABC" or when L2 norm is wanted):
 	{ Name xi_Mag; Case {
 		{ Region #{SurDiriA,SurExt}; Value 0; }
 	}}
