@@ -5,8 +5,18 @@
 
 
 Group {
-	VolExt3Shell = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ];
-	VolCoul = #{VolSphere,VolExt3Shell};
+	If (order == 1)
+		VolCoul = #{VolAll};
+	Else
+		VolExt3Shell = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ];
+		VolCoul = #{VolSphere,VolExt3Shell};
+	EndIf
+	
+	SurCoul = #{SurDiriA};
+	If (order != 1)
+		SurCour += #{SurSphere};
+	EndIf
+	
 	If (bound == BOUND_ABC)
 		SurDiriA -= #{SurExt};
 	EndIf
@@ -23,9 +33,10 @@ Function {
 	mu[All]  = mu0; // All that are unassigned
 
 	// Exact results (for post analysis):
-	Bex[VolSphere] = mu0*(	rho_f*(omega*u[]*r[])*r[]*(rs^2/(3*nr[]^2)-1/5) - 
-							Cross[J[],r[]]*(rs^2/(3*nr[]^2)-2/5)	);
+	Bex[VolSphere] = mu0*( rho_f*(omega*u[]*r[])*r[]*(rs^2/(3*nr[]^2)-1/5) - 
+						   Cross[J[],r[]]*(rs^2/(3*nr[]^2)-2/5) );
 	Bex[VolVacInt] = mu0*rho_f*omega*rs^5/15*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
+	//BexMax = mu0*rs^2*omega*rho_f / 3; // occurs at center of sphere
 	Aex[VolSphere] = (5*rs^2 - 3*nr[]^2) * J[] * (mu0/30);
 	Aex[VolVacInt] = rs^5 * J[] * (mu0/(15*nr[]^3));
 	Wb[] = 8*Pi  * rs^7 * rho_f^2 * omega^2 * (mu0/315);
@@ -42,7 +53,7 @@ Constraint {
 	// Boundary condition for the Coulomb gauge multiplier "xi" (only used when
 	// "bound == BOUND_ABC" or when L2 norm is wanted):
 	{ Name xi_Mag; Case {
-		{ Region #{SurDiriA,SurExt,SurSphere}; Value 0; }
+		{ Region SurCoul; Value 0; }
 	}}
 }
 
@@ -134,23 +145,21 @@ PostProcessing {
 			// { Name J; Value {Local {
 				// [ J[] ]; In VolSphere; Jacobian J1; }}
 			// }
-			{ Name B; Value {Local {
-				[ {d a} ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
+			// { Name H; Value {Local {
+				// [ {d a}/mu[] ]; In VolAll; Jacobian J1; }}
+			// }
+			// { Name B; Value {Local {
+				// [ {d a} ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
+			// }
+			// { Name Bex; Value {Local {
+				// [ Bex[] ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
+			// }
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[(Bex[]-{d a})] ]; // square root in PostOperation
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
-			{ Name Bex; Value {Local {
-				[ Bex[] ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
-			}
-			/*{ Name H; Value {Local {
-				[ {d a}/mu[] ]; In VolAll; Jacobian J1; }}
-			}*/
-			/*{ Name Aex; Value {Local {
-				[ {a}*0 + Aex[] ]; In #{VolSphere}; Jacobian J1; }}
-			}
-			{ Name A; Value {Local {
-				[ {a} ]; In #{VolSphere}; Jacobian J1; }}
-			}*/
-			{ Name L2error; Value {Integral {Type Global;
-				[ coef* SquNorm[(Bex[]-{d a})] ]; // square root done at the end in PostOperation
+			{ Name B2; Value {Integral {Type Global; // B^2 exact integral
+				[ coef* SquNorm[(Bex[])] ];
 				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
 
@@ -171,11 +180,12 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain; 
 		Format Table;
 		Operation {
-			Print[{prob, quarters, axis, bound, muR}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, muR=%g:", File > "output.txt"]; 
+			Print[{prob, quarters, axis, bound}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g:", File > "output.txt"]; 
 
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
-			Print[ {Sqrt[$L2error]/mu0}, Format 
-			" L2e = %.8g [T*m^1.5*mu0]", File > "output.txt" ];
+			Print[ B2, OnGlobal, StoreInVariable $B2 ];
+			Print[ {Sqrt[$L2error/$B2], $B2}, Format 
+			" RelL2e = %.8g [1], B2int = %.8g", File > "output.txt" ];
 
 			If (bound != BOUND_ABC)
 				Print[ Wb, OnGlobal, StoreInVariable $Wb ];
@@ -193,8 +203,8 @@ PostOperation {
 			// Print[ J, OnElementsOf VolSphere, File "sphere_J.pos" ];
 			// Print[ Aex, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_Aex.pos" ];
 			// Print[ A, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_A.pos" ];
-			Print[ Bex, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_Bex.pos" ];
-			Print[ B, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_B.pos" ];
+			// Print[ Bex, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_Bex.pos" ];
+			// Print[ B, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_B.pos" ];
 			// Print[ B, OnElementsOf VolAll, File "sphere_B.pos", Smoothing ];    
 			// Print[ B, OnLine {{0,0,0}{rb,0,0}} {1000},
 			// Format TimeTable, File "sphere_B.txt" ];
