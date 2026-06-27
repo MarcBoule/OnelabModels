@@ -23,6 +23,9 @@ Function {
 	mu[All]  = mu0; // All that are unassigned
 
 	// Exact results (for post analysis):
+	Bex[VolSphere] = mu0*(	rho_f*(omega*u[]*r[])*r[]*(rs^2/(3*nr[]^2)-1/5) - 
+							Cross[J[],r[]]*(rs^2/(3*nr[]^2)-2/5)	);
+	Bex[VolVacInt] = mu0*rho_f*omega*rs^5/15*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
 	Aex[VolSphere] = (5*rs^2 - 3*nr[]^2) * J[] * (mu0/30);
 	Aex[VolVacInt] = rs^5 * J[] * (mu0/(15*nr[]^3));
 	Wb[] = 8*Pi  * rs^7 * rho_f^2 * omega^2 * (mu0/315);
@@ -131,10 +134,13 @@ PostProcessing {
 			// { Name J; Value {Local {
 				// [ J[] ]; In VolSphere; Jacobian J1; }}
 			// }
-			/*{ Name B; Value {Local {
-				[ Norm[{d a}] ]; In VolAll; Jacobian J1; }}
+			{ Name B; Value {Local {
+				[ {d a} ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
 			}
-			{ Name H; Value {Local {
+			{ Name Bex; Value {Local {
+				[ Bex[] ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
+			}
+			/*{ Name H; Value {Local {
 				[ {d a}/mu[] ]; In VolAll; Jacobian J1; }}
 			}*/
 			/*{ Name Aex; Value {Local {
@@ -142,11 +148,11 @@ PostProcessing {
 			}
 			{ Name A; Value {Local {
 				[ {a} ]; In #{VolSphere}; Jacobian J1; }}
-			}
-			{ Name L2error; Value {Integral {Type Global;
-				[ coef* SquNorm[Aex[]-{a}] ]; // square root done at the end in PostOperation
-				Integration I2; Jacobian J1; In #{VolSphere};}}
 			}*/
+			{ Name L2error; Value {Integral {Type Global;
+				[ coef* SquNorm[(Bex[]-{d a})] ]; // square root done at the end in PostOperation
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
 
 			{ Name Wb; Value {Integral {Type Global; 
 				[ coef/(2*mu[]) * SquNorm[{d a}] ]; 
@@ -167,9 +173,9 @@ PostOperation {
 		Operation {
 			Print[{prob, quarters, axis, bound, muR}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, muR=%g:", File > "output.txt"]; 
 
-			/*Print[ L2error, OnGlobal, StoreInVariable $L2error ];
-			Print[ {Sqrt[$L2error]}, Format 
-			" L2e = %.8g [T*m^2.5]", File > "output.txt" ];*/
+			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
+			Print[ {Sqrt[$L2error]/mu0}, Format 
+			" L2e = %.8g [T*m^1.5*mu0]", File > "output.txt" ];
 
 			If (bound != BOUND_ABC)
 				Print[ Wb, OnGlobal, StoreInVariable $Wb ];
@@ -185,8 +191,10 @@ PostOperation {
 	{ Name PostFields; NameOfPostProcessing PostMain; 
 		Operation {
 			// Print[ J, OnElementsOf VolSphere, File "sphere_J.pos" ];
-			Print[ Aex, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_Aex.pos" ];
-			Print[ A, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_A.pos" ];
+			// Print[ Aex, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_Aex.pos" ];
+			// Print[ A, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_A.pos" ];
+			Print[ Bex, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_Bex.pos" ];
+			Print[ B, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_B.pos" ];
 			// Print[ B, OnElementsOf VolAll, File "sphere_B.pos", Smoothing ];    
 			// Print[ B, OnLine {{0,0,0}{rb,0,0}} {1000},
 			// Format TimeTable, File "sphere_B.txt" ];
