@@ -106,7 +106,6 @@ Function {
 		eps[VolExt3] = eps0 * 0.150891868561234;
 	Return
 
-
 	// Vectors
 	u[]  = Vector[axis  == 1, axis  == 2, axis  == 3];// for Mp and omega vectors 
 	uP[] = Vector[axisP == 1, axisP == 2, axisP == 3];// for Pp vector

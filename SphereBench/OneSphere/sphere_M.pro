@@ -9,7 +9,7 @@ ScalarMagPotential = 0; // 1 = scalar mag potential, 0 = vector mag potential
 Group {
 	SurCoul = #{SurSphere,SurDiriA};
 	VolExt3Shell = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ];
-	VolCoul = #{VolSphere,VolExt3Shell};
+	VolCoul = #{VolSphere,VolExt3Shell}; // don't Coulomb gauge everything since slow
 		
 	If (bound == BOUND_ABC)
 		SurDiriA -= #{SurExt};
@@ -113,7 +113,8 @@ Formulation {
 			Integration I1; Jacobian J1; In VolSphere; }
 
 			If (bound == BOUND_ABC)
-				Integral{ [ mu0 * 2 / (re) * Dof{p}, {p}];  // 2 since dipole is leading harmonic
+				// 1st order ABC (n = 2 since dipole is leading harmonic)
+				Integral{ [ mu0 * 2 / (re) * Dof{p}, {p}];
 				Integration I1; Jacobian J1; In SurExt; }
 			EndIf
 		}
@@ -130,6 +131,7 @@ Formulation {
 			Integration I1; Jacobian J1; In VolSphere; }
 
 			If (bound == BOUND_ABC)
+				// 1st order ABC (n = 1 for vect potential when dipole is leading harmonic)
 				Integral{ [ 1 / (mu0*re) * Dof{a}, {a}]; 
 				Integration I1; Jacobian J1; In SurExt; }
 

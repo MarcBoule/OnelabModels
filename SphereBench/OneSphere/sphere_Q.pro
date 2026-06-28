@@ -15,6 +15,7 @@ Group {
 	If (bound == BOUND_ABC)
 		SurDiriV -= #{SurExt};
 	EndIf
+	DomHGradV = #{VolExSphere,SurSphere,SurExt};
 }
 
 
@@ -50,9 +51,9 @@ Constraint {
 FunctionSpace {
 	{ Name HgradV; Type Form0; // electric scalar potential
 		BasisFunction {
-			{ Name sn; NameOfCoef vn; Support #{VolExSphere/*,SurSphere*/,SurExt}; 
+			{ Name sn; NameOfCoef vn; Support DomHGradV; 
 				Function BF_Node; Entity NodesOf[All, Not SurSphere]; }
-			{ Name sf; NameOfCoef vf; Support #{VolExSphere,SurSphere};
+			{ Name sf; NameOfCoef vf; Support DomHGradV;
 				Function BF_GroupOfNodes; Entity GroupsOfNodesOf[ SurSphere ]; }
 		}
 		GlobalQuantity {
@@ -81,7 +82,7 @@ Formulation {
 		Equation {
 			Integral { [ eps[] * Dof{d v}, {d v} ]; 
 				Integration I1; Jacobian J1; In VolExSphere; }
-			GlobalTerm { [ -Dof{Q} , {U} ]; In SurSphere; }
+			GlobalTerm { [ -Dof{Q}, {U} ]; In SurSphere; }
 
 			If (bound == BOUND_ABC)
 				// 1st order ABC (n = 1 since monopole is leading harmonic)

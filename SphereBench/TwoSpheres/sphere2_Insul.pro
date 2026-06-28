@@ -1,3 +1,5 @@
+// How to run: see main.pro
+
 // Two non-conducting spheres
 
 
@@ -30,7 +32,7 @@ Constraint {
 FunctionSpace {
 	{ Name HgradV; Type Form0; // electric scalar potential
 		BasisFunction {
-			{ Name sn; NameOfCoef vn; Support #{VolAll,SurProbe}; 
+			{ Name sn; NameOfCoef vn; Support #{VolAll,SurExt}; 
 				Function BF_Node; Entity NodesOf[All]; }
 		}
 		Constraint {
@@ -48,11 +50,17 @@ Formulation {
 		}
 		Equation {
 			Integral { [ eps[] * Dof{d v}, {d v} ]; 
-				Integration I1; Jacobian J1; In VolAll; }
+			Integration I1; Jacobian J1; In VolAll; }
 			Integral { [ -Rho[], {v} ]; 
-				Integration I1; Jacobian J1; In VolSpheres; }
+			Integration I1; Jacobian J1; In VolSpheres; }
 			Integral { [ Dof{d un}, {d un} ]; // no actual DoFs here
-				Integration I1; Jacobian J1; In VolProbeLayer; }
+			Integration I1; Jacobian J1; In VolProbeLayer; }
+			
+			If (bound == BOUND_ABC)
+				// 1st order ABC (n = 2 since dipole is leading harmonic)
+				Integral{ [ eps0 * 2 / re * Dof{v}, {v}]; 
+				Integration I1; Jacobian J1; In SurExt; }		
+			EndIf
 		}
 	} 
 }
@@ -71,12 +79,12 @@ Resolution {
 PostProcessing {
 	{ Name PostMain; NameOfFormulation FrmV;
 		Quantity {
-			/*{ Name un; Value {Local {
-				[ {un} ]; In VolProbeLayer; Jacobian J1; }}
-			}*/
-			{ Name V; Value {Local {
-				[ {v} ]; In VolAll; Jacobian J1; }}
-			}
+			// { Name un; Value {Local {
+				// [ {un} ]; In VolProbeLayer; Jacobian J1; }}
+			// }
+			// { Name V; Value {Local {
+				// [ {v} ]; In VolAll; Jacobian J1; }}
+			// }
 			{ Name We; Value {Integral {Type Global; 
 				[ coef* eps[] / (2.0) * SquNorm[-{d v}] ];
 				Integration I1; Jacobian J1; In VolAll;}}
@@ -97,13 +105,12 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain;
 		Format Table;
 		Operation {
-			// Print[ un, OnElementsOf VolProbeLayer, File "sphere_un.pos" ];
-			Print[ V, OnElementsOf VolAll, File "sphere_v.pos" ];
+			Print[{prob, quarters, bound}, Format "Prob=%g, Quarters=%g, Bound=%g:", File > "output.txt"]; 
 
-			Print[{prob, quarters, iabc}, Format "Prob=%g, Quarters=%g, IABC=%g:", File > "output.txt"]; 
-
-			Print[ We, OnGlobal, StoreInVariable $We ];
-			Print[ {$We, We[], ($We-We[])/We[]*10^6}, Format " We  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			If (bound != BOUND_ABC)
+				Print[ We, OnGlobal, StoreInVariable $We ];
+				Print[ {$We, We[], ($We-We[])/We[]*10^6}, Format " We  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			EndIf
 
 			Print[ We2, OnGlobal, StoreInVariable $We2 ];
 			Print[ {$We2, We[], ($We2-We[])/We[]*10^6}, Format " We2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
@@ -112,4 +119,10 @@ PostOperation {
 			Print[ {$Fz = CompZ[$F], $FzA = F[], ($Fz-$FzA)/$FzA*10^6}, Format " Fz = %.8g [N] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 		}
 	} 
+	{ Name PostFields; NameOfPostProcessing PostMain; 
+		Operation {
+			// Print[ un, OnElementsOf VolProbeLayer, File "sphere_un.pos" ];
+			// Print[ V, OnElementsOf VolExSpheres, File "sphere_v.pos" ];
+		}
+	}
 }

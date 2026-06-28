@@ -7,7 +7,7 @@
 Group { 
 	SurCoul = #{SurSphere,SurDiriA};
 	VolExt3Shell = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ];
-	VolCoul = #{VolSphere,VolExt3Shell};
+	VolCoul = #{VolSphere,VolExt3Shell}; // don't Coulomb gauge everything since slow
 	
 	If (bound == BOUND_ABC)
 		SurDiriA -= #{SurExt};
@@ -96,6 +96,7 @@ Formulation {
 			Integration I1; Jacobian J1; In SurSphere; }
 
 			If (bound == BOUND_ABC)
+				// 1st order ABC (n = 1 for vect potential when dipole is leading harmonic)
 				Integral{ [ 1 / (mu0*re) * Dof{a}, {a}]; 
 				Integration I1; Jacobian J1; In SurExt; }
 

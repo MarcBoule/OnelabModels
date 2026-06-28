@@ -1,7 +1,7 @@
 // How to run: see main.pro
 
 // Conducting (V) full sphere
-// Uses Lagrange multiplier approcah to weakly impose potential, so that surface charge density is available. 
+// Uses Lagrange multiplier approach to weakly impose potential, so that surface charge density is available. 
 // For alternate solution using global quantities, use sphere_Q with the flag "ImposeV = 1"
 
 

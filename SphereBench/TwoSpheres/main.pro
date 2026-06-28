@@ -6,19 +6,31 @@
 
 Include "main_common.pro";
 
+
 // Constants
 eps0 = 8.8541878188E-12; // ref permittivity (F/m)
 mu0  = 1.25663706127E-6; // ref permeability (H/m)
 coef = 4.0 / quarters;   // for post-processing integrals
 
+// Problem type
 PROB_SPHERE2_COND  = 1;
 PROB_SPHERE2_INSUL = 2;
 PROB_SPHERE2_MAG   = 3;  // requires quarters >= 2
-
-DefineConstant[prob = {PROB_SPHERE2_MAG, Name "Input/0Problem type",
+DefineConstant[prob = {PROB_SPHERE2_COND, Name "Input/0Problem type",
 	Choices{PROB_SPHERE2_COND  = "Sphere2 Cond",
 			PROB_SPHERE2_INSUL = "Sphere2 Insul",
 			PROB_SPHERE2_MAG   = "Sphere2 Mag"}}];
+
+// Boundary type
+BOUND_TRUNC = 1;
+BOUND_ABC   = 2;
+BOUND_IABC  = 3;
+BOUND_SHELL = 4;
+DefineConstant[bound = {BOUND_TRUNC, Name "Input/1Boundary type",
+	Choices{BOUND_TRUNC = "Truncation",
+			BOUND_ABC   = "ABC 1st order",
+			BOUND_IABC  = "IABC 3rd order",
+			BOUND_SHELL = "Shell"}}];
 
 // Simulation parameters
 Mp      = 3.2E5; // permanent magnetic dipole moment per unit volume (A/m)
@@ -32,14 +44,15 @@ Group {
 	VolVacInt  = #{103}; // interior vacuum
 	VolExt1    = #{104}; // exterior shell 1 (inner)
 	VolExt2    = #{105}; // exterior shell 2
-	VolExt3    = #{106}; // exterior shell 3
-	VolExt4    = #{107}; // exterior shell 4 (outer)
-	SurProbe   = #{122};
-	SurExt4    = #{123};
-	PtRefPot   = #{140}; // interior reference point for potential 
+	VolExt3    = #{106}; // exterior shell 3 (outer)
+	SurProbe   = #{121};
+	SurExt     = #{122};
+	SurSphere1 = #{123};
+	SurSphere2 = #{124};
+	PtRefPot   = #{141}; // interior reference point for scalar potentials
 
 	VolSpheres = #{VolSphere1,VolSphere2};
-	VolExts    = #{VolExt1,VolExt2,VolExt3,VolExt4};
+	VolExts    = #{VolExt1,VolExt2,VolExt3};
 	VolAll     = #{VolSpheres,VolVacInt,VolExts};
 	VolProbeLayer = ElementsOf[ VolAll, OnPositiveSideOf SurProbe ];
 }
@@ -47,15 +60,13 @@ Group {
 
 Function {
 	// IABC coefficients
-	If (iabc == 1) 
-		eps[VolExt1] = eps0 * 0.801713;
-		eps[VolExt2] = eps0 * 2.88849;
-		eps[VolExt3] = eps0 * 0.163862;
-		eps[VolExt4] = eps0 * 37.8756;
-		mu[VolExt1]  = mu0 * 0.801713; 
-		mu[VolExt2]  = mu0 * 2.88849;
-		mu[VolExt3]  = mu0 * 0.163862;
-		mu[VolExt4]  = mu0 * 37.8756;
+	If (bound == BOUND_IABC) 
+		mu[VolExt1]  = mu0 * 1.04128553077778; 
+		mu[VolExt2]  = mu0 * 0.566491614524866;
+		mu[VolExt3]  = mu0 * 9.53571368003040;
+		eps[VolExt1] = eps0 * 1.04128553077778;
+		eps[VolExt2] = eps0 * 0.566491614524866;
+		eps[VolExt3] = eps0 * 9.53571368003040;
 	EndIf
 	eps[All]     = eps0; // All others
 	mu[All]      = mu0; // All others
@@ -94,9 +105,10 @@ FunctionSpace {
 
 
 Jacobian {
-	{ Name J1; Case { 
-		If (iabc == 0) 
-			{ Region VolExts; Jacobian VolSphShell{rb, re}; }// Shell transformation when not IABC
+	{ Name J1; Case {
+		{ Region SurExt; Jacobian Sur; }
+		If (bound == BOUND_SHELL) 
+			{ Region VolExts; Jacobian VolSphShell{rb, re}; }
 		EndIf
 		{ Region All; Jacobian Vol; }// All that are unassigned
 	}}      
@@ -109,6 +121,10 @@ Integration {
 		{ GeoElement Triangle2;    NumberOfPoints 3; }
 		{ GeoElement Tetrahedron;  NumberOfPoints 1; }
 		{ GeoElement Tetrahedron2; NumberOfPoints 4; }
+	}}}}
+	{ Name I2; Case {{ Type Gauss; Case { // for L2 error norm 
+		{ GeoElement Tetrahedron;  NumberOfPoints 4; }
+		{ GeoElement Tetrahedron2; NumberOfPoints 16; }
 	}}}}
 }
 

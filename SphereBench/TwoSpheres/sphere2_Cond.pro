@@ -1,4 +1,13 @@
+// How to run: see main.pro
+
 // Two conducting spheres
+
+
+Group {
+	VolExSpheres = #{VolAll,-VolSpheres};
+	SurSpheres = #{SurSphere1,SurSphere2};
+	DomHGradV = #{VolExSpheres,SurExt,SurSpheres};
+}
 
 
 Function {
@@ -18,21 +27,29 @@ Function {
 	F[] = Pi*eps0*(2*V)^2*(argf[0]+argf[1]+argf[2]+argf[3]+argf[4]+argf[5]+argf[6]+argf[7]+argf[8]+argf[9]+argf[10]);
 }
 
+
 Constraint {
 	{ Name CstV; Case { 
-		{ Region VolSphere1; Value V; }
-		{ Region VolSphere2; Value -V; }
+		{ Region SurSphere1; Value V; }
+		{ Region SurSphere2; Value -V; }
 	}}
 }
+
 
 FunctionSpace {
 	{ Name HgradV; Type Form0; // electric scalar potential
 		BasisFunction {
-			{ Name sn; NameOfCoef vn; Support #{VolAll,SurProbe}; 
-				Function BF_Node; Entity NodesOf[All]; }
+			{ Name sn; NameOfCoef vn; Support DomHGradV; 
+				Function BF_Node; Entity NodesOf[All, Not SurSpheres]; }
+			{ Name sf; NameOfCoef vf; Support DomHGradV;
+				Function BF_GroupOfNodes; Entity GroupsOfNodesOf[ SurSpheres ]; }
+		}
+		GlobalQuantity {
+			{ Name GlobalVs; Type AliasOf       ; NameOfCoef vf; }
+			{ Name GlobalQs; Type AssociatedWith; NameOfCoef vf; }
 		}
 		Constraint {
-			{ NameOfCoef vn; EntityType NodesOf; NameOfConstraint CstV; }
+			{ NameOfCoef GlobalVs; EntityType NodesOf; NameOfConstraint CstV; }
 		}
 	}
 }
@@ -43,12 +60,21 @@ Formulation {
 		Quantity {
 			{ Name v; Type Local; NameOfSpace HgradV; }
 			{ Name un; Type Local; NameOfSpace H_Un; }
+			{ Name U; Type Global; NameOfSpace HgradV[GlobalVs]; }
+			{ Name Q; Type Global; NameOfSpace HgradV[GlobalQs]; }
 		}
 		Equation {
 			Integral { [ eps[] * Dof{d v}, {d v} ]; 
-				Integration I1; Jacobian J1; In VolAll; }
+			Integration I1; Jacobian J1; In VolExSpheres; }
 			Integral { [ Dof{d un}, {d un} ]; // no actual DoFs here
-				Integration I1; Jacobian J1; In VolProbeLayer; }
+			Integration I1; Jacobian J1; In VolProbeLayer; }
+			GlobalTerm { [ -Dof{Q}, {U} ]; In SurSpheres; }
+			
+			If (bound == BOUND_ABC)
+				// 1st order ABC (n = 2 since dipole is leading harmonic)
+				Integral{ [ eps0 * 2 / re * Dof{v}, {v}]; 
+				Integration I1; Jacobian J1; In SurExt; }		
+			EndIf
 		}
 	} 
 }
@@ -71,18 +97,33 @@ PostProcessing {
 				// [ {un} ]; In VolProbeLayer; Jacobian J1; }}
 			// }
 			// { Name V; Value {Local {
-				// [ {v} ]; In VolAll; Jacobian J1; }}
+				// [ {v} ]; In VolExSpheres; Jacobian J1; }}
+			// }
+			// { Name U1; Value { Term {
+				// [ {U} ]; In SurSphere1;}}
+			// }
+			// { Name U2; Value { Term {
+				// [ {U} ]; In SurSphere2;}}
+			// }
+			// { Name Q1; Value { Term {
+				// [ coef * {Q} ]; In SurSphere1;}}
+			// }
+			// { Name Q2; Value { Term {
+				// [ coef * {Q} ]; In SurSphere2;}}
 			// }
 			{ Name We; Value {Integral {Type Global; 
 				[ coef* eps[] / (2.0) * SquNorm[-{d v}] ];
-				Integration I1; Jacobian J1; In VolAll;}}
+				Integration I1; Jacobian J1; In VolExSpheres;}}
 			}
-			{ Name We2; Value {Integral {Type Global;
+			{ Name We2; Value { Term {
+				[ coef * {Q} * {U} ]; In SurSphere1;}} // 2x the Q*V/2 of sphere1
+			}
+			{ Name We3; Value {Integral {Type Global;
 				[ coef * V * (eps0*-{d v}  )* -{d un} ];
 				// Q_inside = vol_int(div(D)), with same weighted integral method as used in weighted stress tensor force calculation
 				// Pp = 0, and result simply doubled since energy of sphere2
 				//   is identical (and it doesn't have a probe surface)
-				// this calculation is Q*V/2 for sphere1, using weighted 
+				// this calculation is 2x the Q*V/2 of sphere1, using weighted 
 				Integration I1; Jacobian J1; In VolProbeLayer;}}
 			}
 			{ Name F; Value {Integral {Type Global; 
@@ -97,19 +138,33 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain;
 		Format Table;
 		Operation {
-			// Print[ un, OnElementsOf VolProbeLayer, File "sphere_un.pos" ];
-			// Print[ V, OnElementsOf VolAll, File "sphere_v.pos" ];
+			Print[{prob, quarters, bound}, Format "Prob=%g, Quarters=%g, Bound=%g:", File > "output.txt"]; 
 
-			Print[{prob, quarters, iabc}, Format "Prob=%g, Quarters=%g, IABC=%g:", File > "output.txt"]; 
+			// Print[ U1, OnRegion SurSphere1, StoreInVariable $U1 ];
+			// Print[ U2, OnRegion SurSphere2, StoreInVariable $U2 ];
+			// Print[ Q1, OnRegion SurSphere1, StoreInVariable $Q1 ];
+			// Print[ Q2, OnRegion SurSphere2, StoreInVariable $Q2 ];
+			// Print[ {$U1, $Q1, $U2, $Q2}, Format " U1  = %.8g [C], Q1  = %.8g [C], U2  = %.8g [C], Q2  = %.8g [C]", File > "output.txt" ];
 
-			Print[ We, OnGlobal, StoreInVariable $We ];
-			Print[ {$We, We[], ($We-We[])/We[]*10^6}, Format " We  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			If (bound != BOUND_ABC)
+				Print[ We, OnGlobal, StoreInVariable $We ];
+				Print[ {$We, We[], ($We-We[])/We[]*10^6}, Format " We  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			EndIf
 
-			Print[ We2, OnGlobal, StoreInVariable $We2 ];
+			Print[ We2, OnRegion SurSphere1, StoreInVariable $We2 ];
 			Print[ {$We2, We[], ($We2-We[])/We[]*10^6}, Format " We2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+
+			Print[ We3, OnGlobal, StoreInVariable $We3 ];
+			Print[ {$We3, We[], ($We3-We[])/We[]*10^6}, Format " We3 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 
 			Print[ F, OnGlobal, StoreInVariable $F ]; 
 			Print[ {$Fz = CompZ[$F], $FzA = F[], ($Fz-$FzA)/$FzA*10^6}, Format " Fz = %.8g [N] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 		}
 	} 
+	{ Name PostFields; NameOfPostProcessing PostMain; 
+		Operation {
+			// Print[ un, OnElementsOf VolProbeLayer, File "sphere_un.pos" ];
+			// Print[ V, OnElementsOf VolExSpheres, File "sphere_v.pos" ];
+		}
+	}
 }
