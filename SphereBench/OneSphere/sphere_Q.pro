@@ -1,8 +1,11 @@
 // How to run: see main.pro
 
 // Conducting (V) full sphere
-// Note: this is imposed Q on conductor only, since imposing uniform Q on insulator can be done by imposing an equivalent sigma or rho.
+// This is imposed Q on conductor only, since imposing uniform Q on insulator can be done by imposing an equivalent sigma or rho.
+// Also has alternate solution to sphere_V using global quantities when "ImposeV = 1"
 
+
+ImposeV = 0; // 0 = impose Qf, 1 = impose potential
 
 Qf = sigma_f * 4*Pi*rs^2 / coef;
 
@@ -22,6 +25,11 @@ Function {
 	eps[All] = eps0; // All that are unassigned
 
 	// Exact results (for post analysis):
+	If (ImposeV == 0)
+		Eex[VolVacInt] = Qf*coef*r[]/(4*Pi*eps0*nr[]^3);
+	Else
+		Eex[VolVacInt] = V*rs*r[]/nr[]^3;
+	EndIf
 	We[] = 2*Pi * rs * V^2 * eps0; 
 }
 
@@ -32,6 +40,9 @@ Constraint {
 	}}
 	{ Name CstQs; Case { 
 		{ Region SurSphere; Value Qf; }
+	}}
+	{ Name CstVs; Case { 
+		{ Region SurSphere; Value V; }
 	}}
 }
 
@@ -50,7 +61,11 @@ FunctionSpace {
 		}
 		Constraint {
 			{ NameOfCoef vn; EntityType NodesOf; NameOfConstraint CstV; }
+			If (ImposeV == 1)
+			{ NameOfCoef GlobalVs; EntityType GroupsOfNodesOf; NameOfConstraint CstVs; }
+			Else
 			{ NameOfCoef GlobalQs; EntityType GroupsOfNodesOf; NameOfConstraint CstQs; }
+			EndIf
 		}
 	}
 }
@@ -93,8 +108,19 @@ Resolution {
 PostProcessing {
 	{ Name PostMain; NameOfFormulation FrmV;
 		Quantity {
-			{ Name E; Value {Local {
-				[ -{d v} ]; In VolExSphere; Jacobian J1; }}
+			// { Name E; Value {Local {
+				// [ -{d v} ]; In VolVacInt; Jacobian J1; }}
+			// }
+			// { Name Eex; Value {Local {
+				// [ Eex[] ]; In VolVacInt; Jacobian J1; }}
+			// }
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[Eex[]-(-{d v})] ]; // square root in PostOperation
+				Integration I2; Jacobian J1; In VolVacInt;}}
+			}
+			{ Name E2; Value {Integral {Type Global; // E^2 exact integral
+				[ coef* SquNorm[Eex[]] ];
+				Integration I2; Jacobian J1; In VolVacInt;}}
 			}
 			{ Name We; Value {Integral {Type Global; 
 				[ coef*(eps[]/2) * SquNorm[-{d v}] ]; 
@@ -112,7 +138,12 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain; 
 		Format Table;
 		Operation {
-			Print[{prob, quarters, axis, bound}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g:", File > "output.txt"]; 
+			Print[{prob, quarters, axis, bound, ImposeV}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, ImposeV=%g:", File > "output.txt"]; 
+
+			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
+			Print[ E2, OnGlobal, StoreInVariable $E2 ];
+			Print[ {Sqrt[$L2error/$E2]}, Format 
+			" RelL2e = %.8g [1]", File > "output.txt" ];
 
 			If (bound != BOUND_ABC)
 				Print[ We, OnGlobal, StoreInVariable $We ];
@@ -127,7 +158,8 @@ PostOperation {
 	} 
 	{ Name PostFields; NameOfPostProcessing PostMain; 
 		Operation {
-			//Print[ E, OnElementsOf VolAll, File "sphere_E.pos" ];
+			// Print[ E, OnElementsOf VolVacInt, File "sphere_E.pos" ];
+			// Print[ Eex, OnElementsOf VolVacInt, File "sphere_Eex.pos" ];
 		}
 	}
 }

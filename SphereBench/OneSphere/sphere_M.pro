@@ -3,22 +3,14 @@
 // Uniformly magnetized full sphere
 
 
-ScalarMagPotential = 1; // 1 = scalar mag potential, 0 = vector mag potential
+ScalarMagPotential = 0; // 1 = scalar mag potential, 0 = vector mag potential
 
 
-Group { 
-	If (order == 1)
-		VolCoul = #{VolAll};
-	Else
-		VolExt3Shell = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ];
-		VolCoul = #{VolSphere,VolExt3Shell};
-	EndIf
-	
-	SurCoul = #{SurDiriA};
-	If (order != 1)
-		SurCour += #{SurSphere};
-	EndIf
-	
+Group {
+	SurCoul = #{SurSphere,SurDiriA};
+	VolExt3Shell = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ];
+	VolCoul = #{VolSphere,VolExt3Shell};
+		
 	If (bound == BOUND_ABC)
 		SurDiriA -= #{SurExt};
 	EndIf
@@ -38,8 +30,8 @@ Function {
 	// Exact results (for post analysis):
 	Bex[VolSphere] = mu0*Mp*u[]*2/(muR+2);
 	Bex[VolVacInt] = mu0*Mp*rs^3/(muR+2)*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
-	// Hex[VolSphere] = -Mp*u[]/(muR+2);
-	// Hex[VolVacInt] = Bex[]/mu0;
+	Hex[VolSphere] = -Mp*u[]/(muR+2);
+	Hex[VolVacInt] = Bex[]/mu0;
 	Wb[] = 4*Pi * rs^3 * Mp^2  * mu0 / (3*muR*(muR+2));
 	Wh[] = 2*Pi * rs^3 * Mp^2  * mu0 / (3*(muR+2));
 }
@@ -187,20 +179,20 @@ PostProcessing {
 	{ Append; Name PostMain;
 		Quantity {
 			{ Name B2; Value {Integral {Type Global; // B^2 exact integral
-				[ coef* SquNorm[(Bex[])] ];
+				[ coef* SquNorm[Bex[]] ];
 				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
 
 			If (ScalarMagPotential)
 
-			/*{ Name B; Value {Local {
-				[ mu0*M[]-mu[]*{d p} ]; In VolAll; Jacobian J1; }}
-			}
-			{ Name H; Value {Local {
-				[ -{d p} ]; In VolAll; Jacobian J1; }}
-			}*/
+			// { Name B; Value {Local {
+				// [ mu0*M[]-mu[]*{d p} ]; In VolAll; Jacobian J1; }}
+			// }
+			// { Name H; Value {Local {
+				// [ -{d p} ]; In VolAll; Jacobian J1; }}
+			// }
 			{ Name L2error; Value {Integral {Type Global; 
-				[ coef* SquNorm[(Bex[]-(mu0*M[]-mu[]*{d p}))] ]; // square root in PostOperation
+				[ coef* SquNorm[Bex[]-(mu0*M[]-mu[]*{d p})] ]; // square root in PostOperation
 				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
 
@@ -223,12 +215,12 @@ PostProcessing {
 
 			Else // (ScalarMagPotential == 0)
 
-			/*{ Name B; Value {Local {
-				[ {d a} ]; In VolAll; Jacobian J1; }}
-			}
-			{ Name H; Value {Local {
-				[ ({d a}-mu0*M[])/mu[] ]; In VolAll; Jacobian J1; }}
-			}*/
+			// { Name B; Value {Local {
+				// [ {d a} ]; In VolAll; Jacobian J1; }}
+			// }
+			// { Name H; Value {Local {
+				// [ ({d a}-mu0*M[])/mu[] ]; In VolAll; Jacobian J1; }}
+			// }
 
 			{ Name L2error; Value {Integral {Type Global; 
 				[ coef* SquNorm[(Bex[]-{d a})] ]; // square root in PostOperation

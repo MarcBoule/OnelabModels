@@ -68,11 +68,11 @@ Field[2].InField = 1;
 // Field[2].DistMin = rs; Field[2].SizeMin = 0.085*cm; 
 // Field[2].DistMax = re; Field[2].SizeMax = 0.9*cm;
 // MEDIUM:
-Field[2].DistMin = rs; Field[2].SizeMin = 0.12*cm; 
-Field[2].DistMax = re; Field[2].SizeMax = 1.0*cm;
+// Field[2].DistMin = rs; Field[2].SizeMin = 0.12*cm; 
+// Field[2].DistMax = re; Field[2].SizeMax = 1.0*cm;
 // COARSE:
-// Field[2].DistMin = rs; Field[2].SizeMin = 0.2*cm; 
-// Field[2].DistMax = re; Field[2].SizeMax = 1.3*cm;
+Field[2].DistMin = rs; Field[2].SizeMin = 0.2*cm; 
+Field[2].DistMax = re; Field[2].SizeMax = 1.3*cm;
 Background Field = 2;
 Mesh.MeshSizeExtendFromBoundary = 0;
 Mesh.MeshSizeFromPoints = 0;

@@ -1,6 +1,7 @@
 // How to run: see main.pro
 
 // Uniformly polarized full sphere
+// Note: electric scalar potential is ungauged when SurDiriV is empty
 
 
 Group { 
@@ -25,10 +26,12 @@ Function {
 	eps[All] = eps0; // All that are unassigned
 
 	// Exact results (for post analysis):
-	Vex[VolSphere] = Pp * (r[] * uP[]) / (eps0*(epsR+2));
-	Vex[VolVacInt] = Pp * (r[] * uP[]) * rs^3 / (nr[]^3 * eps0*(epsR+2));
-	We[] = 2*Pi * rs^3 * Pp^2  / (3*eps0*(epsR+2));
-	Wd[] = 4*Pi * rs^3 * Pp^2  / (3*eps0*epsR*(epsR+2)); 
+	Dex[VolSphere] = Pp*u[]*2/(epsR+2);
+	Dex[VolVacInt] = Pp*rs^3/(epsR+2)*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
+	Eex[VolSphere] = -Pp*u[]/(eps0*(epsR+2));
+	Eex[VolVacInt] = Dex[]/eps0;
+	We[] = 2*Pi * rs^3 * Pp^2 / (3*eps0*(epsR+2));
+	Wd[] = 4*Pi * rs^3 * Pp^2 / (3*eps0*epsR*(epsR+2)); 
 }
 
 
@@ -88,26 +91,24 @@ Resolution {
 PostProcessing {
 	{ Name PostMain; NameOfFormulation FrmV;
 		Quantity {
-			{ Name V; Value {Local {
-				[ {v} ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
-			}
-			{ Name VSavg; Value {Integral {Type Global; 
-				[ {v}/GetVolume[] ]; 
-				Integration I2; Jacobian J1; In #{VolSphere};}}
-			}
-			{ Name dV; Value {Local {
-				[ Abs[Vex[] - {v}] ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
-			}
-			{ Name L2error; Value {Integral {Type Global; // manual gauge with VSavg
-				[ coef* (Vex[]-({v}/*+18.860086*/))^2 ]; // square root done at the end in PostOperation
+			// { Name V; Value {Local {
+				// [ {v} ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
+			// }
+			// { Name E; Value {Local {
+				// [ -{d v} ]; In VolAll; Jacobian J1; }}
+			// }
+			// { Name D; Value {Local {
+				// [ eps[]*(-{d v}) + P[] ]; In VolAll; Jacobian J1; }}
+			// }
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[Eex[]-(-{d v})] ]; // square root in PostOperation
 				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
-			{ Name E; Value {Local {
-				[ -{d v} ]; In VolAll; Jacobian J1; }}
+			{ Name E2; Value {Integral {Type Global; // E^2 exact integral
+				[ coef* SquNorm[Eex[]] ];
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
-			{ Name D; Value {Local {
-				[ eps[]*(-{d v}) + P[] ]; In VolAll; Jacobian J1; }}
-			}
+
 			{ Name We; Value {Integral {Type Global; 
 				[ coef*(eps[]/2) * SquNorm[-{d v}] ]; 
 				Integration I1; Jacobian J1; In VolAll;}}
@@ -133,12 +134,12 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain; 
 		Format Table;
 		Operation {
-			Print[{prob, quarters, axis, bound, epsR, zs}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, epsR=%g, zs=%g:", File > "output.txt"]; 
+			Print[{prob, quarters, axis, bound, epsR}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, epsR=%g:", File > "output.txt"]; 
 
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
-			Print[ VSavg, OnGlobal, StoreInVariable $VSavg ];
-			Print[ {Sqrt[$L2error], $VSavg}, Format 
-			" L2e = %.8g [V*m^1.5], VSavg = %.8g", File > "output.txt" ];
+			Print[ E2, OnGlobal, StoreInVariable $E2 ];
+			Print[ {Sqrt[$L2error/$E2]}, Format 
+			" RelL2e = %.8g [1]", File > "output.txt" ];
 
 			If (bound != BOUND_ABC)
 				Print[ We, OnGlobal, StoreInVariable $We ];
@@ -163,8 +164,8 @@ PostOperation {
 	} 
 	{ Name PostFields; NameOfPostProcessing PostMain; 
 		Operation {
-			Print[ V, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_V.pos" ];
-			Print[ dV, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_dV.pos" ];
+			// Print[ V, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_V.pos" ];
+			// Print[ dV, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_dV.pos" ];
 			// Print[ E, OnPoint {xs+rs*1.5,ys,zs},
 			// Format TimeTable, File > "sphere_pts.txt" ];
 			// Print[ D, OnPoint {xs+rs*1.5,ys,zs},

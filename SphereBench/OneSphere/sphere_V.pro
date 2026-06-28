@@ -1,6 +1,8 @@
 // How to run: see main.pro
 
 // Conducting (V) full sphere
+// Uses Lagrange multiplier approcah to weakly impose potential, so that surface charge density is available. 
+// For alternate solution using global quantities, use sphere_Q with the flag "ImposeV = 1"
 
 
 Group {
@@ -18,6 +20,7 @@ Function {
 	eps[All] = eps0; // All that are unassigned
 
 	// Exact results (for post analysis):
+	Eex[VolVacInt] = V*rs/nr[]^3*r[];
 	We[] = 2*Pi * rs * V^2 * eps0; 
 }
 
@@ -89,8 +92,16 @@ Resolution {
 PostProcessing {
 	{ Name PostMain; NameOfFormulation FrmV;
 		Quantity {
-			{ Name E; Value {Local {
-				[ -{d v} ]; In VolExSphere; Jacobian J1; }}
+			// { Name E; Value {Local {
+				// [ -{d v} ]; In VolExSphere; Jacobian J1; }}
+			// }
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[Eex[]-(-{d v})] ]; // square root in PostOperation
+				Integration I2; Jacobian J1; In VolVacInt;}}
+			}
+			{ Name E2; Value {Integral {Type Global; // E^2 exact integral
+				[ coef* SquNorm[Eex[]] ];
+				Integration I2; Jacobian J1; In VolVacInt;}}
 			}
 			{ Name We; Value {Integral {Type Global; 
 				[ coef*(eps[]/2) * SquNorm[-{d v}] ]; 
@@ -110,6 +121,11 @@ PostOperation {
 		Format Table;
 		Operation {
 			Print[{prob, quarters, axis, bound}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g:", File > "output.txt"]; 
+
+			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
+			Print[ E2, OnGlobal, StoreInVariable $E2 ];
+			Print[ {Sqrt[$L2error/$E2]}, Format 
+			" RelL2e = %.8g [1]", File > "output.txt" ];
 
 			If (bound != BOUND_ABC)
 				Print[ We, OnGlobal, StoreInVariable $We ];

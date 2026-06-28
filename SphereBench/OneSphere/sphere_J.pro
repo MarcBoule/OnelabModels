@@ -5,17 +5,9 @@
 
 
 Group {
-	If (order == 1)
-		VolCoul = #{VolAll};
-	Else
-		VolExt3Shell = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ];
-		VolCoul = #{VolSphere,VolExt3Shell};
-	EndIf
-	
-	SurCoul = #{SurDiriA};
-	If (order != 1)
-		SurCour += #{SurSphere};
-	EndIf
+	SurCoul = #{SurSphere,SurDiriA};
+	VolExt3Shell = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ];
+	VolCoul = #{VolSphere,VolExt3Shell};
 	
 	If (bound == BOUND_ABC)
 		SurDiriA -= #{SurExt};
@@ -152,11 +144,11 @@ PostProcessing {
 				// [ Bex[] ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
 			// }
 			{ Name L2error; Value {Integral {Type Global; 
-				[ coef* SquNorm[(Bex[]-{d a})] ]; // square root in PostOperation
+				[ coef* SquNorm[Bex[]-{d a}] ]; // square root in PostOperation
 				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
 			{ Name B2; Value {Integral {Type Global; // B^2 exact integral
-				[ coef* SquNorm[(Bex[])] ];
+				[ coef* SquNorm[Bex[]] ];
 				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
 

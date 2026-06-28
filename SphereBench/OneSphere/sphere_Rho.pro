@@ -18,6 +18,8 @@ Function {
 	eps[All] = eps0; // All that are unassigned
 
 	// Exact results (for post analysis):
+	Eex[VolSphere] = rho_f*r[]/(3*eps0*epsR);
+	Eex[VolVacInt] = rho_f*rs^3/nr[]^3*r[]/(3*eps0);
 	We[] = 2*Pi * rs^5 * rho_f^2 / (9*eps0) * (1/(5*epsR)+1);
 }
 
@@ -78,9 +80,18 @@ Resolution {
 PostProcessing {
 	{ Name PostMain; NameOfFormulation FrmV;
 		Quantity {
-			{ Name E; Value {Local {
-				[ -{d v} ]; In VolAll; Jacobian J1; }}
+			// { Name E; Value {Local {
+				// [ -{d v} ]; In VolAll; Jacobian J1; }}
+			// }
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[Eex[]-(-{d v})] ]; // square root in PostOperation
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
+			{ Name E2; Value {Integral {Type Global; // E^2 exact integral
+				[ coef* SquNorm[Eex[]] ];
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
+
 			{ Name We; Value {Integral {Type Global; 
 				[ coef*(eps[]/2) * SquNorm[-{d v}] ]; 
 				Integration I1; Jacobian J1; In VolAll;}}
@@ -99,6 +110,11 @@ PostOperation {
 		Format Table;
 		Operation {
 			Print[{prob, quarters, axis, bound, epsR}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, epsR=%g:", File > "output.txt"]; 
+
+			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
+			Print[ E2, OnGlobal, StoreInVariable $E2 ];
+			Print[ {Sqrt[$L2error/$E2]}, Format 
+			" RelL2e = %.8g [1]", File > "output.txt" ];
 
 			If (bound != BOUND_ABC)
 				Print[ We, OnGlobal, StoreInVariable $We ];
