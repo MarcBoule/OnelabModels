@@ -3,11 +3,22 @@
 // Uniformly magnetized full sphere
 
 
-ScalarMagPotential = 0; // 1 = scalar mag potential, 0 = vector mag potential
+ScalarMagPotential = 1; // 1 = scalar mag potential, 0 = vector mag potential
 
 
 Group { 
-	VolCoul = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ]; // Gauge only the outer layer for vector potential, since outer surface is the only place where vecA is used in ABC
+	If (order == 1)
+		VolCoul = #{VolAll};
+	Else
+		VolExt3Shell = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ];
+		VolCoul = #{VolSphere,VolExt3Shell};
+	EndIf
+	
+	SurCoul = #{SurDiriA};
+	If (order != 1)
+		SurCour += #{SurSphere};
+	EndIf
+	
 	If (bound == BOUND_ABC)
 		SurDiriA -= #{SurExt};
 	EndIf
@@ -21,29 +32,33 @@ Function {
 	If (bound == BOUND_IABC) 
 		Call MuIabcDiriVectAndNeumScal;
 	EndIf
-	mu[VolSphere]  = mu0  * muR;
+	mu[VolSphere]  = mu0 * muR;
 	mu[All]  = mu0; // All that are unassigned
 
 	// Exact results (for post analysis):
+	Bex[VolSphere] = mu0*Mp*u[]*2/(muR+2);
+	Bex[VolVacInt] = mu0*Mp*rs^3/(muR+2)*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
+	// Hex[VolSphere] = -Mp*u[]/(muR+2);
+	// Hex[VolVacInt] = Bex[]/mu0;
 	Wb[] = 4*Pi * rs^3 * Mp^2  * mu0 / (3*muR*(muR+2));
 	Wh[] = 2*Pi * rs^3 * Mp^2  * mu0 / (3*(muR+2));
 }
 
 
 Constraint {
-	{ Name CstPhi; Case { // Neumann: SurExt4 and any SurXZ or SurYZ not in SurDiriPhi
+	{ Name CstPhi; Case { // Neumann: SurExt and any SurXZ or SurYZ not in SurDiriPhi
 		{ Region SurDiriPhi; Value 0; } 
 	}} 
 	{ Name CstA; Case { // Neumann: any SurXZ or SurYZ not in SurDiriA
 		{ Region SurDiriA; Value 0; }
 	}} 
-	// { Name CstGaugeA; Case {
-		// { Region VolAll; SubRegion SurDiriA; Value 0; }
-	// }}
+	{ Name CstGaugeA; Case {
+		{ Region VolAll; SubRegion SurDiriA; Value 0; }
+	}}
 	// Boundary condition for the Coulomb gauge multiplier "xi" (only used when
-	// "bound == BOUND_ABC" or when L2 norm is wanted):
+	// "bound == BOUND_ABC"):
 	{ Name xi_Mag; Case {
-		{ Region #{SurDiriA,SurExt}; Value 0; }
+		{ Region SurCoul; Value 0; }
 	}}
 }
 
@@ -66,8 +81,10 @@ FunctionSpace {
 			{ NameOfCoef a3a; EntityType FacetsOf; NameOfConstraint CstA; }
 			{ NameOfCoef a3b; EntityType FacetsOf; NameOfConstraint CstA; }
 			EndIf
-			// { NameOfCoef ae; EntityType EdgesOfTreeIn; 
-				// EntitySubType StartingOn; NameOfConstraint CstGaugeA; }
+			If (bound != BOUND_ABC)
+			{ NameOfCoef ae; EntityType EdgesOfTreeIn; 
+				EntitySubType StartingOn; NameOfConstraint CstGaugeA; }
+			EndIf
 		}
 	}
 	// Scalar Lagrange multiplier "xi" in H1_0 to enforce Coulomb gauge constraint
@@ -169,6 +186,11 @@ PostProcessing {
 
 	{ Append; Name PostMain;
 		Quantity {
+			{ Name B2; Value {Integral {Type Global; // B^2 exact integral
+				[ coef* SquNorm[(Bex[])] ];
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
+
 			If (ScalarMagPotential)
 
 			/*{ Name B; Value {Local {
@@ -177,6 +199,10 @@ PostProcessing {
 			{ Name H; Value {Local {
 				[ -{d p} ]; In VolAll; Jacobian J1; }}
 			}*/
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[(Bex[]-(mu0*M[]-mu[]*{d p}))] ]; // square root in PostOperation
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
 
 			{ Name Wb; Value {Integral {Type Global; 
 				[ coef/(2*mu[]) * SquNorm[mu0*M[]-mu[]*{d p}] ]; 
@@ -204,6 +230,10 @@ PostProcessing {
 				[ ({d a}-mu0*M[])/mu[] ]; In VolAll; Jacobian J1; }}
 			}*/
 
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[(Bex[]-{d a})] ]; // square root in PostOperation
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
 			{ Name Wb; Value {Integral {Type Global; 
 				[ coef/(2*mu[]) * SquNorm[{d a}] ];
 				Integration I1; Jacobian J1; In VolAll; }}
@@ -233,6 +263,11 @@ PostOperation {
 		Format Table;
 		Operation {
 			Print[{prob, quarters, axis, bound, muR, ScalarMagPotential}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, muR=%g, Phi=%g:", File > "output.txt"]; 
+
+			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
+			Print[ B2, OnGlobal, StoreInVariable $B2 ];
+			Print[ {Sqrt[$L2error/$B2]}, Format 
+			" RelL2e = %.8g [1]", File > "output.txt" ];
 
 			If (bound != BOUND_ABC)
 				Print[ Wb, OnGlobal, StoreInVariable $Wb ];

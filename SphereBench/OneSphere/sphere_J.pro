@@ -36,9 +36,6 @@ Function {
 	Bex[VolSphere] = mu0*( rho_f*(omega*u[]*r[])*r[]*(rs^2/(3*nr[]^2)-1/5) - 
 						   Cross[J[],r[]]*(rs^2/(3*nr[]^2)-2/5) );
 	Bex[VolVacInt] = mu0*rho_f*omega*rs^5/15*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
-	//BexMax = mu0*rs^2*omega*rho_f / 3; // occurs at center of sphere
-	Aex[VolSphere] = (5*rs^2 - 3*nr[]^2) * J[] * (mu0/30);
-	Aex[VolVacInt] = rs^5 * J[] * (mu0/(15*nr[]^3));
 	Wb[] = 8*Pi  * rs^7 * rho_f^2 * omega^2 * (mu0/315);
 }
 
@@ -51,7 +48,7 @@ Constraint {
 		{ Region VolAll; SubRegion SurDiriA; Value 0; }
 	}}
 	// Boundary condition for the Coulomb gauge multiplier "xi" (only used when
-	// "bound == BOUND_ABC" or when L2 norm is wanted):
+	// "bound == BOUND_ABC"):
 	{ Name xi_Mag; Case {
 		{ Region SurCoul; Value 0; }
 	}}
@@ -184,8 +181,8 @@ PostOperation {
 
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
 			Print[ B2, OnGlobal, StoreInVariable $B2 ];
-			Print[ {Sqrt[$L2error/$B2], $B2}, Format 
-			" RelL2e = %.8g [1], B2int = %.8g", File > "output.txt" ];
+			Print[ {Sqrt[$L2error/$B2]}, Format 
+			" RelL2e = %.8g [1]", File > "output.txt" ];
 
 			If (bound != BOUND_ABC)
 				Print[ Wb, OnGlobal, StoreInVariable $Wb ];

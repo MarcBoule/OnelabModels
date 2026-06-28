@@ -5,8 +5,18 @@
 
 
 Group { 
-	VolExt3Shell = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ];
-	VolCoul = #{VolSphere,VolExt3Shell};
+	If (order == 1)
+		VolCoul = #{VolAll};
+	Else
+		VolExt3Shell = ElementsOf[ VolExt3, OnNegativeSideOf SurExt ];
+		VolCoul = #{VolSphere,VolExt3Shell};
+	EndIf
+	
+	SurCoul = #{SurDiriA};
+	If (order != 1)
+		SurCour += #{SurSphere};
+	EndIf
+	
 	If (bound == BOUND_ABC)
 		SurDiriA -= #{SurExt};
 	EndIf
@@ -23,8 +33,8 @@ Function {
 	mu[All]  = mu0; // All that are unassigned
 
 	// Exact results (for post analysis):
-	Aex[VolSphere] = rs   * K[] * (mu0/3);
-	Aex[VolVacInt] = rs^4 * K[] * (mu0/(3*nr[]^3));
+	Bex[VolSphere] = mu0*sigma_f*omega*rs*u[]*2/3;
+	Bex[VolVacInt] = mu0*sigma_f*omega*rs^4/3*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
 	Wb[] = 4*Pi  * rs^5 * sigma_f^2 * omega^2 * (mu0/9); 
 }
 
@@ -37,9 +47,9 @@ Constraint {
 		{ Region VolAll; SubRegion SurDiriA; Value 0; }
 	}}
 	// Boundary condition for the Coulomb gauge multiplier "xi" (only used when
-	// "bound == BOUND_ABC" or when L2 norm is wanted):
+	// "bound == BOUND_ABC"):
 	{ Name xi_Mag; Case {
-		{ Region #{SurDiriA,SurExt,SurSphere}; Value 0; }
+		{ Region SurCoul; Value 0; }
 	}}
 }
 
@@ -132,6 +142,15 @@ PostProcessing {
 				[ {d a} ]; In VolAll; Jacobian J1; }}
 			}*/
 
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[(Bex[]-{d a})] ]; // square root in PostOperation
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
+			{ Name B2; Value {Integral {Type Global; // B^2 exact integral
+				[ coef* SquNorm[(Bex[])] ];
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
+
 			{ Name Wb; Value {Integral {Type Global; 
 				[ coef/(2*mu[]) * SquNorm[{d a}] ];
 				Integration I1; Jacobian J1; In VolAll; }}
@@ -149,7 +168,12 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain; 
 		Format Table;
 		Operation {
-			Print[{prob, quarters, axis, bound, muR}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, muR=%g:", File > "output.txt"]; 
+			Print[{prob, quarters, axis, bound}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g:", File > "output.txt"]; 
+
+			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
+			Print[ B2, OnGlobal, StoreInVariable $B2 ];
+			Print[ {Sqrt[$L2error/$B2]}, Format 
+			" RelL2e = %.8g [1]", File > "output.txt" ];
 
 			If (bound != BOUND_ABC)
 				Print[ Wb, OnGlobal, StoreInVariable $Wb ];

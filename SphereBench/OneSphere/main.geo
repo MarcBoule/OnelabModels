@@ -64,12 +64,15 @@ Field[1] = MathEval;
 Field[1].F = Sprintf("sqrt((x-(%g))^2+(y-(%g))^2+(z-(%g))^2)", xs, ys, zs);
 Field[2] = Threshold;
 Field[2].InField = 1;
-//Field[2].DistMin = rs; Field[2].SizeMin = 0.085*cm; 
-//Field[2].DistMax = re; Field[2].SizeMax = 0.9*cm;
-//Field[2].DistMin = rs; Field[2].SizeMin = 0.2*cm; 
-//Field[2].DistMax = re; Field[2].SizeMax = 1.3*cm;
+// FINE:
+// Field[2].DistMin = rs; Field[2].SizeMin = 0.085*cm; 
+// Field[2].DistMax = re; Field[2].SizeMax = 0.9*cm;
+// MEDIUM:
 Field[2].DistMin = rs; Field[2].SizeMin = 0.12*cm; 
 Field[2].DistMax = re; Field[2].SizeMax = 1.0*cm;
+// COARSE:
+// Field[2].DistMin = rs; Field[2].SizeMin = 0.2*cm; 
+// Field[2].DistMax = re; Field[2].SizeMax = 1.3*cm;
 Background Field = 2;
 Mesh.MeshSizeExtendFromBoundary = 0;
 Mesh.MeshSizeFromPoints = 0;
