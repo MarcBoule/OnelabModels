@@ -26,7 +26,7 @@ Function {
 
 	// Exact results (for post analysis):
 	Bex[VolSphere] = mu0*sigma_f*omega*rs*u[]*2/3;
-	Bex[VolVacInt] = mu0*sigma_f*omega*rs^4/3*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
+	Bex[All] = mu0*sigma_f*omega*rs^4/3*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
 	Wb[] = 4*Pi  * rs^5 * sigma_f^2 * omega^2 * (mu0/9); 
 }
 
@@ -161,7 +161,7 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain; 
 		Format Table;
 		Operation {
-			Print[{prob, quarters, axis, bound}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g:", File > "output.txt"]; 
+			Print[{prob, quarters, bound, s, axis}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g, Axis=%g:", File > "output.txt"]; 
 
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
 			Print[ B2, OnGlobal, StoreInVariable $B2 ];

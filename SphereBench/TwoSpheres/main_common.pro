@@ -4,6 +4,7 @@
 
 quarters = 1;    // 1 = quarter-of-domain, 2 = half, 4 = full
 order    = 2;    // geometrical element order and basis function interpolation order (1 or 2)
+s        = 1.5;  // mesh scaling factor: 1.0=fine, 1.5=coarse
 
 cm  = 1E-2;      // units
 rb  = 5*cm;      // radius of interior boundary

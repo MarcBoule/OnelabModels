@@ -129,7 +129,7 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain;
 		Format Table;
 		Operation {
-			Print[{prob, quarters, bound}, Format "Prob=%g, Quarters=%g, Bound=%g:", File > "output.txt"]; 
+			Print[{prob, quarters, bound, s}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g:", File > "output.txt"]; 
 
 			If (bound != BOUND_ABC)
 				Print[ We, OnGlobal, StoreInVariable $We ];

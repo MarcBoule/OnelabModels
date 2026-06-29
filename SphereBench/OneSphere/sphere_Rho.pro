@@ -19,7 +19,7 @@ Function {
 
 	// Exact results (for post analysis):
 	Eex[VolSphere] = rho_f*r[]/(3*eps0*epsR);
-	Eex[VolVacInt] = rho_f*rs^3/nr[]^3*r[]/(3*eps0);
+	Eex[All] = rho_f*rs^3/nr[]^3*r[]/(3*eps0);
 	We[] = 2*Pi * rs^5 * rho_f^2 / (9*eps0) * (1/(5*epsR)+1);
 }
 
@@ -109,7 +109,7 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain; 
 		Format Table;
 		Operation {
-			Print[{prob, quarters, axis, bound, epsR}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, epsR=%g:", File > "output.txt"]; 
+			Print[{prob, quarters, bound, s, epsR}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g, epsR=%g:", File > "output.txt"]; 
 
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
 			Print[ E2, OnGlobal, StoreInVariable $E2 ];

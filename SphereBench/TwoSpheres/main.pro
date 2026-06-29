@@ -26,7 +26,7 @@ BOUND_TRUNC = 1;
 BOUND_ABC   = 2;
 BOUND_IABC  = 3;
 BOUND_SHELL = 4;
-DefineConstant[bound = {BOUND_TRUNC, Name "Input/1Boundary type",
+DefineConstant[bound = {BOUND_SHELL, Name "Input/1Boundary type",
 	Choices{BOUND_TRUNC = "Truncation",
 			BOUND_ABC   = "ABC 1st order",
 			BOUND_IABC  = "IABC 3rd order",
@@ -80,6 +80,13 @@ Function {
 	vd[] = Vector[xs,ys,zs]-Vector[xs2,ys2,zs2]; // distance vector 2 to 1
 	d[]  = Norm[vd[]];
 	ud[] = vd[] / d[]; 
+
+	c1[]  = Vector[xs,  ys,  zs];  // Center of sphere 1
+	c2[]  = Vector[xs2, ys2, zs2]; // Center of sphere 2
+	r1[]  = XYZ[] - c1[]; // Position from center of sphere 1
+	r2[]  = XYZ[] - c2[]; // Position from center of sphere 2
+	nr1[] = Norm[r1[]];
+	nr2[] = Norm[r2[]];
 }
 
 

@@ -26,10 +26,11 @@ Function {
 	eps[All] = eps0; // All that are unassigned
 
 	// Exact results (for post analysis):
+	Eex[VolSphere] = 0;
 	If (ImposeV == 0)
-		Eex[VolVacInt] = Qf*coef*r[]/(4*Pi*eps0*nr[]^3);
+		Eex[All] = Qf*coef*r[]/(4*Pi*eps0*nr[]^3);
 	Else
-		Eex[VolVacInt] = V*rs*r[]/nr[]^3;
+		Eex[All] = V*rs*r[]/nr[]^3;
 	EndIf
 	We[] = 2*Pi * rs * V^2 * eps0; 
 }
@@ -139,7 +140,7 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain; 
 		Format Table;
 		Operation {
-			Print[{prob, quarters, axis, bound, ImposeV}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, ImposeV=%g:", File > "output.txt"]; 
+			Print[{prob, quarters, bound, s, ImposeV}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g, ImposeV=%g:", File > "output.txt"]; 
 
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
 			Print[ E2, OnGlobal, StoreInVariable $E2 ];

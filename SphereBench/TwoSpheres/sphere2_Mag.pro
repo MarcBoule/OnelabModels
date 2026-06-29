@@ -2,6 +2,7 @@
 
 // Two magnetized spheres
 // see constraints on u1[] and u2[] in main.pro when quarters < 4
+// muR = 1 to avoid cross magnetizations
 
 
 Function {
@@ -13,6 +14,11 @@ Function {
 	TM[] = (SquDyadicProduct[$1] - SquNorm[$1] * TensorDiag[0.5, 0.5, 0.5]) / mu0;
 
 	// Exact results (for post analysis):
+	// B field (superposition)
+	B1ex[VolSphere1] = mu0*Mp*u1[]*2/3;
+	B1ex[All] = mu0*Mp*rs^3/3*( 3/nr1[]^5*(u1[]*r1[])*r1[] - u1[]/nr1[]^3 );
+	B2ex[VolSphere2] = mu0*Mp*u2[]*2/3;
+	B2ex[All] = mu0*Mp*rs^3/3*( 3/nr2[]^5*(u2[]*r2[])*r2[] - u2[]/nr2[]^3 );
 	// Energy
 	Wb[] = 4*Pi * rs^3 * Mp^2 * mu0 / 9 * (2 + (rs/d[])^3 * (3 * (u1[]*ud[])*(u2[]*ud[])-u1[]*u2[]) );
 	Wh[] = 4*Pi * rs^3 * Mp^2 * mu0 / 9 * (1 - (rs/d[])^3 * (3 * (u1[]*ud[])*(u2[]*ud[])-u1[]*u2[]) );
@@ -91,6 +97,16 @@ PostProcessing {
 			// { Name un; Value {Local {
 				// [ -{d un} ]; In VolProbeLayer; Jacobian J1; }}
 			// }
+
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[(B1ex[]+B2ex[])-(mu0*M[]-mu[]*{d p})] ]; // square root in PostOperation
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSpheres};}}
+			}
+			{ Name B2; Value {Integral {Type Global; // B^2 exact integral
+				[ coef* SquNorm[B1ex[]+B2ex[]] ];
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSpheres};}}
+			}
+
 			{ Name Wb; Value {Integral {Type Global; 
 				[ coef/(2*mu[]) * SquNorm[mu0*M[]-mu[]*{d p}] ]; 
 				Integration I1; Jacobian J1; In VolAll; }}
@@ -125,8 +141,13 @@ PostOperation {
 		Operation {
 			// Print[ un, OnElementsOf VolProbeLayer, File "sphere_un.pos" ];
 
-			Print[{prob, quarters, bound, CompX[u1[]], CompZ[u1[]], CompX[u2[]], CompZ[u2[]]}, Format "Prob=%g, Quarters=%g, Bound=%g, u1xz=%.3g,%.3g, u2xz=%.3g,%.3g:", File > "output.txt"];
+			Print[{prob, quarters, bound, s, CompX[u1[]], CompZ[u1[]], CompX[u2[]], CompZ[u2[]]}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g, u1xz=%.3g,%.3g, u2xz=%.3g,%.3g:", File > "output.txt"];
 				
+			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
+			Print[ B2, OnGlobal, StoreInVariable $B2 ];
+			Print[ {Sqrt[$L2error/$B2]}, Format 
+			" RelL2e = %.8g [1]", File > "output.txt" ];
+
 			If (bound != BOUND_ABC)
 				Print[ Wb, OnGlobal, StoreInVariable $Wb ];
 				Print[ {$Wb, Wb[], ($Wb-Wb[])/Wb[]*10^6}, Format 

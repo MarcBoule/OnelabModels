@@ -47,22 +47,13 @@ Else
 EndIf
 
 
-
-Mesh.HighOrderOptimize = 2; Mesh.ElementOrder = order;  
-
-
 // Mesh parameters
 
-// FINE:
-// smin = 0.085*cm;
-// smax = 0.9*cm;
-// MEDIUM:
-smin = 0.12*cm;
-smax = 1.0*cm;
-// COARSE:
-// smin = 0.2*cm;
-// smax = 1.3*cm;
+Mesh.HighOrderOptimize = 2; 
+Mesh.ElementOrder = order;  
 
+smin = s*0.085*cm;
+smax = s*0.9*cm;
 
 Field[1] = MathEval;
 Field[1].F = Sprintf("sqrt((x-(%g))^2+(y-(%g))^2+(z-(%g))^2)", xs, ys, zs);

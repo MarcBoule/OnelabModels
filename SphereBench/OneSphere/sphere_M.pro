@@ -30,9 +30,9 @@ Function {
 
 	// Exact results (for post analysis):
 	Bex[VolSphere] = mu0*Mp*u[]*2/(muR+2);
-	Bex[VolVacInt] = mu0*Mp*rs^3/(muR+2)*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
+	Bex[All] = mu0*Mp*rs^3/(muR+2)*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
 	Hex[VolSphere] = -Mp*u[]/(muR+2);
-	Hex[VolVacInt] = Bex[]/mu0;
+	Hex[All] = Bex[]/mu0;
 	Wb[] = 4*Pi * rs^3 * Mp^2  * mu0 / (3*muR*(muR+2));
 	Wh[] = 2*Pi * rs^3 * Mp^2  * mu0 / (3*(muR+2));
 }
@@ -260,7 +260,7 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain; 
 		Format Table;
 		Operation {
-			Print[{prob, quarters, axis, bound, muR, ScalarMagPotential}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, muR=%g, Phi=%g:", File > "output.txt"]; 
+			Print[{prob, quarters, bound, s, axis, muR, ScalarMagPotential}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g, Axis=%g, muR=%g, ScalMagPot=%g:", File > "output.txt"]; 
 
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
 			Print[ B2, OnGlobal, StoreInVariable $B2 ];
