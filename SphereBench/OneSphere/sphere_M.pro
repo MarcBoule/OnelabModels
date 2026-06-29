@@ -1,9 +1,10 @@
 // How to run: see main.pro
 
 // Uniformly magnetized full sphere
+// Note: magnetic scalar potential is ungauged when SurDiriPhi is empty
 
 
-ScalarMagPotential = 0; // 1 = scalar mag potential, 0 = vector mag potential
+ScalarMagPotential = 1; // 1 = scalar mag potential, 0 = vector mag potential
 
 
 Group {
@@ -187,6 +188,9 @@ PostProcessing {
 
 			If (ScalarMagPotential)
 
+			{ Name Phi; Value {Local {
+				[ {p} ]; In VolAll; Jacobian J1; }}
+			}
 			// { Name B; Value {Local {
 				// [ mu0*M[]-mu[]*{d p} ]; In VolAll; Jacobian J1; }}
 			// }
@@ -286,7 +290,7 @@ PostOperation {
 	} 
 	{ Name PostFields; NameOfPostProcessing PostMain; 
 		Operation {
-			// Print[ Phi, OnElementsOf VolAll, File "sphere_Phi.pos" ];
+			Print[ Phi, OnElementsOf VolAll, File "sphere_Phi.pos" ];
 			// Print[ B, OnElementsOf VolSphere, File "sphere_B.pos" ];
 			// Print[ H, OnElementsOf VolSphere, File "sphere_H.pos" ];
 		}

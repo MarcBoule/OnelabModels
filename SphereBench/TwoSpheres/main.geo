@@ -6,7 +6,7 @@ SetFactory("OpenCASCADE");
 azimut = quarters * Pi/2;
 
 Sphere(1)   = {xs,ys,zs, rs, -Pi/2, Pi/2, azimut};  // sphere 1 (top)
-Sphere(2)   = {xs,ys,zs, rs*2, -Pi/2, Pi/2, azimut}; // sphere 1 probe surface; one of the points is also a reference point for potential when no potential is imposed
+Sphere(2)   = {xs,ys,zs, rs*2, -Pi/2, Pi/2, azimut}; // sphere 1 probe surface
 Sphere(3)   = {xs2,ys2,zs2, rs, -Pi/2, Pi/2, azimut};  // sphere 2 (bot)
 
 Sphere(4)   = {0,0,0, rb, -Pi/2, Pi/2, azimut};     // bnd int
@@ -19,6 +19,7 @@ BooleanFragments{ Volume{7}; Delete; }{Volume{1:6}; Delete; }
 Physical Volume("Vol sphere 1", 101) = {1};
 Physical Volume("Vol sphere 2", 102) = {3};
 Physical Surface("Sur sphere 1", 123) = {1};
+Physical Point("Pt ref pot", 141) = {2};  // for potential gauging
 
 If (quarters <= 2)
 
@@ -31,7 +32,6 @@ If (quarters <= 2)
 	Physical Surface("Sur force probe", 121) = {22};
 	Physical Surface("Sur vac ext3", 122) = {10};
 	Physical Surface("Sur sphere 2", 124) = {7};
-	Physical Point("Pt ref pot", 141) = {15};
 	
 Else
 
@@ -43,7 +43,6 @@ Else
 	Physical Surface("Sur force probe", 121) = {6};
 	Physical Surface("Sur vac ext3", 122) = {4};
 	Physical Surface("Sur sphere 2", 124) = {3};
-	Physical Point("Pt ref pot", 141) = {12};
 	
 EndIf
 

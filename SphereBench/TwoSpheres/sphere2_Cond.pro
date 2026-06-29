@@ -14,14 +14,14 @@ Function {
 	// Maxwell stress tensor (electric components only)
 	TM[] = (SquDyadicProduct[$1] - SquNorm[$1] * TensorDiag[0.5, 0.5, 0.5]) * eps0;
 
-	// Analytical energy
+	// Exact results (for post analysis):
+	// Energy
 	k[] = d[]/(2*rs);
 	x[] = Sqrt[k[]*k[]-1]; // beta
 	y[] = k[] + x[];       // alpha
 	argw[] = 1 / (y[]^(2*$1+1) - 1); // w_i
 	We[] = 2*Pi*eps0*(2*V)^2*rs*x[] * (argw[0]+argw[1]+argw[2]+argw[3]+argw[4]+argw[5]+argw[6]+argw[7]+argw[8]+argw[9]+argw[10]);
-	
-	// Analytical force 
+	// Force on top sphere (Sphere1)
 	//argf[] = k[]/(x[]*(y[]^(2*$1+1)-1)) - (2*$1+1)*y[]^(2*$1+1) / (y[]^(2*$1+1)-1)^2;
 	argf[] = k[]/(x[]*(( $z=(y[]^(2*$1+1)) )-1)) - (2*$1+1)*$z / ($z-1)^2;
 	F[] = Pi*eps0*(2*V)^2*(argf[0]+argf[1]+argf[2]+argf[3]+argf[4]+argf[5]+argf[6]+argf[7]+argf[8]+argf[9]+argf[10]);
@@ -99,24 +99,15 @@ PostProcessing {
 			// { Name V; Value {Local {
 				// [ {v} ]; In VolExSpheres; Jacobian J1; }}
 			// }
-			// { Name U1; Value { Term {
-				// [ {U} ]; In SurSphere1;}}
-			// }
-			// { Name U2; Value { Term {
-				// [ {U} ]; In SurSphere2;}}
-			// }
-			// { Name Q1; Value { Term {
-				// [ coef * {Q} ]; In SurSphere1;}}
-			// }
-			// { Name Q2; Value { Term {
-				// [ coef * {Q} ]; In SurSphere2;}}
-			// }
 			{ Name We; Value {Integral {Type Global; 
 				[ coef* eps[] / (2.0) * SquNorm[-{d v}] ];
 				Integration I1; Jacobian J1; In VolExSpheres;}}
 			}
-			{ Name We2; Value { Term {
-				[ coef * {Q} * {U} ]; In SurSphere1;}} // 2x the Q*V/2 of sphere1
+			{ Name We21; Value { Term {
+				[ coef/2 * {Q} * {U} ]; In SurSphere1;}} 
+			}
+			{ Name We22; Value { Term {
+				[ coef/2 * {Q} * {U} ]; In SurSphere2;}} 
 			}
 			{ Name We3; Value {Integral {Type Global;
 				[ coef * V * (eps0*-{d v}  )* -{d un} ];
@@ -140,19 +131,14 @@ PostOperation {
 		Operation {
 			Print[{prob, quarters, bound}, Format "Prob=%g, Quarters=%g, Bound=%g:", File > "output.txt"]; 
 
-			// Print[ U1, OnRegion SurSphere1, StoreInVariable $U1 ];
-			// Print[ U2, OnRegion SurSphere2, StoreInVariable $U2 ];
-			// Print[ Q1, OnRegion SurSphere1, StoreInVariable $Q1 ];
-			// Print[ Q2, OnRegion SurSphere2, StoreInVariable $Q2 ];
-			// Print[ {$U1, $Q1, $U2, $Q2}, Format " U1  = %.8g [C], Q1  = %.8g [C], U2  = %.8g [C], Q2  = %.8g [C]", File > "output.txt" ];
-
 			If (bound != BOUND_ABC)
 				Print[ We, OnGlobal, StoreInVariable $We ];
 				Print[ {$We, We[], ($We-We[])/We[]*10^6}, Format " We  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 			EndIf
 
-			Print[ We2, OnRegion SurSphere1, StoreInVariable $We2 ];
-			Print[ {$We2, We[], ($We2-We[])/We[]*10^6}, Format " We2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			Print[ We21, OnRegion SurSphere1, StoreInVariable $We21 ];
+			Print[ We22, OnRegion SurSphere2, StoreInVariable $We22 ];
+			Print[ {$We21+$We22, We[], ($We21+$We22-We[])/We[]*10^6}, Format " We2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 
 			Print[ We3, OnGlobal, StoreInVariable $We3 ];
 			Print[ {$We3, We[], ($We3-We[])/We[]*10^6}, Format " We3 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];

@@ -25,7 +25,6 @@ If (quarters == 1)
 	Physical Surface("Sur XZ", 122) = {2,6,9,12,15};
 	Physical Surface("Sur YZ", 123) = {3,5,8,11,14};
 	Physical Surface("Sur vac ext3", 124) = {4};
-	//Physical Surface("Sur bnd int", 125) = {13};
 
 ElseIf (quarters == 2)
 
@@ -37,7 +36,6 @@ ElseIf (quarters == 2)
 	Physical Surface("Sur XZ", 122) = {2,3,5,6,8,9,11,12,14,15};
 	Physical Surface("Sur YZ", 123) = {};
 	Physical Surface("Sur vac ext3", 124) = {4};
-	//Physical Surface("Sur bnd int", 125) = {13};
 
 ElseIf (quarters == 4)
 
@@ -49,7 +47,6 @@ ElseIf (quarters == 4)
 	Physical Surface("Sur XZ", 122) = {};
 	Physical Surface("Sur YZ", 123) = {};
 	Physical Surface("Sur vac ext3", 124) = {2};
-	//Physical Surface("Sur bnd int", 125) = {4};
 
 EndIf
 

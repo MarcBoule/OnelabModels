@@ -16,7 +16,7 @@ coef = 4.0 / quarters;   // for post-processing integrals
 PROB_SPHERE2_COND  = 1;
 PROB_SPHERE2_INSUL = 2;
 PROB_SPHERE2_MAG   = 3;  // requires quarters >= 2
-DefineConstant[prob = {PROB_SPHERE2_COND, Name "Input/0Problem type",
+DefineConstant[prob = {PROB_SPHERE2_MAG, Name "Input/0Problem type",
 	Choices{PROB_SPHERE2_COND  = "Sphere2 Cond",
 			PROB_SPHERE2_INSUL = "Sphere2 Insul",
 			PROB_SPHERE2_MAG   = "Sphere2 Mag"}}];
@@ -49,7 +49,7 @@ Group {
 	SurExt     = #{122};
 	SurSphere1 = #{123};
 	SurSphere2 = #{124};
-	PtRefPot   = #{141}; // interior reference point for scalar potentials
+	PtRefPot   = #{141}; // interior reference point for scalar potential gauging
 
 	VolSpheres = #{VolSphere1,VolSphere2};
 	VolExts    = #{VolExt1,VolExt2,VolExt3};

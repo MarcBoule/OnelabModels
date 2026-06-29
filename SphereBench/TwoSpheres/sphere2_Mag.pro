@@ -9,30 +9,30 @@ Function {
 	M[VolSphere2] = Mp * u2[];
 	M[All] = Vector[0,0,0]; // All that are unassigned
 
-
 	// Maxwell stress tensor (magnetic components only)
 	TM[] = (SquDyadicProduct[$1] - SquNorm[$1] * TensorDiag[0.5, 0.5, 0.5]) / mu0;
 
-	// Analytical energies
+	// Exact results (for post analysis):
+	// Energy
 	Wb[] = 4*Pi * rs^3 * Mp^2 * mu0 / 9 * (2 + (rs/d[])^3 * (3 * (u1[]*ud[])*(u2[]*ud[])-u1[]*u2[]) );
 	Wh[] = 4*Pi * rs^3 * Mp^2 * mu0 / 9 * (1 - (rs/d[])^3 * (3 * (u1[]*ud[])*(u2[]*ud[])-u1[]*u2[]) );
-
-	// Analytical force on top sphere
+	// Force on top sphere (Sphere1)
 	F[] = 4*Pi * rs^6 * Mp^2 * mu0 / (3 * d[]^4) * (
 		ud[] * (u1[] *u2[]) +
 		u1[] * (ud[] *u2[]) +
 		u2[] * (ud[] *u1[]) -
 		5 * ud[] * (ud[] *u1[]) * (ud[] *u2[])
 	);
-
-	// Analytical torque on top sphere
+	// Torque on top sphere (Sphere1)
 	Tau[] = 4*Pi * rs^6 * Cross[u1[], 3*(u2[]*ud[])*ud[] - u2[]] * Mp^2 * mu0 / (9 * d[]^3);
 }
 
 
 Constraint {
 	{ Name CstPhi; Case { 
-		{ Region PtRefPot;  Value 0; }// not needed, but helps to anchor the scalar potential to a reasonable value
+		If (bound != BOUND_ABC)
+		{ Region PtRefPot; Value 0; }// helps improve F; value and location are arbitrary
+		EndIf
 	}}
 }
 

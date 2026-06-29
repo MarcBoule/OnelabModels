@@ -11,12 +11,12 @@ Function {
 	// Maxwell stress tensor (electric components only)
 	TM[] = (SquDyadicProduct[$1] - SquNorm[$1] * TensorDiag[0.5, 0.5, 0.5]) * eps0;
 
-	// Analytical energy
+	// Exact results (for post analysis):
+	// Energy
 	// Q = rho_f * 4/3*Pi*rs^3;
 	// We[] = Q*Q*(6*d[]-5*rs)/(20*Pi*eps0*rs*d[]);
 	We[] = 4*Pi * rs^5 * rho_f^2 * (6/5 - rs/d[]) / (9*eps0);
-
-	// Analytical force on top sphere
+	// Force on top sphere (Sphere1)
 	// F[] = -1/(4*Pi*eps0)*Q*Q/(d[]*d[]);
 	F[] = -4*Pi * rs^6 * rho_f^2 / (9 * d[]*d[] * eps0);
 }
@@ -24,7 +24,9 @@ Function {
 
 Constraint {
 	{ Name CstV; Case { 
-		{ Region PtRefPot;  Value 0; }// needed for We2
+		If (bound != BOUND_ABC)
+		{ Region PtRefPot; Value 0; }// helps improve We2; value and location are arbitrary
+		EndIf
 	}}
 }
 
