@@ -26,9 +26,9 @@ Function {
 	eps[All] = eps0; // All that are unassigned
 
 	// Exact results (for post analysis):
-	Dex[VolSphere] = Pp*u[]*2/(epsR+2);
-	Dex[All] = Pp*rs^3/(epsR+2)*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
-	Eex[VolSphere] = -Pp*u[]/(eps0*(epsR+2));
+	Dex[VolSphere] = Pp*uP[]*2/(epsR+2);
+	Dex[All] = Pp*rs^3/((epsR+2)/nr[]^3)*( 3/nr[]^2*(uP[]*r[])*r[] - uP[] );
+	Eex[VolSphere] = -Pp*uP[]/(eps0*(epsR+2));
 	Eex[All] = Dex[]/eps0;
 	We[] = 2*Pi * rs^3 * Pp^2 / (3*eps0*(epsR+2));
 	Wd[] = 4*Pi * rs^3 * Pp^2 / (3*eps0*epsR*(epsR+2)); 
@@ -134,7 +134,7 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain; 
 		Format Table;
 		Operation {
-			Print[{prob, quarters, bound, s, axis, epsR}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g, Axis=%g, epsR=%g:", File > "output.txt"]; 
+			Print[{prob, quarters, bound, s, axisP, epsR}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g, Axis=%g, epsR=%g:", File > "output.txt"]; 
 
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
 			Print[ E2, OnGlobal, StoreInVariable $E2 ];
