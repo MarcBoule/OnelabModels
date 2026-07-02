@@ -51,7 +51,7 @@ rho_f   = 8E-5;  // volume free charge density (C/m^3)
 V       = 100;   // electric potential (V)
 sigma_f = V * eps0 / rs; // surface free charge density (C/m^2)
 omega   = 1E3;   // angular speed (rad/s)
-axis    = 3;     // Mp and omega axis (1=X, 2=Y, 3=Z)
+axis    = 1;     // Mp and omega axis (1=X, 2=Y, 3=Z)
 axisP   = 3;     // Pp axis (1=X, 2=Y, 3=Z)
 
 

@@ -27,7 +27,7 @@ Function {
 
 	// Exact results (for post analysis):
 	Dex[VolSphere] = Pp*uP[]*2/(epsR+2);
-	Dex[All] = Pp*rs^3/((epsR+2)/nr[]^3)*( 3/nr[]^2*(uP[]*r[])*r[] - uP[] );
+	Dex[All] = Pp*rs^3/((epsR+2)*nr[]^3)*( 3/nr[]^2*(uP[]*r[])*r[] - uP[] );
 	Eex[VolSphere] = -Pp*uP[]/(eps0*(epsR+2));
 	Eex[All] = Dex[]/eps0;
 	We[] = 2*Pi * rs^3 * Pp^2 / (3*eps0*(epsR+2));
@@ -94,6 +94,12 @@ PostProcessing {
 			// { Name V; Value {Local {
 				// [ {v} ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
 			// }
+			{ Name E; Value {Local {
+				[ -{d v} ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
+			}
+			{ Name Eex; Value {Local {
+				[ Eex[] ]; In #{VolVacInt,VolSphere}; Jacobian J1; }}
+			}
 			// { Name E; Value {Local {
 				// [ -{d v} ]; In VolAll; Jacobian J1; }}
 			// }
@@ -164,7 +170,8 @@ PostOperation {
 	} 
 	{ Name PostFields; NameOfPostProcessing PostMain; 
 		Operation {
-			// Print[ V, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_V.pos" ];
+			Print[ E, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_E.pos" ];
+			Print[ Eex, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_Eex.pos" ];
 			// Print[ dV, OnElementsOf #{VolVacInt,VolSphere}, File "sphere_dV.pos" ];
 			// Print[ E, OnPoint {xs+rs*1.5,ys,zs},
 			// Format TimeTable, File > "sphere_pts.txt" ];
