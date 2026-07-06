@@ -25,9 +25,9 @@ Function {
 	mu[All]  = mu0; // All that are unassigned
 
 	// Exact results (for post analysis):
-	Bex[VolSphere] = mu0*( rho_f*(omega*u[]*r[])*r[]*(rs^2/(3*nr[]^2)-1/5) - 
-						   Cross[J[],r[]]*(rs^2/(3*nr[]^2)-2/5) );
-	Bex[All] = mu0*rho_f*omega*rs^5/15*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
+	Bex[VolSphere] = mu0*rho_f*( (rs^2/(3*nr[]^2)-1/5)*(omega*u[]*r[])*r[] - 
+						         (rs^2/(3*nr[]^2)-2/5)*Cross[Cross[ omega*u[], r[] ],r[]] );
+	Bex[All] = mu0*rho_f*omega*rs^5/(15*nr[]^3)*( 3/nr[]^2*(u[]*r[])*r[] - u[] );
 	Wb[] = 8*Pi  * rs^7 * rho_f^2 * omega^2 * (mu0/315);
 }
 

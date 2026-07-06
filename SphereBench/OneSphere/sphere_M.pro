@@ -30,7 +30,7 @@ Function {
 
 	// Exact results (for post analysis):
 	Bex[VolSphere] = mu0*Mp*u[]*2/(muR+2);
-	Bex[All] = mu0*Mp*rs^3/(muR+2)*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
+	Bex[All] = mu0*Mp*rs^3/((muR+2)*nr[]^3)*( 3/nr[]^2*(u[]*r[])*r[] - u[] );
 	Hex[VolSphere] = -Mp*u[]/(muR+2);
 	Hex[All] = Bex[]/mu0;
 	Wb[] = 4*Pi * rs^3 * Mp^2  * mu0 / (3*muR*(muR+2));

@@ -26,7 +26,7 @@ Function {
 
 	// Exact results (for post analysis):
 	Bex[VolSphere] = mu0*sigma_f*omega*rs*u[]*2/3;
-	Bex[All] = mu0*sigma_f*omega*rs^4/3*( 3/nr[]^5*(u[]*r[])*r[] - u[]/nr[]^3 );
+	Bex[All] = mu0*sigma_f*omega*rs^4/(3*nr[]^3)*( 3/nr[]^2*(u[]*r[])*r[] - u[]);
 	Wb[] = 4*Pi  * rs^5 * sigma_f^2 * omega^2 * (mu0/9); 
 }
 
