@@ -76,7 +76,7 @@ Function {
 	//   they should not have a Y component when quarters < 4, and
 	//   they should not have an X component when quarters < 2, and
 	u1[] = Unit[Vector[0, 0, 1]]; // for Mp1 vector
-	u2[] = Unit[Vector[0, 0, 1]]; // for Mp2 vector
+	u2[] = Unit[Vector[1, 0, 0]]; // for Mp2 vector
 	vd[] = Vector[xs,ys,zs]-Vector[xs2,ys2,zs2]; // distance vector 2 to 1
 	d[]  = Norm[vd[]];
 	ud[] = vd[] / d[]; 

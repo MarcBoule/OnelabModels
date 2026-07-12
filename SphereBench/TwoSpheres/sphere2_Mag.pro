@@ -30,7 +30,10 @@ Function {
 		5 * ud[] * (ud[] *u1[]) * (ud[] *u2[])
 	);
 	// Torque on top sphere (Sphere1)
-	Tau[] = 4*Pi * rs^6 * Cross[u1[], 3*(u2[]*ud[])*ud[] - u2[]] * Mp^2 * mu0 / (9 * d[]^3);
+	Tau[] = Pi * mu0 * rs^6 * Mp^2 / (9*d[]^3) * (
+		4 * Cross[u1[], 3*(u2[]*ud[])*ud[] - u2[]] +
+		6 * Cross[ud[], (ud[]*u2[])*u1[] + (ud[]*u1[])*u2[]]
+	);
 }
 
 
@@ -128,7 +131,7 @@ PostProcessing {
 				In VolProbeLayer; Integration I1; Jacobian J1;}}
 			}
 			{ Name Tau; Value {Integral {Type Global;
-				[ coef* Cross[(XYZ[] - Vector[xs,ys,zs]), (TM[mu0*M[] - mu[]*{d p}] * -{d un})] ];
+				[ coef* Cross[(XYZ[] - (Vector[xs2,ys2,zs2] + vd[]/2)), (TM[mu0*M[] - mu[]*{d p}] * -{d un})] ];
 				In VolProbeLayer; Integration I1; Jacobian J1;}}
 			} 
 		}

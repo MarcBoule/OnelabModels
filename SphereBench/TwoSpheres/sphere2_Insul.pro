@@ -24,7 +24,7 @@ Function {
 	We[] = 4*Pi * rs^5 * rho_f^2 * (6/5 - rs/d[]) / (9*eps0);
 	// Force on top sphere (Sphere1)
 	// F[] = -1/(4*Pi*eps0)*Q*Q/(d[]*d[]);
-	F[] = -4*Pi * rs^6 * rho_f^2 / (9 * d[]*d[] * eps0);
+	F[] = -ud[] * 4*Pi * rs^6 * rho_f^2 / (9 * d[]*d[] * eps0);
 }
 
 
@@ -137,7 +137,7 @@ PostOperation {
 			Print[ {$We2, We[], ($We2-We[])/We[]*10^6}, Format " We2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 
 			Print[ F, OnGlobal, StoreInVariable $F ]; 
-			Print[ {$Fz = CompZ[$F], $FzA = F[], ($Fz-$FzA)/$FzA*10^6}, Format " Fz = %.8g [N] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			Print[ {$Fz = CompZ[$F], $FzA = CompZ[F[]], ($Fz-$FzA)/$FzA*10^6}, Format " Fz = %.8g [N] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 		}
 	} 
 	{ Name PostFields; NameOfPostProcessing PostMain; 

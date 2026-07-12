@@ -22,9 +22,9 @@ Function {
 	argw[] = 1 / (y[]^(2*$1+1) - 1); // w_i
 	We[] = 2*Pi*eps0*(2*V)^2*rs*x[] * (argw[0]+argw[1]+argw[2]+argw[3]+argw[4]+argw[5]+argw[6]+argw[7]+argw[8]+argw[9]+argw[10]);
 	// Force on top sphere (Sphere1)
-	//argf[] = k[]/(x[]*(y[]^(2*$1+1)-1)) - (2*$1+1)*y[]^(2*$1+1) / (y[]^(2*$1+1)-1)^2;
-	argf[] = k[]/(x[]*(( $z=(y[]^(2*$1+1)) )-1)) - (2*$1+1)*$z / ($z-1)^2;
-	F[] = Pi*eps0*(2*V)^2*(argf[0]+argf[1]+argf[2]+argf[3]+argf[4]+argf[5]+argf[6]+argf[7]+argf[8]+argf[9]+argf[10]);
+	//argf[] = (2*$1+1)*y[]^(2*$1+1) / (y[]^(2*$1+1)-1)^2  -  k[]/(x[]*(y[]^(2*$1+1)-1));
+	argf[] = (2*$1+1)*($z=y[]^(2*$1+1)) / ($z-1)^2  -  k[]/(($z-1)*x[]);
+	F[] = -ud[] * Pi*eps0*(2*V)^2*(argf[0]+argf[1]+argf[2]+argf[3]+argf[4]+argf[5]+argf[6]+argf[7]+argf[8]+argf[9]+argf[10]);
 }
 
 
@@ -144,7 +144,7 @@ PostOperation {
 			Print[ {$We3, We[], ($We3-We[])/We[]*10^6}, Format " We3 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 
 			Print[ F, OnGlobal, StoreInVariable $F ]; 
-			Print[ {$Fz = CompZ[$F], $FzA = F[], ($Fz-$FzA)/$FzA*10^6}, Format " Fz = %.8g [N] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			Print[ {$Fz = CompZ[$F], $FzA = CompZ[F[]], ($Fz-$FzA)/$FzA*10^6}, Format " Fz = %.8g [N] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 		}
 	} 
 	{ Name PostFields; NameOfPostProcessing PostMain; 
