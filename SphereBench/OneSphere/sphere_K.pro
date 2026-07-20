@@ -139,7 +139,7 @@ PostProcessing {
 				[ coef* SquNorm[Bex[]-{d a}] ]; // square root in PostOperation
 				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
-			{ Name B2; Value {Integral {Type Global; // B^2 exact integral
+			{ Name BexSqu; Value {Integral {Type Global; // B^2 exact integral
 				[ coef* SquNorm[Bex[]] ];
 				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
@@ -164,8 +164,8 @@ PostOperation {
 			Print[{prob, quarters, bound, s, axis}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g, Axis=%g:", File > "output.txt"]; 
 
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
-			Print[ B2, OnGlobal, StoreInVariable $B2 ];
-			Print[ {Sqrt[$L2error/$B2]}, Format 
+			Print[ BexSqu, OnGlobal, StoreInVariable $BexSqu ];
+			Print[ {Sqrt[$L2error/$BexSqu]}, Format 
 			" RelL2e = %.8g [1]", File > "output.txt" ];
 
 			If (bound != BOUND_ABC)

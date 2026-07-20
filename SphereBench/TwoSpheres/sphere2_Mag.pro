@@ -105,7 +105,7 @@ PostProcessing {
 				[ coef* SquNorm[(B1ex[]+B2ex[])-(mu0*M[]-mu[]*{d p})] ]; // square root in PostOperation
 				Integration I2; Jacobian J1; In #{VolVacInt,VolSpheres};}}
 			}
-			{ Name B2; Value {Integral {Type Global; // B^2 exact integral
+			{ Name BexSqu; Value {Integral {Type Global; // B^2 exact integral
 				[ coef* SquNorm[B1ex[]+B2ex[]] ];
 				Integration I2; Jacobian J1; In #{VolVacInt,VolSpheres};}}
 			}
@@ -147,8 +147,8 @@ PostOperation {
 			Print[{prob, quarters, bound, s, CompX[u1[]], CompZ[u1[]], CompX[u2[]], CompZ[u2[]]}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g, u1xz=%.3g,%.3g, u2xz=%.3g,%.3g:", File > "output.txt"];
 				
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
-			Print[ B2, OnGlobal, StoreInVariable $B2 ];
-			Print[ {Sqrt[$L2error/$B2]}, Format 
+			Print[ BexSqu, OnGlobal, StoreInVariable $BexSqu ];
+			Print[ {Sqrt[$L2error/$BexSqu]}, Format 
 			" RelL2e = %.8g [1]", File > "output.txt" ];
 
 			If (bound != BOUND_ABC)
