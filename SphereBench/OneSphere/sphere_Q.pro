@@ -30,9 +30,9 @@ Function {
 	If (ImposeV == 0)
 		Eex[All] = Qf*coef*r[]/(4*Pi*eps0*nr[]^3);
 	Else
-		Eex[All] = V*rs*r[]/nr[]^3;
+		Eex[All] = V0*rs*r[]/nr[]^3;
 	EndIf
-	We[] = 2*Pi * rs * V^2 * eps0; 
+	We[] = 2*Pi * rs * V0^2 * eps0; 
 }
 
 
@@ -44,7 +44,7 @@ Constraint {
 		{ Region SurSphere; Value Qf; }
 	}}
 	{ Name CstVs; Case { 
-		{ Region SurSphere; Value V; }
+		{ Region SurSphere; Value V0; }
 	}}
 }
 

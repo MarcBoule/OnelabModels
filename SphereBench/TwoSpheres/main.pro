@@ -35,7 +35,7 @@ DefineConstant[bound = {BOUND_SHELL, Name "Input/1Boundary type",
 // Simulation parameters
 Mp      = 3.2E5; // permanent magnetic dipole moment per unit volume (A/m)
 rho_f   = 8E-5;  // volume free charge density (C/m^3)
-V       = 100;   // electric potential (V)
+V0      = 100;   // electric potential (V)
 
 
 Group {

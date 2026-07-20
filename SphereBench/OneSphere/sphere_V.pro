@@ -21,8 +21,8 @@ Function {
 
 	// Exact results (for post analysis):
 	Eex[VolSphere] = 0;
-	Eex[All] = V*rs/nr[]^3*r[];
-	We[] = 2*Pi * rs * V^2 * eps0; 
+	Eex[All] = V0*rs/nr[]^3*r[];
+	We[] = 2*Pi * rs * V0^2 * eps0; 
 }
 
 
@@ -65,7 +65,7 @@ Formulation {
 			Integration I1; Jacobian J1; In SurSphere; }
 			Integral{ [eps0 * Dof{v}, {lam}];
 			Integration I1; Jacobian J1; In SurSphere; }
-			Integral{ [-eps0 * V, {lam}];
+			Integral{ [-eps0 * V0, {lam}];
 			Integration I1; Jacobian J1; In SurSphere; }
 
 			If (bound == BOUND_ABC)

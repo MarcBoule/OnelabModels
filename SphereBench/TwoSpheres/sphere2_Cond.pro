@@ -20,18 +20,18 @@ Function {
 	x[] = Sqrt[k[]*k[]-1]; // beta
 	y[] = k[] + x[];       // alpha
 	argw[] = 1 / (y[]^(2*$1+1) - 1); // w_i
-	We[] = 2*Pi*eps0*(2*V)^2*rs*x[] * (argw[0]+argw[1]+argw[2]+argw[3]+argw[4]+argw[5]+argw[6]+argw[7]+argw[8]+argw[9]+argw[10]);
+	We[] = 2*Pi*eps0*(2*V0)^2*rs*x[] * (argw[0]+argw[1]+argw[2]+argw[3]+argw[4]+argw[5]+argw[6]+argw[7]+argw[8]+argw[9]+argw[10]);
 	// Force on top sphere (Sphere1)
 	//argf[] = (2*$1+1)*y[]^(2*$1+1) / (y[]^(2*$1+1)-1)^2  -  k[]/(x[]*(y[]^(2*$1+1)-1));
 	argf[] = (2*$1+1)*($z=y[]^(2*$1+1)) / ($z-1)^2  -  k[]/(($z-1)*x[]);
-	F[] = -ud[] * Pi*eps0*(2*V)^2*(argf[0]+argf[1]+argf[2]+argf[3]+argf[4]+argf[5]+argf[6]+argf[7]+argf[8]+argf[9]+argf[10]);
+	F[] = -ud[] * Pi*eps0*(2*V0)^2*(argf[0]+argf[1]+argf[2]+argf[3]+argf[4]+argf[5]+argf[6]+argf[7]+argf[8]+argf[9]+argf[10]);
 }
 
 
 Constraint {
 	{ Name CstV; Case { 
-		{ Region SurSphere1; Value V; }
-		{ Region SurSphere2; Value -V; }
+		{ Region SurSphere1; Value V0; }
+		{ Region SurSphere2; Value -V0; }
 	}}
 }
 
@@ -110,7 +110,7 @@ PostProcessing {
 				[ coef/2 * {Q} * {U} ]; In SurSphere2;}} 
 			}
 			{ Name We3; Value {Integral {Type Global;
-				[ coef * V * (eps0*-{d v}  )* -{d un} ];
+				[ coef * V0 * (eps0*-{d v}  )* -{d un} ];
 				// Q_inside = vol_int(div(D)), with same weighted integral method as used in weighted stress tensor force calculation
 				// Pp = 0, and result simply doubled since energy of sphere2
 				//   is identical (and it doesn't have a probe surface)
