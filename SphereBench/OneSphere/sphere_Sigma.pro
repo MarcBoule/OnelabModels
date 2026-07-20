@@ -108,7 +108,7 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain; 
 		Format Table;
 		Operation {
-			Print[{prob, quarters, bound, s}, Format "Prob=%g, Quarters=%g, Axis=%g, Bound=%g, s=%g:", File > "output.txt"]; 
+			Print[{prob, quarters, bound, s}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g:", File > "output.txt"]; 
 
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
 			Print[ EexSqu, OnGlobal, StoreInVariable $EexSqu ];
