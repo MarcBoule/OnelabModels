@@ -1,0 +1,292 @@
+ONE SPHERE (2000s sim time for sphere_J and sphere_K with ABC):
+
+Prob=1, Quarters=1, Bound=1, s=1, Axis=3, epsR=3.1:
+ RelL2e = 0.014392098 [1]
+ We  = 0.00011610392 [J] (analyt 0.00011595239, 1.31e+03 ppm)
+ We2 = 0.00011610392 [J] (analyt 0.00011595239, 1.31e+03 ppm)
+ Wd  = 7.4656305e-05 [J] (analyt 7.4807995e-05, -2.03e+03 ppm)
+ Wd2 = 7.4656305e-05 [J] (analyt 7.4807995e-05, -2.03e+03 ppm)
+Prob=1, Quarters=1, Bound=2, s=1, Axis=3, epsR=3.1:
+ RelL2e = 0.0059369441 [1]
+ We2 = 0.00011595303 [J] (analyt 0.00011595239, 5.51 ppm)
+ Wd2 = 7.4807194e-05 [J] (analyt 7.4807995e-05, -10.7 ppm)
+Prob=1, Quarters=1, Bound=3, s=1, Axis=3, epsR=3.1:
+ RelL2e = 0.0059274671 [1]
+ We  = 0.00011594953 [J] (analyt 0.00011595239, -24.7 ppm)
+ We2 = 0.00011594953 [J] (analyt 0.00011595239, -24.7 ppm)
+ Wd  = 7.4810695e-05 [J] (analyt 7.4807995e-05, 36.1 ppm)
+ Wd2 = 7.4810695e-05 [J] (analyt 7.4807995e-05, 36.1 ppm)
+Prob=1, Quarters=1, Bound=4, s=1, Axis=3, epsR=3.1:
+ RelL2e = 0.0059257815 [1]
+ We  = 0.00011594973 [J] (analyt 0.00011595239, -22.9 ppm)
+ We2 = 0.00011594973 [J] (analyt 0.00011595239, -22.9 ppm)
+ Wd  = 7.4810493e-05 [J] (analyt 7.4807995e-05, 33.4 ppm)
+ Wd2 = 7.4810493e-05 [J] (analyt 7.4807995e-05, 33.4 ppm)
+
+Prob=2, Quarters=1, Bound=1, s=1, epsR=3.1:
+ RelL2e = 0.014934284 [1]
+ We  = 4.8460904e-08 [J] (analyt 5.3718125e-08, -9.79e+04 ppm)
+ We2 = 4.8460904e-08 [J] (analyt 5.3718125e-08, -9.79e+04 ppm)
+Prob=2, Quarters=1, Bound=2, s=1, epsR=3.1:
+ RelL2e = 0.0080466904 [1]
+ We2 = 5.3824039e-08 [J] (analyt 5.3718125e-08, 1.97e+03 ppm)
+Prob=2, Quarters=1, Bound=3, s=1, epsR=3.1:
+ RelL2e = 0.0034517051 [1]
+ We  = 5.3718774e-08 [J] (analyt 5.3718125e-08, 12.1 ppm)
+ We2 = 5.3718774e-08 [J] (analyt 5.3718125e-08, 12.1 ppm)
+Prob=2, Quarters=1, Bound=4, s=1, epsR=3.1:
+ RelL2e = 0.0033893027 [1]
+ We  = 5.371657e-08 [J] (analyt 5.3718125e-08, -29 ppm)
+ We2 = 5.371657e-08 [J] (analyt 5.3718125e-08, -29 ppm)
+
+Prob=3, Quarters=1, Bound=1, s=1:
+ RelL2e = 0.11545898 [1]
+ We  = 6.2102455e-09 [J] (analyt 5.5632503e-09, 1.16e+05 ppm)
+ We2 = 6.2102455e-09 [J] (analyt 5.5632503e-09, 1.16e+05 ppm)
+Prob=3, Quarters=1, Bound=2, s=1:
+ RelL2e = 0.0082089706 [1]
+ We2 = 5.5515921e-09 [J] (analyt 5.5632503e-09, -2.1e+03 ppm)
+Prob=3, Quarters=1, Bound=3, s=1:
+ RelL2e = 0.0035011163 [1]
+ We  = 5.5631685e-09 [J] (analyt 5.5632503e-09, -14.7 ppm)
+ We2 = 5.5631685e-09 [J] (analyt 5.5632503e-09, -14.7 ppm)
+Prob=3, Quarters=1, Bound=4, s=1:
+ RelL2e = 0.0034379094 [1]
+ We  = 5.5634115e-09 [J] (analyt 5.5632503e-09, 29 ppm)
+ We2 = 5.5634115e-09 [J] (analyt 5.5632503e-09, 29 ppm)
+
+Prob=4, Quarters=1, Bound=1, s=1, ImposeV=0:
+ RelL2e = 0.015228444 [1]
+ We  = 4.9836602e-09 [J] (analyt 5.5632503e-09, -1.04e+05 ppm)
+ We2 = 4.9836602e-09 [J] (analyt 5.5632503e-09, -1.04e+05 ppm)
+Prob=4, Quarters=1, Bound=2, s=1, ImposeV=0:
+ RelL2e = 0.0081946143 [1]
+ We2 = 5.5749329e-09 [J] (analyt 5.5632503e-09, 2.1e+03 ppm)
+Prob=4, Quarters=1, Bound=3, s=1, ImposeV=0:
+ RelL2e = 0.0035012354 [1]
+ We  = 5.563332e-09 [J] (analyt 5.5632503e-09, 14.7 ppm)
+ We2 = 5.563332e-09 [J] (analyt 5.5632503e-09, 14.7 ppm)
+Prob=4, Quarters=1, Bound=4, s=1, ImposeV=0:
+ RelL2e = 0.0034379103 [1]
+ We  = 5.5630891e-09 [J] (analyt 5.5632503e-09, -29 ppm)
+ We2 = 5.5630891e-09 [J] (analyt 5.5632503e-09, -29 ppm)
+
+Prob=5, Quarters=1, Bound=1, s=1
+ RelL2e = 0.015109999 [1]
+ We  = 4.983671e-09 [J] (analyt 5.5632503e-09, -1.04e+05 ppm)
+ We2 = 4.983671e-09 [J] (analyt 5.5632503e-09, -1.04e+05 ppm)
+Prob=5, Quarters=1, Bound=2, s=1
+ RelL2e = 0.0081423155 [1]
+ We2 = 5.5749318e-09 [J] (analyt 5.5632503e-09, 2.1e+03 ppm)
+Prob=5, Quarters=1, Bound=3, s=1
+ RelL2e = 0.0034967494 [1]
+ We  = 5.5633269e-09 [J] (analyt 5.5632503e-09, 13.8 ppm)
+ We2 = 5.5633269e-09 [J] (analyt 5.5632503e-09, 13.8 ppm)
+Prob=5, Quarters=1, Bound=4, s=1
+ RelL2e = 0.0034335531 [1]
+ We  = 5.5630839e-09 [J] (analyt 5.5632503e-09, -29.9 ppm)
+ We2 = 5.5630839e-09 [J] (analyt 5.5632503e-09, -29.9 ppm)
+
+Prob=6, Quarters=1, Bound=1, s=1, Axis=1, muR=1.6, ScalMagPot=1:
+ RelL2e = 0.010200584 [1]
+ Wb  = 0.09344387 [J] (analyt 0.093578471, -1.44e+03 ppm)
+ Wb2 = 0.09344387 [J] (analyt 0.093578471, -1.44e+03 ppm)
+ Wh  = 0.074997234 [J] (analyt 0.074862777, 1.8e+03 ppm)
+ Wh2 = 0.074997234 [J] (analyt 0.074862777, 1.8e+03 ppm)
+Prob=6, Quarters=1, Bound=2, s=1, Axis=1, muR=1.6, ScalMagPot=1:
+ RelL2e = 0.0042575745 [1]
+ Wb2 = 0.093578541 [J] (analyt 0.093578471, 0.746 ppm)
+ Wh2 = 0.074862563 [J] (analyt 0.074862777, -2.86 ppm)
+Prob=6, Quarters=1, Bound=3, s=1, Axis=1, muR=1.6, ScalMagPot=1:
+ RelL2e = 0.004252544 [1]
+ Wb  = 0.093580866 [J] (analyt 0.093578471, 25.6 ppm)
+ Wb2 = 0.093580866 [J] (analyt 0.093578471, 25.6 ppm)
+ Wh  = 0.074860239 [J] (analyt 0.074862777, -33.9 ppm)
+ Wh2 = 0.074860239 [J] (analyt 0.074862777, -33.9 ppm)
+Prob=6, Quarters=1, Bound=4, s=1, Axis=1, muR=1.6, ScalMagPot=1:
+ RelL2e = 0.0042518296 [1]
+ Wb  = 0.093580789 [J] (analyt 0.093578471, 24.8 ppm)
+ Wb2 = 0.093580789 [J] (analyt 0.093578471, 24.8 ppm)
+ Wh  = 0.074860315 [J] (analyt 0.074862777, -32.9 ppm)
+ Wh2 = 0.074860315 [J] (analyt 0.074862777, -32.9 ppm)
+
+Prob=7, Quarters=1, Bound=1, s=1, Axis=1:
+ RelL2e = 0.008323029 [1]
+ Wb  = 6.4118171e-24 [J] (analyt 6.4168095e-24, -778 ppm)
+ Wb2 = 6.4118171e-24 [J] (analyt 6.4168095e-24, -778 ppm)
+Prob=7, Quarters=1, Bound=2, s=1, Axis=1:  2200s!!
+ RelL2e = 0.0031026381 [1]
+ Wb2 = 6.4168821e-24 [J] (analyt 6.4168095e-24, 11.3 ppm)
+Prob=7, Quarters=1, Bound=3, s=1, Axis=1:
+ RelL2e = 0.0030908978 [1]
+ Wb  = 6.4167507e-24 [J] (analyt 6.4168095e-24, -9.16 ppm)
+ Wb2 = 6.4167507e-24 [J] (analyt 6.4168095e-24, -9.16 ppm)
+Prob=7, Quarters=1, Bound=4, s=1, Axis=1:
+ RelL2e = 0.0030902553 [1]
+ Wb  = 6.4167438e-24 [J] (analyt 6.4168095e-24, -10.2 ppm)
+ Wb2 = 6.4167438e-24 [J] (analyt 6.4168095e-24, -10.2 ppm)
+
+Prob=8, Quarters=1, Bound=1, s=1, Axis=1:
+ RelL2e = 0.0097377143 [1]
+ Wb  = 1.3740209e-24 [J] (analyt 1.3755446e-24, -1.11e+03 ppm)
+ Wb2 = 1.3740209e-24 [J] (analyt 1.3755446e-24, -1.11e+03 ppm)
+Prob=8, Quarters=1, Bound=2, s=1, Axis=1:
+ RelL2e = 0.0030831588 [1]
+ Wb2 = 1.3755644e-24 [J] (analyt 1.3755446e-24, 14.4 ppm)
+Prob=8, Quarters=1, Bound=3, s=1, Axis=1:
+ RelL2e = 0.0030662395 [1]
+ Wb  = 1.3755318e-24 [J] (analyt 1.3755446e-24, -9.33 ppm)
+ Wb2 = 1.3755318e-24 [J] (analyt 1.3755446e-24, -9.33 ppm)
+Prob=8, Quarters=1, Bound=4, s=1, Axis=1:
+ RelL2e = 0.003065313 [1]
+ Wb  = 1.3755297e-24 [J] (analyt 1.3755446e-24, -10.9 ppm)
+ Wb2 = 1.3755297e-24 [J] (analyt 1.3755446e-24, -10.9 ppm)
+
+
+TWO SPHERES:
+
+Prob=1, Quarters=1, Bound=1, s=1:
+ We  = 1.4628535e-08 [J] (analyt 1.4921303e-08, -1.96e+04 ppm)
+ We2 = 1.4628535e-08 [J] (analyt 1.4921303e-08, -1.96e+04 ppm)
+ We3 = 1.4628535e-08 [J] (analyt 1.4921303e-08, -1.96e+04 ppm)
+ Fz = -1.4493044e-07 [N] (analyt -1.3426326e-07, 7.94e+04 ppm)
+Prob=1, Quarters=1, Bound=2, s=1:
+ We2 = 1.4921411e-08 [J] (analyt 1.4921303e-08, 7.22 ppm)
+ We3 = 1.492141e-08 [J] (analyt 1.4921303e-08, 7.15 ppm)
+ Fz = -1.3427525e-07 [N] (analyt -1.3426326e-07, 89.3 ppm)
+Prob=1, Quarters=1, Bound=3, s=1:
+ We  = 1.4921505e-08 [J] (analyt 1.4921303e-08, 13.5 ppm)
+ We2 = 1.4921505e-08 [J] (analyt 1.4921303e-08, 13.5 ppm)
+ We3 = 1.4921505e-08 [J] (analyt 1.4921303e-08, 13.5 ppm)
+ Fz = -1.3426083e-07 [N] (analyt -1.3426326e-07, -18.1 ppm)
+Prob=1, Quarters=1, Bound=4, s=1:
+ We  = 1.4921727e-08 [J] (analyt 1.4921303e-08, 28.4 ppm)
+ We2 = 1.4921727e-08 [J] (analyt 1.4921303e-08, 28.4 ppm)
+ We3 = 1.4921727e-08 [J] (analyt 1.4921303e-08, 28.4 ppm)
+ Fz = -1.3425413e-07 [N] (analyt -1.3426326e-07, -68 ppm)
+
+Prob=2, Quarters=1, Bound=1, s=1:
+ RelL2e = 0.038477142 [1]
+ We  = 9.7494093e-08 [J] (analyt 9.5878715e-08, 1.68e+04 ppm)
+ We2 = 9.7494093e-08 [J] (analyt 9.5878715e-08, 1.68e+04 ppm)
+ Fz = -7.1178492e-07 [N] (analyt -6.3078102e-07, 1.28e+05 ppm)
+Prob=2, Quarters=1, Bound=2, s=1:
+ RelL2e = 0.0030936511 [1]
+ We2 = 9.5878086e-08 [J] (analyt 9.5878715e-08, -6.56 ppm)
+ Fz = -6.3086381e-07 [N] (analyt -6.3078102e-07, 131 ppm)
+Prob=2, Quarters=1, Bound=3, s=1:
+ RelL2e = 0.0030929005 [1]
+ We  = 9.5877516e-08 [J] (analyt 9.5878715e-08, -12.5 ppm)
+ We2 = 9.5877516e-08 [J] (analyt 9.5878715e-08, -12.5 ppm)
+ Fz = -6.3077332e-07 [N] (analyt -6.3078102e-07, -12.2 ppm)
+Prob=2, Quarters=1, Bound=4, s=1:
+ RelL2e = 0.0030923494 [1]
+ We  = 9.587633e-08 [J] (analyt 9.5878715e-08, -24.9 ppm)
+ We2 = 9.587633e-08 [J] (analyt 9.5878715e-08, -24.9 ppm)
+ Fz = -6.3072371e-07 [N] (analyt -6.3078102e-07, -90.9 ppm)
+
+Prob=3, Quarters=1, Bound=1, s=1, u1xz=0,1, u2xz=0,1:
+ RelL2e = 0.013475272 [1]
+ Wb  = 0.36423615 [J] (analyt 0.36495604, -1.97e+03 ppm)
+ Wb2 = 0.36423615 [J] (analyt 0.36495604, -1.97e+03 ppm)
+ Wh  = 0.17477538 [J] (analyt 0.17405596, 4.13e+03 ppm)
+ Wh2 = 0.17477538 [J] (analyt 0.17405596, 4.13e+03 ppm)
+ Fx = 0.2388153 [N] (analyt 0, inf ppm)
+ Fz = -0.42183604 [N] (analyt -0.42110312, 1.74e+03 ppm)
+ Ty = 0.010137325 [N] (analyt 0, inf ppm)
+Prob=3, Quarters=1, Bound=2, s=1, u1xz=0,1, u2xz=0,1:
+ RelL2e = 0.0040459447 [1]
+ Wb2 = 0.36495967 [J] (analyt 0.36495604, 9.96 ppm)
+ Wh2 = 0.17405186 [J] (analyt 0.17405596, -23.5 ppm)
+ Fx = 0.25112888 [N] (analyt 0, inf ppm)
+ Fz = -0.4213502 [N] (analyt -0.42110312, 587 ppm)
+ Ty = 0.010424504 [N] (analyt 0, inf ppm)
+Prob=3, Quarters=1, Bound=3, s=1, u1xz=0,1, u2xz=0,1:
+ RelL2e = 0.004046087 [1]
+ Wb  = 0.36496233 [J] (analyt 0.36495604, 17.2 ppm)
+ Wb2 = 0.36496233 [J] (analyt 0.36495604, 17.2 ppm)
+ Wh  = 0.1740492 [J] (analyt 0.17405596, -38.8 ppm)
+ Wh2 = 0.1740492 [J] (analyt 0.17405596, -38.8 ppm)
+ Fx = 0.25108588 [N] (analyt 0, inf ppm)
+ Fz = -0.42102216 [N] (analyt -0.42110312, -192 ppm)
+ Ty = 0.010420359 [N] (analyt 0, inf ppm)
+Prob=3, Quarters=1, Bound=4, s=1, u1xz=0,1, u2xz=0,1:
+ RelL2e = 0.0040450401 [1]
+ Wb  = 0.36496232 [J] (analyt 0.36495604, 17.2 ppm)
+ Wb2 = 0.36496232 [J] (analyt 0.36495604, 17.2 ppm)
+ Wh  = 0.17404921 [J] (analyt 0.17405596, -38.7 ppm)
+ Wh2 = 0.17404921 [J] (analyt 0.17405596, -38.7 ppm)
+ Fx = 0.25114907 [N] (analyt 0, inf ppm)
+ Fz = -0.42113896 [N] (analyt -0.42110312, 85.1 ppm)
+ Ty = 0.010423014 [N] (analyt 0, inf ppm)
+//
+Prob=3, Quarters=2, Bound=1, s=1, u1xz=1,0, u2xz=1,0:
+ RelL2e = 0.013667649 [1]
+ Wb  = 0.35581679 [J] (analyt 0.35653398, -2.01e+03 ppm)
+ Wb2 = 0.35581679 [J] (analyt 0.35653398, -2.01e+03 ppm)
+ Wh  = 0.18319475 [J] (analyt 0.18247802, 3.93e+03 ppm)
+ Wh2 = 0.18319475 [J] (analyt 0.18247802, 3.93e+03 ppm)
+ Fx = -1.3603745e-05 [N] (analyt 0, -inf ppm)
+ Fz = 0.21005084 [N] (analyt 0.21055156, -2.38e+03 ppm)
+ Ty = -2.9581738e-07 [N] (analyt 0, -inf ppm)
+Prob=3, Quarters=2, Bound=2, s=1, u1xz=1,0, u2xz=1,0:
+ RelL2e = 0.0042147525 [1]
+ Wb2 = 0.3565387 [J] (analyt 0.35653398, 13.2 ppm)
+ Wh2 = 0.18247284 [J] (analyt 0.18247802, -28.4 ppm)
+ Fx = -1.360399e-05 [N] (analyt 0, -inf ppm)
+ Fz = 0.21037454 [N] (analyt 0.21055156, -841 ppm)
+ Ty = -2.937192e-07 [N] (analyt 0, -inf ppm)
+Prob=3, Quarters=2, Bound=3, s=1, u1xz=1,0, u2xz=1,0:
+ RelL2e = 0.004214782 [1]
+ Wb  = 0.35654043 [J] (analyt 0.35653398, 18.1 ppm)
+ Wb2 = 0.35654043 [J] (analyt 0.35653398, 18.1 ppm)
+ Wh  = 0.18247111 [J] (analyt 0.18247802, -37.9 ppm)
+ Wh2 = 0.18247111 [J] (analyt 0.18247802, -37.9 ppm)
+ Fx = -1.3608087e-05 [N] (analyt 0, -inf ppm)
+ Fz = 0.21058475 [N] (analyt 0.21055156, 158 ppm)
+ Ty = -2.9383721e-07 [N] (analyt 0, -inf ppm)
+Prob=3, Quarters=2, Bound=4, s=1, u1xz=1,0, u2xz=1,0:
+ RelL2e = 0.0042141585 [1]
+ Wb  = 0.35654067 [J] (analyt 0.35653398, 18.8 ppm)
+ Wb2 = 0.35654067 [J] (analyt 0.35653398, 18.8 ppm)
+ Wh  = 0.18247087 [J] (analyt 0.18247802, -39.2 ppm)
+ Wh2 = 0.18247087 [J] (analyt 0.18247802, -39.2 ppm)
+ Fx = -1.3748077e-05 [N] (analyt 0, -inf ppm)
+ Fz = 0.21051569 [N] (analyt 0.21055156, -170 ppm)
+ Ty = -2.876827e-07 [N] (analyt 0, -inf ppm)
+//
+Prob=3, Quarters=2, Bound=1, s=1, u1xz=0,1, u2xz=1,0:
+ RelL2e = 0.010161567 [1]
+ Wb  = 0.35894727 [J] (analyt 0.35934133, -1.1e+03 ppm)
+ Wb2 = 0.35894727 [J] (analyt 0.35934133, -1.1e+03 ppm)
+ Wh  = 0.18006427 [J] (analyt 0.17967066, 2.19e+03 ppm)
+ Wh2 = 0.18006427 [J] (analyt 0.17967066, 2.19e+03 ppm)
+ Fx = 0.2119587 [N] (analyt 0.21055156, 6.68e+03 ppm)
+ Fz = -0.0025872 [N] (analyt 0, -inf ppm)
+ Ty = 0.001102957 [N] (analyt 0.0014036771, -2.14e+05 ppm)
+Prob=3, Quarters=2, Bound=2, s=1, u1xz=0,1, u2xz=1,0:
+ RelL2e = 0.0041948997 [1]
+ Wb2 = 0.35934018 [J] (analyt 0.35934133, -3.2 ppm)
+ Wh2 = 0.17967136 [J] (analyt 0.17967066, 3.85 ppm)
+ Fx = 0.21076004 [N] (analyt 0.21055156, 990 ppm)
+ Fz = -0.00052680159 [N] (analyt 0, -inf ppm)
+ Ty = 0.0014128869 [N] (analyt 0.0014036771, 6.56e+03 ppm)
+Prob=3, Quarters=2, Bound=3, s=1, u1xz=0,1, u2xz=1,0:
+ RelL2e = 0.0041889972 [1]
+ Wb  = 0.35934814 [J] (analyt 0.35934133, 18.9 ppm)
+ Wb2 = 0.35934814 [J] (analyt 0.35934133, 18.9 ppm)
+ Wh  = 0.1796634 [J] (analyt 0.17967066, -40.4 ppm)
+ Wh2 = 0.1796634 [J] (analyt 0.17967066, -40.4 ppm)
+ Fx = 0.21052442 [N] (analyt 0.21055156, -129 ppm)
+ Fz = 0.00011206516 [N] (analyt 0, inf ppm)
+ Ty = 0.001403211 [N] (analyt 0.0014036771, -332 ppm)
+Prob=3, Quarters=2, Bound=4, s=1, u1xz=0,1, u2xz=1,0:
+ RelL2e = 0.0041880394 [1]
+ Wb  = 0.35934774 [J] (analyt 0.35934133, 17.9 ppm)
+ Wb2 = 0.35934774 [J] (analyt 0.35934133, 17.9 ppm)
+ Wh  = 0.17966379 [J] (analyt 0.17967066, -38.2 ppm)
+ Wh2 = 0.17966379 [J] (analyt 0.17967066, -38.2 ppm)
+ Fx = 0.21054996 [N] (analyt 0.21055156, -7.6 ppm)
+ Fz = -4.5234877e-05 [N] (analyt 0, -inf ppm)
+ Ty = 0.0014041721 [N] (analyt 0.0014036771, 353 ppm)
+
