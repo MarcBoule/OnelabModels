@@ -6,11 +6,13 @@
 
 Include "main_common.pro";
 
+
 // Constants
 eps0 = 8.8541878188E-12; // ref permittivity (F/m)
 mu0  = 1.25663706127E-6; // ref permeability (H/m)
 coef = 4.0 / quarters;   // for post-processing integrals
 
+// Problem type
 PROB_SPHERE_RHO_M   = 1;
 PROB_SPHERE_V_M     = 2;
 PROB_SPHERE_SIGMA_M = 3;
@@ -19,7 +21,6 @@ PROB_SPHERE_P_M     = 5;
 PROB_SPHERE_RHO_J   = 6;
 PROB_SPHERE_SIGMA_K = 7;
 PROB_FEYNMAN        = 8;
-
 DefineConstant[prob = {PROB_SPHERE_RHO_M, Name "Input/0Problem type",
 	Choices{PROB_SPHERE_RHO_M   = "Sphere Rho,M",
 			PROB_SPHERE_V_M     = "Sphere V,M",
@@ -30,14 +31,23 @@ DefineConstant[prob = {PROB_SPHERE_RHO_M, Name "Input/0Problem type",
 			PROB_SPHERE_SIGMA_K = "Sphere Sigma,K",
 			PROB_FEYNMAN        = "Feynman"}}];
 
+// Boundary type
+BOUND_IABC  = 1;
+BOUND_SHELL = 0;
+DefineConstant[iabc = {BOUND_IABC, Name "Input/1Boundary type",
+	Choices{BOUND_IABC  = "IABC 3rd order",
+			BOUND_SHELL = "Shell"}}];
+// (for truncation, use 0 and comment out shell Jacobian)
+
+
 // Simulation parameters
 epsR    = 3.1;   // relative permittivity (unitless)
 muR     = 1.6;   // relative permeability (unitless)
 Pp      = 5E-5;  // permanent electric dipole moment per unit volume (C/m^2)
 Mp      = 3.2E5; // permanent magnetic dipole moment per unit volume (A/m)
 rho_f   = 8E-5;  // volume free charge density (C/m^3)
-V       = 100;   // electric potential (V)
-sigma_f = V * eps0 / rs; // surface free charge density (C/m^2)
+V0      = 100;   // electric potential (V)
+sigma_f = V0 * eps0 / rs; // surface free charge density (C/m^2)
 omega   = 1E3;   // angular speed (rad/s)
 axis    = 2;     // Mp and omega axis (1=X, 2=Y, 3=Z)
 axisP   = (axis == 3 ? 1 : axis + 1); // Pp axis (1=X, 2=Y, 3=Z)
@@ -49,23 +59,22 @@ Group {
 	VolVacInt = #{103}; // interior vacuum
 	VolExt1   = #{104}; // exterior shell 1 (inner)
 	VolExt2   = #{105}; // exterior shell 2
-	VolExt3   = #{106}; // exterior shell 3
-	VolExt4   = #{107}; // exterior shell 4 (outer)
+	VolExt3   = #{106}; // exterior shell 3 (outer)
 	SurSphere = #{121}; 
 	SurXZ     = #{122}; // cut of XZ plane (Y=0), empty when quarters > 2
 	SurYZ     = #{123}; // cut of YZ plane (X=0), empty when quarters > 1
-	SurExt4   = #{124}; // curved outer bound (of VolExt4)
+	SurExt    = #{124}; // curved outer bound (of VolExt3)
 
-	VolExts   = #{VolExt1,VolExt2,VolExt3,VolExt4};
+	VolExts   = #{VolExt1,VolExt2,VolExt3};
 	VolAll    = #{VolSphere,VolCylinder,VolVacInt,VolExts};
 
 	// Electric Dirichlet (can be dipole or monopole),
 	//  subproblems can rework this as needed
-	SurDiriV   = #{SurExt4}; 
+	SurDiriV   = #{SurExt}; 
 
 	// Magnetic Dirichlet (dipole only, so do here)
 	SurDiriPhi = #{}; // B normal to Dirichlet=0 surfaces
-	SurDiriA   = #{SurExt4}; // B parallel to Dirichlet=0 surfaces
+	SurDiriA   = #{SurExt}; // B parallel to Dirichlet=0 surfaces
 	If (axis == 1)
 		SurDiriPhi += #{SurYZ};
 		SurDiriA   += #{SurXZ};
@@ -81,23 +90,21 @@ Group {
 Function {
 	// IABC coefficients
 	Macro MuIabcDiriVectAndNeumScal
-		mu[VolExt1]  = mu0 * 0.801713; 
-		mu[VolExt2]  = mu0 * 2.88849;
-		mu[VolExt3]  = mu0 * 0.163862;
-		mu[VolExt4]  = mu0 * 37.8756;
+		mu[VolExt1]  = mu0 * 1.04128553077778; 
+		mu[VolExt2]  = mu0 * 0.566491614524866;
+		mu[VolExt3]  = mu0 * 9.53571368003040;
 	Return
 	Macro EpsIabcNeumScal
-		eps[VolExt1] = eps0 * 0.801713;
-		eps[VolExt2] = eps0 * 2.88849;
-		eps[VolExt3] = eps0 * 0.163862;
-		eps[VolExt4] = eps0 * 37.8756;
+		eps[VolExt1] = eps0 * 1.04128553077778;
+		eps[VolExt2] = eps0 * 0.566491614524866;
+		eps[VolExt3] = eps0 * 9.53571368003040;
 	Return
 	Macro EpsIabcDiriScal
-		eps[VolExt1] = eps0 * 1.5363;
-		eps[VolExt2] = eps0 * 0.2472;
-		eps[VolExt3] = eps0 * 14.892;
-		eps[VolExt4] = eps0 * 0.0872062;
+		eps[VolExt1] = eps0 * 0.863724546405317;
+		eps[VolExt2] = eps0 * 3.13613101072653;
+		eps[VolExt3] = eps0 * 0.150891868561234;
 	Return
+
 
 	// Vectors
 	u[]  = Vector[axis  == 1, axis  == 2, axis  == 3];// for Mp and omega vectors 

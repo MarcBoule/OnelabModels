@@ -8,7 +8,7 @@
 // Note: if no momentum, then remove 2nd pass with lag mult and use We3 = 0.5*Q*V in place of We2, but for Lc2, we really need charge density via lambda since A not constant
 
 
-ScalarMagPotential = 1; // 1 = scalar mag potential, 0 = vector mag potential
+ScalarMagPotential = 0; // 1 = scalar mag potential, 0 = vector mag potential
 
 Qf = sigma_f * 4*Pi*rs^2 / coef;
 
@@ -34,21 +34,21 @@ Function {
 	mu[All]  = mu0; // All that are unassigned
 
 	// Exact results (for post analysis):
-	We[] = 2*Pi * rs   * V^2    * eps0; 
+	We[] = 2*Pi * rs   * V0^2    * eps0; 
 	Wb[] = 4*Pi * rs^3 * Mp^2   * mu0 / (3*muR*(muR+2)); 
 	Wh[] = 2*Pi * rs^3 * Mp^2   * mu0 / (3*(muR+2)); 
-	Lc[] = 8*Pi * rs^3 * V * Mp * eps0 * mu0 / (3*(muR+2));
+	Lc[] = 8*Pi * rs^3 * V0 * Mp * eps0 * mu0 / (3*(muR+2));
 }
 
 
 Constraint {
-	{ Name CstV; Case { // Neumann: any SurExt4, SurXZ or SurYZ not in SurDiriV
+	{ Name CstV; Case { // Neumann: any SurExt, SurXZ or SurYZ not in SurDiriV
 		{ Region SurDiriV; Value 0; }
 	}}
 	{ Name CstQs; Case { 
 		{ Region SurSphere; Value Qf; }
 	}}
-	{ Name CstPhi; Case { // Neumann: SurExt4 and any SurXZ or SurYZ not in SurDiriPhi
+	{ Name CstPhi; Case { // Neumann: SurExt and any SurXZ or SurYZ not in SurDiriPhi
 		{ Region SurDiriPhi; Value 0; } 
 	}} 
 	{ Name CstA; Case { // Neumann: any SurXZ or SurYZ not in SurDiriA

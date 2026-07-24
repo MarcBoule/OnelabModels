@@ -38,10 +38,10 @@ Function {
 
 
 Constraint {
-	{ Name CstV; Case { // Neumann: any SurXZ, SurYZ or SurExt4 not in SurDiriV
+	{ Name CstV; Case { // Neumann: any SurXZ, SurYZ or SurExt not in SurDiriV
 		{ Region SurDiriV; Value 0; }
 	}}
-	{ Name CstPhi; Case { // Neumann: SurExt4 and any SurXZ or SurYZ not in SurDiriPhi
+	{ Name CstPhi; Case { // Neumann: SurExt and any SurXZ or SurYZ not in SurDiriPhi
 		{ Region SurDiriPhi; Value 0; } 
 	}} 
 }

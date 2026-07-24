@@ -7,7 +7,7 @@ ScalarMagPotential = 0; // 1 = scalar mag potential, 0 = vector mag potential
 
 
 Group { 
-	SurDiriV -= #{SurExt4}; // remove since Neumann V
+	SurDiriV -= #{SurExt}; // remove since Neumann V
 	If (axisP == 1)
 		SurDiriV += #{SurYZ};
 	ElseIf (axisP == 2)
@@ -45,10 +45,10 @@ Function {
 
 
 Constraint {
-	{ Name CstV; Case { // Neumann: any SurExt4, SurXZ or SurYZ not in SurDiriV
+	{ Name CstV; Case { // Neumann: any SurExt, SurXZ or SurYZ not in SurDiriV
 		{ Region SurDiriV; Value 0; }
 	}}
-	{ Name CstPhi; Case { // Neumann: SurExt4 and any SurXZ or SurYZ not in SurDiriPhi
+	{ Name CstPhi; Case { // Neumann: SurExt and any SurXZ or SurYZ not in SurDiriPhi
 		{ Region SurDiriPhi; Value 0; } 
 	}} 
 	{ Name CstA; Case { // Neumann: any SurXZ or SurYZ not in SurDiriA
