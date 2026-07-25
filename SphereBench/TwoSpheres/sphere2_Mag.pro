@@ -178,7 +178,7 @@ PostOperation {
 			Print[ {CompZ[$F], CompZ[F[]], (CompZ[$F]-CompZ[F[]])/CompZ[F[]]*10^6}, Format " Fz = %.8g [N] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 
 			Print[ Tau, OnGlobal, StoreInVariable $Tau ]; 
-			Print[ {$Ty = CompY[$Tau], $TyA = CompY[Tau[]], ($Ty-$TyA)/$TyA*10^6}, Format " Ty = %.8g [N] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			Print[ {$Ty = CompY[$Tau], $TyA = CompY[Tau[]], ($Ty-$TyA)/$TyA*10^6}, Format " Ty = %.8g [N] (analyt %.8g, %.4g ppm)", File > "output.txt" ];
 		}
 	} 
 }

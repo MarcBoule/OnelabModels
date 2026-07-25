@@ -50,7 +50,7 @@ V0      = 100;   // electric potential (V)
 sigma_f = V0 * eps0 / rs; // surface free charge density (C/m^2)
 omega   = 1E3;   // angular speed (rad/s)
 axis    = 2;     // Mp and omega axis (1=X, 2=Y, 3=Z)
-axisP   = (axis == 3 ? 1 : axis + 1); // Pp axis (1=X, 2=Y, 3=Z)
+axisP   = (axis == 3 ? 1 : axis + 1);  // Pp axis (1=X, 2=Y, 3=Z)
 
 
 Group {

@@ -26,7 +26,7 @@ BOUND_TRUNC = 1;
 BOUND_ABC   = 2;
 BOUND_IABC  = 3;
 BOUND_SHELL = 4;
-DefineConstant[bound = {BOUND_SHELL, Name "Input/1Boundary type",
+DefineConstant[bound = {BOUND_TRUNC, Name "Input/1Boundary type",
 	Choices{BOUND_TRUNC = "Truncation",
 			BOUND_ABC   = "ABC 1st order",
 			BOUND_IABC  = "IABC 3rd order",
@@ -75,8 +75,14 @@ Function {
 	// u1 and u2 are magnetization directions for sphere1 and sphere2
 	//   they should not have a Y component when quarters < 4, and
 	//   they should not have an X component when quarters < 2, and
+	//
 	u1[] = Unit[Vector[0, 0, 1]]; // for Mp1 vector
-	u2[] = Unit[Vector[1, 0, 0]]; // for Mp2 vector
+	u2[] = Unit[Vector[0, 0, 1]]; // for Mp2 vector
+	// u1[] = Unit[Vector[1, 0, 0]]; // for Mp1 vector
+	// u2[] = Unit[Vector[1, 0, 0]]; // for Mp2 vector
+	// u1[] = Unit[Vector[0, 0, 1]]; // for Mp1 vector
+	// u2[] = Unit[Vector[1, 0, 0]]; // for Mp2 vector
+	//
 	vd[] = Vector[xs,ys,zs]-Vector[xs2,ys2,zs2]; // distance vector 2 to 1
 	d[]  = Norm[vd[]];
 	ud[] = vd[] / d[]; 

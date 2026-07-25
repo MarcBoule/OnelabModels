@@ -136,7 +136,7 @@ PostOperation {
 
 			Print[ We2, OnGlobal, StoreInVariable $We2 ];
 			Print[ {$We2, We[], ($We2-We[])/We[]*10^6}, Format 
-			" We2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			" We2 = %.8g [J] (analyt %.8g, %.4g ppm)", File > "output.txt" ];
 		}
 	} 
 	{ Name PostFields; NameOfPostProcessing PostMain; 

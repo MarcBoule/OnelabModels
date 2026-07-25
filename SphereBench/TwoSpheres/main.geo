@@ -6,7 +6,7 @@ SetFactory("OpenCASCADE");
 azimut = quarters * Pi/2;
 
 Sphere(1)   = {xs,ys,zs, rs, -Pi/2, Pi/2, azimut};  // sphere 1 (top)
-Sphere(2)   = {xs,ys,zs, rs*2, -Pi/2, Pi/2, azimut}; // sphere 1 probe surface
+Sphere(2)   = {xs,ys,zs, rs*1.5, -Pi/2, Pi/2, azimut}; // sphere 1 probe surface
 Sphere(3)   = {xs2,ys2,zs2, rs, -Pi/2, Pi/2, azimut};  // sphere 2 (bot)
 
 Sphere(4)   = {0,0,0, rb, -Pi/2, Pi/2, azimut};     // bnd int
@@ -52,7 +52,7 @@ EndIf
 Mesh.HighOrderOptimize = 2; 
 Mesh.ElementOrder = order;  
 
-smin = s*0.085*cm;
+smin = s*0.06*cm;
 smax = s*0.9*cm;
 
 Field[1] = MathEval;
