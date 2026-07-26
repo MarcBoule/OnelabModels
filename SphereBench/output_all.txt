@@ -116,6 +116,9 @@ Prob=7, Quarters=1, Bound=1, s=1, Axis=3:
  RelL2e = 0.0079744181 [1]
  Wb  = 6.4117093e-24 [J] (analyt 6.4168095e-24, -795 ppm)
  Wb2 = 6.4117093e-24 [J] (analyt 6.4168095e-24, -795 ppm)
+Prob=7, Quarters=1, Bound=2, s=1, Axis=3:
+ RelL2e = 0.001882014 [1]
+ Wb2 = 6.4169396e-24 [J] (analyt 6.4168095e-24, 20.3 ppm)
 Prob=7, Quarters=1, Bound=3, s=1, Axis=3:
  RelL2e = 0.0018562475 [1]
  Wb  = 6.4167975e-24 [J] (analyt 6.4168095e-24, -1.86 ppm)
@@ -129,6 +132,9 @@ Prob=8, Quarters=1, Bound=1, s=1, Axis=3:
  RelL2e = 0.0094823282 [1]
  Wb  = 1.3739839e-24 [J] (analyt 1.3755446e-24, -1.13e+03 ppm)
  Wb2 = 1.3739839e-24 [J] (analyt 1.3755446e-24, -1.13e+03 ppm)
+Prob=8, Quarters=1, Bound=2, s=1, Axis=3:
+ RelL2e = 0.0020007645 [1]
+ Wb2 = 1.3755856e-24 [J] (analyt 1.3755446e-24, 29.8 ppm)
 Prob=8, Quarters=1, Bound=3, s=1, Axis=3:
  RelL2e = 0.0019660205 [1]
  Wb  = 1.3755421e-24 [J] (analyt 1.3755446e-24, -1.79 ppm)
@@ -426,4 +432,3 @@ Prob=7, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6:
  Wb2 = 1.3755387e-24 [J] (analyt 1.3755446e-24, -4.3 ppm)
  LcY = 2.7510652e-27 [kg*m^2/s] (analyt 2.7510892e-27, -8.73 ppm)
  LcY2 = 2.7510774e-27 [kg*m^2/s] (analyt 2.7510892e-27, -4.3 ppm)
-
