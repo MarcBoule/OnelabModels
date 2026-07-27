@@ -97,9 +97,10 @@ Resolution {
 PostProcessing {
 	{ Name PostMain; NameOfFormulation FrmPhi;
 		Quantity {
-			// { Name un; Value {Local {
+			{ Name un; Value {Local {
+				[ {un} ]; In VolProbeLayer; Jacobian J1; }}
 				// [ -{d un} ]; In VolProbeLayer; Jacobian J1; }}
-			// }
+			}
 
 			{ Name L2error; Value {Integral {Type Global; 
 				[ coef* SquNorm[(B1ex[]+B2ex[])-(mu0*M[]-mu[]*{d p})] ]; // square root in PostOperation
@@ -142,8 +143,6 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain;
 		Format Table;
 		Operation {
-			// Print[ un, OnElementsOf VolProbeLayer, File "sphere_un.pos" ];
-
 			Print[{prob, quarters, bound, s, CompX[u1[]], CompZ[u1[]], CompX[u2[]], CompZ[u2[]]}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g, u1xz=%.3g,%.3g, u2xz=%.3g,%.3g:", File > "output.txt"];
 				
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
@@ -179,6 +178,11 @@ PostOperation {
 
 			Print[ Tau, OnGlobal, StoreInVariable $Tau ]; 
 			Print[ {$Ty = CompY[$Tau], $TyA = CompY[Tau[]], ($Ty-$TyA)/$TyA*10^6}, Format " Ty = %.8g [N] (analyt %.8g, %.4g ppm)", File > "output.txt" ];
+		}
+	} 
+	{ Name Fields; NameOfPostProcessing PostMain;
+		Operation {
+			Print[ un, OnElementsOf VolProbeLayer, File "sphere_un.pos" ];
 		}
 	} 
 }
