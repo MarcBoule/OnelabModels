@@ -1,0 +1,33 @@
+152282 triangles, 12th pass
+
+energy (Wh):
+
+Scl : 0.166358911117822
+Scl : +(RZIntegrate(Volume(sphere1), *(*(Dot(<0, 0, 320000>, <Hr,0,Hz>), -0.5), 1.25663706143592E-06)), RZIntegrate(Volume(sphere2), *(*(Dot(<0, 0, 320000>, <Hr,0,Hz>), -0.5), 1.25663706143592E-06)))
+
+Scl : 0.166358914556334
+Scl : RZIntegrate(Volume(AllObjects), *(Dot(mu*(<Hr,0,Hz>), <Hr,0,Hz>), 0.5))
+
+Scl : 0.166358915123356
+Scl : RZIntegrate(Volume(AllObjects), <Energy>)
+
+
+coenergy (Wb):
+
+Scl : 0.37264282150963
+Scl : *(*(+(RZIntegrate(Volume(sphere1), Dot(<0, 0, 320000>, 1/mu*(<Br,0,Bz>))), RZIntegrate(Volume(sphere2), Dot(<0, 0, 320000>, 1/mu*(<Br,0,Bz>)))), 0.5), 1.25663706143592E-06)
+
+Scl : 0.372642822312408
+Scl : RZIntegrate(Volume(AllObjects), *(Dot(1/mu*(<Br,0,Bz>), <Br,0,Bz>), 0.5))
+
+Scl : 0.166358915123356
+Scl : RZIntegrate(Volume(AllObjects), <CoEnergy>)
+
+
+force (F):
+
+Scl : -1.3309989574383
+Scl : RZIntegrate(Edge(sphere1), ScalarZ(<EdgeForceDensityr,0,EdgeForceDensityz>))
+
+From force parameter (set to 0, but after solve right click the param -> View Solution)
+-1.3309

@@ -1,0 +1,17 @@
+154247 triangles, 12th pass
+
+energy (We)
+
+Scl : 1.70831440051769E-08
+Scl : *(RZIntegrate(Volume(AllObjects), Dot(<Er,0,Ez>, <Dr,0,Dz>)), 0.5)
+
+
+Scl : 1.70831440051769E-08
+Scl : RZIntegrate(Volume(AllObjects), <energy>)
+
+
+force (F)
+
+From force parameter (set to 0, but after solve right click the param -> View Solution)
+-3.536e-7
+
