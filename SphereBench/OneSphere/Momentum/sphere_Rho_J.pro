@@ -1,7 +1,7 @@
 // How to run: see main.pro
 
 // Spinning uniformly volume-charged nonconducting full sphere
-// epsilon_r = mu_r = 1 for mag and momentum (or else there will be spinning bound charges and currents which would complicate things)
+// epsilon_r = mu_r = 1 for mag and momentum (or else there will be spinning bound charges and currents)
 
 
 Group {

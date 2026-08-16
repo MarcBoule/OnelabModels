@@ -77,14 +77,14 @@ Function {
 	//   they should not have an X component when quarters < 2, and
 	//
 	// case 1:
-	// u1x=0; u1y=0; u1z=1;
-	// u2x=0; u2y=0; u2z=1;
+	u1x=0; u1y=0; u1z=1;
+	u2x=0; u2y=0; u2z=1;
 	// case 2:
 	// u1x=1; u1y=0; u1z=0;
 	// u2x=1; u2y=0; u2z=0;
 	// case 3:
-	u1x=0; u1y=0; u1z=1;
-	u2x=1; u2y=0; u2z=0;
+	// u1x=0; u1y=0; u1z=1;
+	// u2x=1; u2y=0; u2z=0;
 	u1[] = Unit[Vector[u1x, u1y, u1z]]; // for Mp1 vector
 	u2[] = Unit[Vector[u2x, u2y, u2z]]; // for Mp2 vector
 	//
