@@ -133,15 +133,15 @@ PostOperation {
 
 			If (bound != BOUND_ABC)
 				Print[ We, OnGlobal, StoreInVariable $We ];
-				Print[ {$We, We[], ($We-We[])/We[]*10^6}, Format " We  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+				Print[ {$We, $WeA = We[], ($We-$WeA)/$WeA*10^6}, Format " We  = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 			EndIf
 
 			Print[ We21, OnRegion SurSphere1, StoreInVariable $We21 ];
 			Print[ We22, OnRegion SurSphere2, StoreInVariable $We22 ];
-			Print[ {$We21+$We22, We[], ($We21+$We22-We[])/We[]*10^6}, Format " We2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			Print[ {$We2 = $We21+$We22, $WeA = We[], ($We2-$WeA)/$WeA*10^6}, Format " We2 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 
 			Print[ We3, OnGlobal, StoreInVariable $We3 ];
-			Print[ {$We3, We[], ($We3-We[])/We[]*10^6}, Format " We3 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			Print[ {$We3, $WeA = We[], ($We3-$WeA)/$WeA*10^6}, Format " We3 = %.8g [J] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
 
 			Print[ F, OnGlobal, StoreInVariable $F ]; 
 			Print[ {$Fz = CompZ[$F], $FzA = CompZ[F[]], ($Fz-$FzA)/$FzA*10^6}, Format " Fz = %.8g [N] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
