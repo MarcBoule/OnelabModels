@@ -143,8 +143,15 @@ PostOperation {
 	{ Name PostMain; NameOfPostProcessing PostMain;
 		Format Table;
 		Operation {
-			Print[{prob, quarters, bound, s, CompX[u1[]], CompZ[u1[]], CompX[u2[]], CompZ[u2[]]}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g, u1xz=%.3g,%.3g, u2xz=%.3g,%.3g:", File > "output.txt"];
+			Print[{prob, quarters, bound, s, u1x,u1y,u1z, u2x,u2y,u2z}, Format "Prob=%g, Quarters=%g, Bound=%g, s=%g, u1=[%.3g,%.3g,%.3g], u2=[%.3g,%.3g,%.3g]:", File > "output.txt"];
 				
+			If (quarters < 4 && (u1y != 0.0 || u2y != 0.0))
+				Echo[" ** Warning: requires quarters == 4 when u1 or u2 has a Y component", File > "output.txt"];
+			EndIf
+			If (quarters < 2 && (u1x != 0.0 || u2x != 0.0))
+				Echo[" ** Warning: requires quarters == 2 or 4 when u1 or u2 has an X component", File > "output.txt"];
+			EndIf
+
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
 			Print[ BexSqu, OnGlobal, StoreInVariable $BexSqu ];
 			Print[ {Sqrt[$L2error/$BexSqu]}, Format 

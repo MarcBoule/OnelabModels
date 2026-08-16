@@ -1,7 +1,7 @@
 // How to run: see main.pro
 
 // Spinning uniformly volume-charged nonconducting full sphere
-// epsilon_r = mu_r = 1 (or else there will be spinning bound charges and currents which would complicate things)
+// epsilon_r = mu_r = 1 (or else there will be spinning bound charges and currents)
 
 
 Group {
@@ -123,6 +123,9 @@ Resolution {
 			{ Name SA; NameOfFormulation FrmA; }
 		}
 		Operation {
+			If (bound == BOUND_ABC && order > 1)
+				Print["*** The ABC method may require excessive simulation time in this problem ***"];
+			EndIf
 			Generate[SA]; Solve[SA]; SaveSolution[SA];
 		}
 	}
