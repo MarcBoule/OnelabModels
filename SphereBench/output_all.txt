@@ -301,6 +301,7 @@ ONE SPHERE - MOMENTUM
 *********************************************************************
 
 Prob=1, Quarters=1, Axis=2, IABC=1, epsR=1, muR=1.6, Phi=0:
+ RelL2e = 0.0026370172 [1]
  We  = 6.0555915e-08 [J] (analyt 6.0554978e-08, 15.5 ppm)
  We2 = 6.0555915e-08 [J] (analyt 6.0554978e-08, 15.5 ppm)
  Wb  = 0.093578154 [J] (analyt 0.093578471, -3.39 ppm)
@@ -310,6 +311,7 @@ Prob=1, Quarters=1, Axis=2, IABC=1, epsR=1, muR=1.6, Phi=0:
  Lcy = [needs iabc = 0]
  LcY2 = 1.49725e-15 [kg*m^2/s] (analyt 1.4972555e-15, -3.68 ppm)
 Prob=1, Quarters=1, Axis=2, IABC=0, epsR=1, muR=1.6, Phi=0:
+ RelL2e = 0.0026330232 [1]
  We  = 6.0553717e-08 [J] (analyt 6.0554978e-08, -20.8 ppm)
  We2 = 6.0553717e-08 [J] (analyt 6.0554978e-08, -20.8 ppm)
  Wb  = 0.093577964 [J] (analyt 0.093578471, -5.43 ppm)
@@ -378,30 +380,32 @@ Prob=4, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6, Phi=0:
  LcY = 8.2855327e-16 [kg*m^2/s] (analyt 8.2856136e-16, -9.77 ppm)
  LcY2 = 8.2864233e-16 [kg*m^2/s] (analyt 8.2856136e-16, 97.7 ppm)
 
-Prob=5, Quarters=1, Axis=2, IABC=1, epsR=3.1, muR=1.6, Phi=0:
+Prob=5, Quarters=1, Axis=2, IABC=1, epsR=3.1, muR=1.6, Phi=1:
+ RelL2e = 0.0022077025 [1]
  We  = 0.00011595104 [J] (analyt 0.00011595239, -11.6 ppm)
  We2 = 0.00011595104 [J] (analyt 0.00011595239, -11.6 ppm)
  Wd  = 7.4809306e-05 [J] (analyt 7.4807995e-05, 17.5 ppm)
  Wd2 = 7.4809306e-05 [J] (analyt 7.4807995e-05, 17.5 ppm)
- Wb  = 0.093578154 [J] (analyt 0.093578471, -3.39 ppm)
- Wb2 = 0.093578154 [J] (analyt 0.093578471, -3.39 ppm)
- Wh  = 0.074863059 [J] (analyt 0.074862777, 3.76 ppm)
- Wh2 = 0.074863059 [J] (analyt 0.074862777, 3.76 ppm)
+ Wb  = 0.093579563 [J] (analyt 0.093578471, 11.7 ppm)
+ Wb2 = 0.093579563 [J] (analyt 0.093578471, 11.7 ppm)
+ Wh  = 0.074861651 [J] (analyt 0.074862777, -15 ppm)
+ Wh2 = 0.074861651 [J] (analyt 0.074862777, -15 ppm)
  pX  = [needs iabc = 0]
- pX2 = 1.3761369e-11 [kg*m/s] (analyt 1.376154e-11, -12.4 ppm)
- pX3 = 1.3761603e-11 [kg*m/s] (analyt 1.376154e-11, 4.62 ppm)
-Prob=5, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6, Phi=0:
+ pX2 = 1.376142e-11 [kg*m/s] (analyt 1.376154e-11, -8.68 ppm)
+ pX3 = 1.3761811e-11 [kg*m/s] (analyt 1.376154e-11, 19.7 ppm)
+Prob=5, Quarters=1, Axis=2, IABC=0, epsR=3.1, muR=1.6, Phi=1:
+ RelL2e = 0.0022076966 [1]
  We  = 0.00011595125 [J] (analyt 0.00011595239, -9.88 ppm)
  We2 = 0.00011595125 [J] (analyt 0.00011595239, -9.88 ppm)
  Wd  = 7.4809101e-05 [J] (analyt 7.4807995e-05, 14.8 ppm)
  Wd2 = 7.4809101e-05 [J] (analyt 7.4807995e-05, 14.8 ppm)
- Wb  = 0.093577964 [J] (analyt 0.093578471, -5.43 ppm)
- Wb2 = 0.093577964 [J] (analyt 0.093578471, -5.43 ppm)
- Wh  = 0.07486325 [J] (analyt 0.074862777, 6.31 ppm)
- Wh2 = 0.07486325 [J] (analyt 0.074862777, 6.31 ppm)
- pX  = 1.3761386e-11 [kg*m/s] (analyt 1.376154e-11, -11.2 ppm)
- pX2 = 1.3761386e-11 [kg*m/s] (analyt 1.376154e-11, -11.2 ppm)
- pX3 = 1.3761558e-11 [kg*m/s] (analyt 1.376154e-11, 1.34 ppm)
+ Wb  = 0.093579487 [J] (analyt 0.093578471, 10.9 ppm)
+ Wb2 = 0.093579487 [J] (analyt 0.093578471, 10.9 ppm)
+ Wh  = 0.074861726 [J] (analyt 0.074862777, -14 ppm)
+ Wh2 = 0.074861726 [J] (analyt 0.074862777, -14 ppm)
+ pX  = 1.3761443e-11 [kg*m/s] (analyt 1.376154e-11, -7.05 ppm)
+ pX2 = 1.3761442e-11 [kg*m/s] (analyt 1.376154e-11, -7.11 ppm)
+ pX3 = 1.3761782e-11 [kg*m/s] (analyt 1.376154e-11, 17.6 ppm)
 
 Prob=6, Quarters=1, Axis=2, IABC=1, epsR=3.1, muR=1.6:
  We  = 6.0555915e-08 [J] (analyt 6.0554978e-08, 15.5 ppm)

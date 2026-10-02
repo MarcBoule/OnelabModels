@@ -3,7 +3,7 @@
 // Uniformly polarized and magnetized full sphere
 
 
-ScalarMagPotential = 0; // 1 = scalar mag potential, 0 = vector mag potential
+ScalarMagPotential = 1; // 1 = scalar mag potential, 0 = vector mag potential
 
 
 Group { 
@@ -36,6 +36,15 @@ Function {
 	mu[All]  = mu0; // All that are unassigned
 
 	// Exact results (for post analysis):
+	Dex[VolSphere] = Pp*uP[]*2/(epsR+2);
+	Dex[All] = Pp*rs^3/((epsR+2)*nr[]^3)*( 3/nr[]^2*(uP[]*r[])*r[] - uP[] );
+	Eex[VolSphere] = -Pp*uP[]/(eps0*(epsR+2));
+	Eex[All] = Dex[]/eps0;
+	Bex[VolSphere] = mu0*Mp*u[]*2/(muR+2);
+	Bex[All] = mu0*Mp*rs^3/((muR+2)*nr[]^3)*( 3/nr[]^2*(u[]*r[])*r[] - u[] );
+	Hex[VolSphere] = -Mp*u[]/(muR+2);
+	Hex[All] = Bex[]/mu0;
+	pex[] = eps0 * Cross[Eex[],Bex[]];
 	We[] = 2*Pi * rs^3 * Pp^2  / (3*eps0*(epsR+2));
 	Wd[] = 4*Pi * rs^3 * Pp^2  / (3*eps0*epsR*(epsR+2)); 
 	Wb[] = 4*Pi * rs^3 * Mp^2  * mu0 / (3*muR*(muR+2));
@@ -234,6 +243,16 @@ PostProcessing {
 				[ coef* -1/2 * Cross[eps0*(eps[]/eps0-1)*(-{d v}) + P[], mu0*M[]-mu[]*{d p}] ]; 
 				Integration I1; Jacobian J1; In VolSphere; }}
 			}
+			
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[pex[] - eps0*Cross[-{d v}, mu0*M[]-mu[]*{d p}]] ]; // square root in PostOperation
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
+			{ Name pexSqu; Value {Integral {Type Global; // p^2 exact integral
+				[ coef* SquNorm[pex[]] ];
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
+			
 
 			Else // (ScalarMagPotential == 0)
 
@@ -274,6 +293,15 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolSphere; }}
 			}
 
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[pex[] - eps0 * Cross[-{d v}, {d a}]] ]; // square root in PostOperation
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
+			{ Name pexSqu; Value {Integral {Type Global; // p^2 exact integral
+				[ coef* SquNorm[pex[]] ];
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
+
 			EndIf   
 
 		}
@@ -286,6 +314,11 @@ PostOperation {
 		Format Table;
 		Operation {
 			Print[{prob, quarters, axis, iabc, epsR, muR, ScalarMagPotential}, Format "Prob=%g, Quarters=%g, Axis=%g, IABC=%g, epsR=%g, muR=%g, Phi=%g:", File > "output.txt"]; 
+
+			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
+			Print[ pexSqu, OnGlobal, StoreInVariable $pexSqu ];
+			Print[ {Sqrt[$L2error/$pexSqu]}, Format 
+			" RelL2e = %.8g [1]", File > "output.txt" ];
 
 			Print[ We, OnGlobal, StoreInVariable $We ];
 			Print[ {$We, We[], ($We-We[])/We[]*10^6}, Format 

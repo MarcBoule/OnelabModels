@@ -111,6 +111,7 @@ Function {
 	uP[] = Vector[axisP == 1, axisP == 2, axisP == 3];// for Pp vector
 	c[]  = Vector[xs, ys, zs]; // Center of sphere
 	r[]  = XYZ[] - c[]; // Position from center of sphere
+	nr[] = Norm[r[]];
 
 	// Position vector for angular momentum calculation (when shell transform)
 	//  angular momentum is calculated about the center of the sphere
@@ -140,6 +141,10 @@ Integration {
 		{ GeoElement Triangle2;    NumberOfPoints 3; }
 		{ GeoElement Tetrahedron;  NumberOfPoints 1; }
 		{ GeoElement Tetrahedron2; NumberOfPoints 4; }
+	}}}}
+	{ Name I2; Case {{ Type Gauss; Case { // for L2 error norm 
+		{ GeoElement Tetrahedron;  NumberOfPoints 4; }
+		{ GeoElement Tetrahedron2; NumberOfPoints 16; }
 	}}}}
 }
 

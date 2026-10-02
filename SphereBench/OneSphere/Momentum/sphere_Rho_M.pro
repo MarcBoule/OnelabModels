@@ -30,6 +30,15 @@ Function {
 
 
 	// Exact results (for post analysis):
+	Eex[VolSphere] = rho_f*r[]/(3*eps0*epsR);
+	Eex[All] = rho_f*rs^3*r[]/(3*eps0*nr[]^3);
+	Dex[VolSphere] = rho_f*r[]/3;
+	Dex[All] = rho_f*rs^3*r[]/(3*nr[]^3);
+	Bex[VolSphere] = mu0*Mp*u[]*2/(muR+2);
+	Bex[All] = mu0*Mp*rs^3/((muR+2)*nr[]^3)*( 3/nr[]^2*(u[]*r[])*r[] - u[] );
+	Hex[VolSphere] = -Mp*u[]/(muR+2);
+	Hex[All] = Bex[]/mu0;
+	Lex[] = eps0 * Cross[r[], Cross[Eex[],Bex[]]];
 	We[] = 2*Pi * rs^5 * rho_f^2    / (9*eps0) * (1/(5*epsR)+1);
 	Wb[] = 4*Pi * rs^3 * Mp^2       * mu0 / (3*muR*(muR+2));
 	Wh[] = 2*Pi * rs^3 * Mp^2       * mu0 / (3*(muR+2));
@@ -207,13 +216,22 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolSphere;}}
 			}
 			{ Name Lc; Value {Integral {Type Global; // needs iabc=0
-				[ coef*Cross[ tr[], eps0*Cross[-{d v},mu0*M[]-mu[]*{d p}] ] ];
+				[ coef*eps0*Cross[ tr[], Cross[-{d v},mu0*M[]-mu[]*{d p}] ] ];
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name Lc2; Value {Integral {Type Global; // needs epsr=1
 			// [ coef*Cross[ r[], rho_f * {a} ] ]; // needs Coulomb gauging when rho_f not uniform; assumes rho=rho_free
 				[ Vector[0,0,0] ]; // can't use above line here since no A
 				Integration I1; Jacobian J1; In VolSphere;}}
+			}
+
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[Lex[] - eps0*Cross[tr[], Cross[-{d v},mu0*M[]-mu[]*{d p}]]] ]; // square root in PostOperation
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
+			{ Name LexSqu; Value {Integral {Type Global; // Lc^2 exact integral
+				[ coef* SquNorm[Lex[]] ];
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
 
 
@@ -243,12 +261,21 @@ PostProcessing {
 				Integration I1; Jacobian J1; In VolSphere;}}
 			}
 			{ Name Lc; Value {Integral {Type Global; // needs iabc=0
-				[ coef*Cross[ tr[], eps0*Cross[-{d v},{d a}] ] ];
+				[ coef*eps0*Cross[ tr[], Cross[-{d v},{d a}] ] ];
 				Integration I1; Jacobian J1; In VolAll;}}
 			}
 			{ Name Lc2; Value {Integral {Type Global; // needs epsr=1
 				[ coef*Cross[ r[], rho_f * {a} ] ]; // needs Coulomb gauging when rho_f not uniform; assumes rho=rho_free
 				Integration I1; Jacobian J1; In VolSphere;}}
+			}
+
+			{ Name L2error; Value {Integral {Type Global; 
+				[ coef* SquNorm[Lex[] - eps0*Cross[ tr[], Cross[-{d v},{d a}] ]] ]; // square root in PostOperation
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
+			}
+			{ Name LexSqu; Value {Integral {Type Global; // Lc^2 exact integral
+				[ coef* SquNorm[Lex[]] ];
+				Integration I2; Jacobian J1; In #{VolVacInt,VolSphere};}}
 			}
 
 			EndIf   
@@ -263,6 +290,11 @@ PostOperation {
 		Format Table;
 		Operation {
 			Print[{prob, quarters, axis, iabc, epsR, muR, ScalarMagPotential}, Format "Prob=%g, Quarters=%g, Axis=%g, IABC=%g, epsR=%g, muR=%g, Phi=%g:", File > "output.txt"]; 
+
+			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
+			Print[ LexSqu, OnGlobal, StoreInVariable $LexSqu ];
+			Print[ {Sqrt[$L2error/$LexSqu]}, Format 
+			" RelL2e = %.8g [1]", File > "output.txt" ];
 
 			Print[ We, OnGlobal, StoreInVariable $We ];
 			Print[ {$We, We[], ($We-We[])/We[]*10^6}, Format 

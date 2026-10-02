@@ -19,7 +19,9 @@ Function {
 
 	// Exact results (for post analysis):
 	Eex[VolSphere] = rho_f*r[]/(3*eps0*epsR);
-	Eex[All] = rho_f*rs^3/nr[]^3*r[]/(3*eps0);
+	Eex[All] = rho_f*rs^3*r[]/(3*eps0*nr[]^3);
+	Dex[VolSphere] = rho_f*r[]/3;
+	Dex[All] = rho_f*rs^3*r[]/(3*nr[]^3);
 	We[] = 2*Pi * rs^5 * rho_f^2 / (9*eps0) * (1/(5*epsR)+1);
 }
 
