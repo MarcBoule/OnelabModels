@@ -14,6 +14,21 @@
 /SphereBench/OneSphere/*.pos
 /SphereBench/OneSphere/output.txt
 
+/SphereBench/OneSphere/Momentum/*.msh
+/SphereBench/OneSphere/Momentum/*.db
+/SphereBench/OneSphere/Momentum/*.json
+/SphereBench/OneSphere/Momentum/*.pre
+/SphereBench/OneSphere/Momentum/*.res
+/SphereBench/OneSphere/Momentum/*.pos
+/SphereBench/OneSphere/output.txt
+
+/SphereBench/OneSphere/Momentum/Minkowski/*.msh
+/SphereBench/OneSphere/Momentum/Minkowski/*.db
+/SphereBench/OneSphere/Momentum/Minkowski/*.json
+/SphereBench/OneSphere/Momentum/Minkowski/*.pre
+/SphereBench/OneSphere/Momentum/Minkowski/*.res
+/SphereBench/OneSphere/Momentum/Minkowski/*.pos
+
 /SphereBench/TwoSpheres/*.msh
 /SphereBench/TwoSpheres/*.db
 /SphereBench/TwoSpheres/*.json
