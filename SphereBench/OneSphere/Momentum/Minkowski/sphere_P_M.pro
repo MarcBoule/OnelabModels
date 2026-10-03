@@ -237,7 +237,7 @@ PostProcessing {
 			}
 			{ Name p2; Value {Integral {Type Global; 
 				[ coef* ( mu0*eps0 * Cross[-{d v}, (mu[]/mu0-1)*(-{d p}) + M[]] +
-				Cross[eps0*(eps[]/eps0-1)*(-{d v}) + P[], mu0*M[]-mu[]*{d p}] ) ]; // Minkowski
+				Cross[(eps[]-eps0)*(-{d v}) + P[], mu0*M[]-mu[]*{d p}] ) ]; // Minkowski
 				Integration I1; Jacobian J1; In VolSphere; }}
 			}
 			
@@ -283,7 +283,7 @@ PostProcessing {
 			}
 			{ Name p2; Value {Integral {Type Global; 
 				[ coef* ( mu0*eps0 * Cross[-{d v}, (mu[]/mu0-1)*({d a}-mu0*M[])/mu[] + M[]] +
-				Cross[eps0*(eps[]/eps0-1)*(-{d v}) + P[], {d a}] ) ]; // Minkowski
+				Cross[(eps[]-eps0)*(-{d v}) + P[], {d a}] ) ]; // Minkowski
 				Integration I1; Jacobian J1; In VolSphere; }}
 			}
 
