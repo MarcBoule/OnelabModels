@@ -6,7 +6,6 @@ cm  = 1E-2;       // units
 
 DefineConstant[
 	quarters = 1, // 1 = quarter-of-domain, 2 = half, 4 = full
-	coef  = 4 / quarters; // for post-processing integrals
 	order = 2,    // geometrical element order and basis function interpolation order (1 or 2)
 	s  = 1.0,     // mesh scaling factor: 1.0=fine, 1.5=coarse
 
