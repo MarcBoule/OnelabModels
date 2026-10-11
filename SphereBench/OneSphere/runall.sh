@@ -4,19 +4,19 @@
 
 #!/bin/bash
 
-OPT=(-setnumber s 1.5)
+set -euo pipefail
 
-gmsh main.geo -3 "${OPT[@]}"
+OPT="-setnumber s 1.5"
+gmsh main.geo -3 $OPT
 
 getdp_run() {
-    local prob="$1"
-    local PROB=(-setnumber prob "$prob")
-
+    PROB="-setnumber prob $1"
     for ((b=1; b<=4; b++)); do
-        getdp main.pro -solve ResMain -pos PostMain "${OPT[@]}" "${PROB[@]}" -setnumber bound "$b"
+        getdp main.pro -solve ResMain -pos PostMain $OPT $PROB -setnumber bound $b
     done
 }
 
 for ((p=1; p<=8; p++)); do
-    getdp_run "$p"
+    getdp_run $p
 done
+
