@@ -1,6 +1,8 @@
-# run all 8 problems on all 4 boundary types
-# assumes Gmsh and GetDP are in the path
-# script with coarse mesh (s=1.5), can be changed below
+:: run all 8 problems on all 4 boundary types
+:: assumes Gmsh and GetDP are in the path
+:: script with coarse mesh (s=1.5), can be changed below
+
+@echo off
 
 set "OPT=-setnumber s 1.5"
 gmsh main.geo -3 %OPT%

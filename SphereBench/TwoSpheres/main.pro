@@ -10,12 +10,12 @@ Include "main_common.pro";
 // Constants
 eps0 = 8.8541878188E-12; // ref permittivity (F/m)
 mu0  = 1.25663706127E-6; // ref permeability (H/m)
-coef = 4.0 / quarters;   // for post-processing integrals
+coef = 4 / quarters;     // for post-processing integrals
 
 // Problem type
 PROB_SPHERE2_COND  = 1;
 PROB_SPHERE2_INSUL = 2;
-PROB_SPHERE2_MAG   = 3;  // requires quarters >= 2
+PROB_SPHERE2_MAG   = 3;  // may require quarters > 1 for some cases
 DefineConstant[prob = {PROB_SPHERE2_MAG, Name "Input/0Problem type",
 	Choices{PROB_SPHERE2_COND  = "Sphere2 Cond",
 			PROB_SPHERE2_INSUL = "Sphere2 Insul",
@@ -33,9 +33,12 @@ DefineConstant[bound = {BOUND_TRUNC, Name "Input/1Boundary type",
 			BOUND_SHELL = "Shell"}}];
 
 // Simulation parameters
-Mp      = 3.2E5; // permanent magnetic dipole moment per unit volume (A/m)
-rho_f   = 8E-5;  // volume free charge density (C/m^3)
-V0      = 100;   // electric potential (V)
+DefineConstant[
+	Mp      = 3.2E5, // permanent magnetic dipole moment per unit volume (A/m)
+	mags    = 1,     // magnetization state (1=axial, 2=para., 3=perp., see below)
+	rho_f   = 8E-5,  // volume free charge density (C/m^3)
+	V0      = 100    // electric potential (V)
+];
 
 
 Group {
@@ -76,15 +79,19 @@ Function {
 	//   they should not have a Y component when quarters < 4, and
 	//   they should not have an X component when quarters < 2, and
 	//
-	// case 1:
-	u1x=0; u1y=0; u1z=1;
-	u2x=0; u2y=0; u2z=1;
-	// case 2:
-	// u1x=1; u1y=0; u1z=0;
-	// u2x=1; u2y=0; u2z=0;
-	// case 3:
-	// u1x=0; u1y=0; u1z=1;
-	// u2x=1; u2y=0; u2z=0;
+	If (mags == 1)
+		// case 1: axially aligned
+		u1x=0; u1y=0; u1z=1;
+		u2x=0; u2y=0; u2z=1;
+	ElseIf (mags == 2)
+		// case 2: parallel (side-by-side)
+		u1x=1; u1y=0; u1z=0;
+		u2x=1; u2y=0; u2z=0;
+	Else // (mags == 3)
+		// case 3: perpendicular
+		u1x=0; u1y=0; u1z=1;
+		u2x=1; u2y=0; u2z=0;
+	EndIf
 	u1[] = Unit[Vector[u1x, u1y, u1z]]; // for Mp1 vector
 	u2[] = Unit[Vector[u2x, u2y, u2z]]; // for Mp2 vector
 	//

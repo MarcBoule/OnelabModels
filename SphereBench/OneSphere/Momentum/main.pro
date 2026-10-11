@@ -10,7 +10,7 @@ Include "main_common.pro";
 // Constants
 eps0 = 8.8541878188E-12; // ref permittivity (F/m)
 mu0  = 1.25663706127E-6; // ref permeability (H/m)
-coef = 4.0 / quarters;   // for post-processing integrals
+coef = 4 / quarters;     // for post-processing integrals
 
 // Problem type
 PROB_SPHERE_RHO_M   = 1;
@@ -39,17 +39,18 @@ DefineConstant[iabc = {BOUND_IABC, Name "Input/1Boundary type",
 			BOUND_SHELL = "Shell"}}];
 // (for truncation, use 0 and comment out shell Jacobian)
 
-
 // Simulation parameters
-epsR    = 3.1;   // relative permittivity (unitless)
-muR     = 1.6;   // relative permeability (unitless)
-Pp      = 5E-5;  // permanent electric dipole moment per unit volume (C/m^2)
-Mp      = 3.2E5; // permanent magnetic dipole moment per unit volume (A/m)
-rho_f   = 8E-5;  // volume free charge density (C/m^3)
-V0      = 100;   // electric potential (V)
+DefineConstant[
+	epsR    = 3.1,   // relative permittivity (unitless)
+	muR     = 1.6,   // relative permeability (unitless)
+	Pp      = 5E-5,  // permanent electric dipole moment per unit volume (C/m^2)
+	Mp      = 3.2E5, // permanent magnetic dipole moment per unit volume (A/m)
+	rho_f   = 8E-5,  // volume free charge density (C/m^3)
+	V0      = 100,   // electric potential (V)
+	omega   = 1E3,   // angular speed (rad/s)
+	axis    = 2      // Mp and omega axis (1=X, 2=Y, 3=Z)
+];
 sigma_f = V0 * eps0 / rs; // surface free charge density (C/m^2)
-omega   = 1E3;   // angular speed (rad/s)
-axis    = 2;     // Mp and omega axis (1=X, 2=Y, 3=Z)
 axisP   = (axis == 3 ? 1 : axis + 1);  // Pp axis (1=X, 2=Y, 3=Z)
 
 

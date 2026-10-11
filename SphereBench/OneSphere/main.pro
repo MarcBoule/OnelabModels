@@ -10,7 +10,7 @@ Include "main_common.pro";
 // Constants
 eps0 = 8.8541878188E-12; // ref permittivity (F/m)
 mu0  = 1.25663706127E-6; // ref permeability (H/m)
-coef  = 4 / quarters; // for post-processing integrals
+coef  = 4 / quarters;    // for post-processing integrals
 
 // Problem type
 PROB_SPHERE_P     = 1;

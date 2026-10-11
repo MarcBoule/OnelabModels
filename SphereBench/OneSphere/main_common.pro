@@ -13,8 +13,8 @@ DefineConstant[
 	re = 2*rb,    // radius of exterior (infinite) boundary
 
 	// sphere:
-	rs = 1*cm,  // radius
+	rs = 1*cm,    // radius
 	xs = 0*cm * (quarters > 1), // x position of center (with symmetry guard)
 	ys = 0*cm * (quarters > 2), // y position of center (with symmetry guard)
-	zs = 2*cm   // z position of center
+	zs = 2*cm     // z position of center
 ];
