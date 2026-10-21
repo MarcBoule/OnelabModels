@@ -6,7 +6,7 @@ SetFactory("OpenCASCADE");
 azimut = quarters * Pi/2;
 
 Sphere(1)   = {xs,ys,zs, rs, -Pi/2, Pi/2, azimut};  // sphere 1 (top)
-Sphere(2)   = {xs,ys,zs, rs*1.5, -Pi/2, Pi/2, azimut}; // sphere 1 probe surface
+Sphere(2)   = {xs,ys,zs, rp, -Pi/2, Pi/2, azimut};  // sphere 1 probe surface
 Sphere(3)   = {xs2,ys2,zs2, rs, -Pi/2, Pi/2, azimut};  // sphere 2 (bot)
 
 Sphere(4)   = {0,0,0, rb, -Pi/2, Pi/2, azimut};     // bnd int

@@ -20,8 +20,8 @@ Function {
 	B2ex[VolSphere2] = mu0*Mp*u2[]*2/3;
 	B2ex[All] = mu0*Mp*rs^3/3*( 3/nr2[]^5*(u2[]*r2[])*r2[] - u2[]/nr2[]^3 );
 	// Energy
-	Wb[] = 4*Pi * rs^3 * Mp^2 * mu0 / 9 * (2 + (rs/d[])^3 * (3 * (u1[]*ud[])*(u2[]*ud[])-u1[]*u2[]) );
-	Wh[] = 4*Pi * rs^3 * Mp^2 * mu0 / 9 * (1 - (rs/d[])^3 * (3 * (u1[]*ud[])*(u2[]*ud[])-u1[]*u2[]) );
+	Wb[] = 4*Pi * rs^3 * Mp^2 * mu0 / 9 * (2 - (u1[]*u2[] - 3*(u1[]*ud[])*(u2[]*ud[])) * (rs/d[])^3 );
+	Wh[] = 4*Pi * rs^3 * Mp^2 * mu0 / 9 * (1 + (u1[]*u2[] - 3*(u1[]*ud[])*(u2[]*ud[])) * (rs/d[])^3 );
 	// Force on top sphere (Sphere1)
 	F[] = 4*Pi * rs^6 * Mp^2 * mu0 / (3 * d[]^4) * (
 		ud[] * (u1[] *u2[]) +

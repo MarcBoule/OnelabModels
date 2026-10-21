@@ -11,6 +11,7 @@ DefineConstant[
 
 	rb  = 5*cm,   // radius of interior boundary
 	re  = 2*rb,   // radius of exterior (infinite) boundary
+	rp  = 1.5*cm, // radius of probe surface for sphere 1
 
 	// sphere1:
 	rs = 1*cm,    // radius
