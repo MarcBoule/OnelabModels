@@ -134,6 +134,7 @@ Resolution {
 			{ Name S1; NameOfFormulation MagFrm; Type Complex; }
 		}
 		Operation {
+			CreateDir["pos"];
 			Generate[S1]; Solve[S1]; SaveSolution[S1];
 		}
 	} 
@@ -187,27 +188,27 @@ PostProcessing {
 PostOperation {
 	{ Name PostMain; NameOfPostProcessing Post;
 		Format Table;
-		Operation {
-			Print[ Bre, OnElementsOf VolAll, Format Gmsh, File "plate_Bre.pos"];
-			Print[ Bim, OnElementsOf VolAll, Format Gmsh, File "plate_Bim.pos"];
-			Print[ P, OnElementsOf VolPlate, Format Gmsh, File "plate_P.pos"];
-			Print[ J, OnElementsOf VolPlate, Format Gmsh, File "plate_J.pos"];
+		Operation {			
+			Print[ Bre, OnElementsOf VolAll, Format Gmsh, File "pos/plate2d_Bre.pos"];
+			Print[ Bim, OnElementsOf VolAll, Format Gmsh, File "pos/plate2d_Bim.pos"];
+			Print[ P, OnElementsOf VolPlate, Format Gmsh, File "pos/plate2d_P.pos"];
+			Print[ J, OnElementsOf VolPlate, Format Gmsh, File "pos/plate2d_J.pos"];
 
-			Print[{w, h, d, meshSize, order, freq}, Format "w=%g, h=%g, d=%g, ms=%g, o=%g, freq=%g:", File > "output.txt"];
+			Print[{w, h, d, meshSize, order, freq}, Format "w=%g, h=%g, d=%g, ms=%g, o=%g, freq=%g:", File > "output2d.txt"];
 
 			Print[ Vrms, OnRegion VolPlate, StoreInVariable $Vrms ];
 			Print[ Irms, OnRegion VolPlate, StoreInVariable $Irms ];
 
-			Print[ {Re[$Irms], Im[$Irms]}, Format " I = %.8g + i*%.8g [A] (RMS)", File > "output.txt"];
-			Print[ {Re[$Vrms], Im[$Vrms]}, Format " V = %.8g + i*%.8g [V] (RMS)", File > "output.txt" ]; 
+			Print[ {Re[$Irms], Im[$Irms]}, Format " I = %.8g + i*%.8g [A] (RMS)", File > "output2d.txt"];
+			Print[ {Re[$Vrms], Im[$Vrms]}, Format " V = %.8g + i*%.8g [V] (RMS)", File > "output2d.txt" ]; 
 
-			Print[ {$Psim=$Vrms*Conj[$Irms], $Pex=Pex[], ($Psim-$Pex)/$Pex*10^6}, Format " P = %.8g [W] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			Print[ {$Psim=$Vrms*Conj[$Irms], $Pex=Pex[], ($Psim-$Pex)/$Pex*10^6}, Format " P = %.8g [W] (analyt %.8g, %.3g ppm)", File > "output2d.txt" ];
 
-			Print[ {$Rsim=Re[$Vrms/$Irms], $Rex=Rex[], ($Rsim-$Rex)/$Rex*10^6}, Format " R = %.8g [Ohm] (analyt %.8g, %.3g ppm)", File > "output.txt" ];
+			Print[ {$Rsim=Re[$Vrms/$Irms], $Rex=Rex[], ($Rsim-$Rex)/$Rex*10^6}, Format " R = %.8g [Ohm] (analyt %.8g, %.3g ppm)", File > "output2d.txt" ];
 
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
 			Print[ JexSqu, OnGlobal, StoreInVariable $JexSqu ];
-			Print[ {Sqrt[$L2error/$JexSqu]}, Format " RelL2e = %.8g [1]", File > "output.txt" ]; 
+			Print[ {Sqrt[$L2error/$JexSqu]}, Format " RelL2e = %.8g [1]", File > "output2d.txt" ]; 
 		}
 	}  
 }
