@@ -38,7 +38,6 @@ Function {
 	// Exact resistance and exact active power (average real power)
 	Rex[] = d*k[]/(2*w*sigma) * (Sinh[k[]*h]+Sin[k[]*h]) / (Cosh[k[]*h]-Cos[k[]*h]);
 	Pex[] = 0.5*Rex[]*currMag^2;
-
 }
 
 
@@ -208,7 +207,7 @@ PostOperation {
 
 			Print[ L2error, OnGlobal, StoreInVariable $L2error ];
 			Print[ JexSqu, OnGlobal, StoreInVariable $JexSqu ];
-			Print[ {Sqrt[$L2error/$JexSqu]}, Format " RelL2e = %.8g [1]", File > "output2d.txt" ]; 
+			Print[ {Sqrt[$L2error/$JexSqu]}, Format " RelL2e = %.8g [1]", File > "output2d.txt" ];
 		}
 	}  
 }
