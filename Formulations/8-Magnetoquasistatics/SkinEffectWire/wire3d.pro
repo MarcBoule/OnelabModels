@@ -48,7 +48,7 @@ Constraint {
 		{ Region SurWireFront; Value 0; }
 	}}
 	{ Name CstI; Case {
-		{ Region SurWireBack; Value currMag*Complex[Cos[currPhase],Sin[currPhase]]; }
+		{ Region SurWireBack; Value 1/coef * currMag*Complex[Cos[currPhase],Sin[currPhase]]; }
 	}}
 	{ Name CstGaugeA; Case {
 		{ Region VolAll; SubRegion SurDiriA; Value 0; }
@@ -185,7 +185,7 @@ PostProcessing {
 				In SurWireBack; }}
 			}
 			{ Name Irms; Value {Local { 
-				[ {Current} / Sqrt[2] ]; 
+				[ coef* {Current} / Sqrt[2] ]; 
 				In SurWireBack; }}
 			}
 			{ Name L2error; Value {Integral {Type Global; 

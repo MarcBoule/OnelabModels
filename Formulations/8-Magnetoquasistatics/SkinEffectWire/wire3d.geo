@@ -1,25 +1,25 @@
 Include "wire_common.pro";
 SetFactory("OpenCASCADE");
 
-Cylinder(1) = {0,0,0, 0,0,d, r};
-Cylinder(2) = {0,0,0, 0,0,d, rb};
+Cylinder(1) = {0,0,0, 0,0,d, r, 2*Pi/coef};
+Cylinder(2) = {0,0,0, 0,0,d, rb, 2*Pi/coef};
 BooleanFragments{Volume{2}; Delete;}{Volume{1}; Delete;}
 
 Physical Volume("Vol wire", 100) = {1};
 Physical Volume("Vol vacuum", 101) = {2};
-Physical Surface("Sur ext", 120) = {4};
-Physical Surface("Sur wire back", 121) = {3}; 
-Physical Surface("Sur wire front", 122) = {2}; //ReverseMesh Surface {2};
-Physical Surface("Sur vacuum frontback", 123) = {5,6}; 
+Physical Surface("Sur ext", 120) = {1};
+Physical Surface("Sur wire back", 121) = {8}; 
+Physical Surface("Sur wire front", 122) = {7}; //ReverseMesh Surface {2};
+Physical Surface("Sur vacuum frontback", 123) = {2,4}; 
 
 Mesh.HighOrderOptimize = 2; Mesh.ElementOrder = order;
 
 Field[1] = Distance;
-Field[1].SurfacesList = {1};
+Field[1].SurfacesList = {6};
 Field[1].Sampling = 200;
 
 Field[2] = MathEval;
-Field[2].F = Sprintf("((F1/%g)^0.75) * %g",rb-r,rb-r);
+Field[2].F = Sprintf("((F1/%g)^0.4) * %g",rb-r,rb-r);
 
 Field[3] = Threshold;
 Field[3].InField = 2;
