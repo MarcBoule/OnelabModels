@@ -39,7 +39,7 @@ and the GetDP software}
 
 \end{center}
 
-This document presents a set of formulations based on the Laplace/Poisson equations for use in the finite element method. Implementation notes for the GetDP software are also briefly given. Electromagnetic notation mostly follows the textbook ``\textit{Introduction to electrodynamics}'' by D. J. Griffiths. The symbol ${i}$ is the imaginary unit, and phasors are denoted $\vecp{A}$, with $\vect{A}(t)=\text{Re}[\vecp{A}e^{i\omega t}]$.
+This document is a work in progress aiming to show a set of formulations based on the Laplace/Poisson equations for use in the finite element method. Implementation notes for the GetDP software are also briefly given. Electromagnetic notation mostly follows the textbook ``\textit{Introduction to electrodynamics}'' by D. J. Griffiths. The symbol ${i}$ is the imaginary unit. When required, scalar phasors are denoted $\tilde{A}$, with $A(t)=\text{Re}[\tilde{A}e^{i\omega t}]$ and vector phasors are denoted $\vecp{A}$, with $\vect{A}(t)=\text{Re}[\vecp{A}e^{i\omega t}]$.
 
 The simulation domain is denoted $\Omega$, and its boundary is denoted $\Gamma$. The Neumann-type portion of the domain's boundary, if required, is denoted $\Gamma_N$. The Dirichlet-type portion of the domain's boundary, if required, is denoted $\Gamma_D$. 
 Each can be subdivided into multiple disjoint subregions, but are treated as a single type for the sake of simplicity. 
@@ -564,7 +564,7 @@ The domain $\Omega_c$ is the nonempty conducting subdomain of $\Omega$ where Edd
 such that $\Omega_c \cap \Omega_s=0$ and $\{\Omega_c \cup \Omega_s\} \subseteq\Omega$. Example use cases:
 \begin{enumerate}
 \item Skin effect: voltage/current sources are related to $\Omega_c$, and $\Omega_s$ is empty ($\vecp{J}_s$ is unused);
-\item Induction heating: $\Omega_s$ is nonempty and contains a known current source $\vecp{J}_s$ where induction effects are neglected (stranded conductors), no sources via voltage/current related to $\Omega_c$, where induction occurs.
+\item Induction heating: $\Omega_s$ is nonempty and contains a known current source $\vecp{J}_s$ where induction effects are neglected (stranded conductors); no sources via voltage/current related to $\Omega_c$, where induction occurs.
 \end{enumerate}
 
 \begin{table}[h!]
@@ -613,7 +613,7 @@ $\vect{n}\times\vecp{H}=\vecp{A}_t/(\mu_0 R)$ & \multicolumn{2}{l}{on $\Gamma_N$
 
 \hline
 \multicolumn{3}{c}{Post-processing:} \\
-$P_c=\frac{1}{2}\int\sigma \vecp{E}\cdot\vecp{E}^*\,d\Omega_c$ & $[\text{J}]$ & Active power, where $^*$ denotes the complex conjugate\\[1pt]
+$P_c=\frac{1}{2}\int\sigma \vecp{E}\cdot\vecp{E}^*\,d\Omega_c$ & $[\text{J}]$ & Active (average) power, where $^*$ denotes the complex conjugate\\[1pt]
 
 \hline
 \end{tabular}
@@ -627,13 +627,13 @@ $P_c=\frac{1}{2}\int\sigma \vecp{E}\cdot\vecp{E}^*\,d\Omega_c$ & $[\text{J}]$ & 
 
 %------------------------------------------------------------------------------
 \clearpage
-\section{Symmetry and open boundaries in GetDP}
+\section{Function spaces and symmetries in GetDP}
 \label{sec_getdp}
 %------------------------------------------------------------------------------
 
-The formulations given previously fall under two main types: the strong forms in the scalar potential formulations are of the \textit{div(grad)} type, and the vector potential formulations are of the \textit{curl(curl)} type. These formulations can be applied to 2D planar, 2D axisymmetric or 3D domains by employing the proper declarations in the \keyw{FunctionSpace} and \keyw{Jacobian} objects in GetDP, as shown further below. Consequently, the weak formulations require very little syntactical modifications when specified in the \keyw{Formulation} object in GetDP. The two main changes are: 1) the test functions appearing in the \keyw{Integral} terms (in the second argument of the inner product) use the same symbol as the unknown variable, and 2) vector source quantities should have components consisent with the chosen symmetry in 2D. For example, in a 2D simulation specified in the $x$,$y$ plane in Gmsh (at $z=0$), a current density should have a $z$ component only, while permanent magnetization/polarization should have $x$,$y$ components only. In 2D axisymmetric simulations, the $x$,$y$ axes represent the $r$,$z$ axes respectively.
+The formulations presented in this document can be applied to 2D planar (called simply 2D), 2D axisymmetric (called simply Axi or axisymmetric) or 3D domains by use of the proper function spaces and Jacobians in GetDP. Weak formulations require very little modifications when specified in the \keyw{Formulation} object in GetDP. The two main changes are: 1) the test functions appearing in the \keyw{Integral} terms (in the second argument of the inner product) use the same symbol as the unknown variable, and 2) vector source quantities should have components consisent with the chosen symmetry in 2D. For example, in a 2D simulation specified in the $x$,$y$ plane in Gmsh (at $z=0$), a current density should have a $z$ component only, while permanent magnetization/polarization should have $x$,$y$ components only. In axisymmetric simulations, the symmetry axis is the $y$ axis by default; as such, the $x$,$y$ axes represent the $r$,$z$ axes typically used when describing Axi simulations.
 
-In the table below, the ``Type'' column shows the function space to declare for each type of simulation. The ``Function/Entity'' column describes the first order basis functions that are minimally required. The ``2nd order'' column shows the additional basis functions needed to support second order interpolation\footnote{In the case of edge elements, the designation of interpolation order is more intricate (and actually different) than described here. In this work, it is assumed that a vector potential is being solved, and that the order designation follows that of the geometrical elements (i.e., that second order interpolation basis functions are said to be related to second order geometrical elements for the sake of simplicity).}, assuming that second order geometrical meshing was specified in the \texttt{.geo} file using:
+In the table below, the ``FS-Type'' column shows the type of function space to declare for different types of potentials. The ``Function/EntityType'' column describes the first order basis functions that are minimally required. The ``2nd order'' column shows the additional basis functions needed to support second order interpolation\footnote{In the case of edge elements, the designation of interpolation order is more intricate (and actually different) than described here. In this work, it is assumed that a vector potential is being solved, and that the order designation follows that of the geometrical elements (i.e., that second order interpolation basis functions are said to be related to second order geometrical elements for the sake of simplicity).}, assuming that second order geometrical meshing was specified in the \texttt{.geo} file using:
 \begin{center}
 \keyw{Mesh.HighOrderOptimize = 2;~~Mesh.ElementOrder = 2;}
 \end{center}
@@ -644,33 +644,30 @@ In the ``2nd order'' column, ``None'' means that no additional basis functions n
 \begin{table}[h!]
 \centering
 \begin{tabular}{llll}
-\multicolumn{4}{c}{Function spaces and basis functions for scalar potential formulations} \\
+\multicolumn{4}{c}{Function spaces and basis functions for scalar potentials} \\
 \hline
- & Type & Function / Entity & 2nd order \\\hline
-2D planar & \keyw{Form0} & \keyw{BF\_Node} / \keyw{NodesOf} & None (automatic)  \\
-2D axisym. & \keyw{Form0} & \keyw{BF\_Node} / \keyw{NodesOf} & None (automatic) \\
+ & FS-Type & Function / EntityType & 2nd order \\\hline
+2D & \keyw{Form0} & \keyw{BF\_Node} / \keyw{NodesOf} & None (automatic)  \\
+Axi & \keyw{Form0} & \keyw{BF\_Node} / \keyw{NodesOf} & None (automatic) \\
 3D & \keyw{Form0} & \keyw{BF\_Node} / \keyw{NodesOf} & None (automatic) \\
  \hline
  &&&\\
 
- \multicolumn{4}{c}{Function spaces and basis functions for vector potential formulations} \\ 
+ \multicolumn{4}{c}{Function spaces and basis functions for vector potentials} \\ 
  \hline
- & Type & Function / Entity &  2nd order \\\hline
-2D planar & \keyw{Form1P} & \keyw{BF\_PerpendicularEdge} / \keyw{NodesOf} & None (automatic)  \\
-2D axisym. & \keyw{Form1P} & \keyw{BF\_PerpendicularEdge} / \keyw{NodesOf} & None (automatic) \\
-3D & \keyw{Form1} & \keyw{BF\_Edge} / \keyw{EdgesOf} & \keyw{BF\_Edge\_3F\_a} / \keyw{FacetsOf}~~$\star$ \\
- & & & \keyw{BF\_Edge\_3F\_b} / \keyw{FacetsOf}~~$\star$ \\ 
- & & & \keyw{BF\_Edge\_3F\_c} / \keyw{FacetsOf}~~$\star$\\ 
+ & FS-Type & Function / EntityType &  2nd order \\\hline
+2D & \keyw{Form1P} & \keyw{BF\_PerpendicularEdge} / \keyw{NodesOf} & None (automatic)  \\
+Axi & \keyw{Form1P} & \keyw{BF\_PerpendicularEdge} / \keyw{NodesOf} & None (automatic) \\
+3D & \keyw{Form1} & \keyw{BF\_Edge} / \keyw{EdgesOf} & \keyw{BF\_Edge\_3F\_a} / \keyw{FacetsOf} \\
+ & & & \keyw{BF\_Edge\_3F\_b} / \keyw{FacetsOf} \\ 
 \hline
- \multicolumn{4}{l}{$\star$: add any two of these three (apply constraints also, but not tree/cotree gauging)}\\
-
 \end{tabular}
 \end{table}
 
 
 Jacobians are given in the table below for the main regions of dimension $n$ of the simulation.  %Jacobians for regions of dimension $n-1$ are given after the table. 
 The external Jacobian is used in the external region of open boundary models, when applicable. Only a selected set of Jacobians are listed, others can be found in the GetDP manual. 
-The \keyw{Sur} Jacobian can be applied to regions of dimension $n-1$ in the 2D planar and 3D simulations, while the \keyw{SurAxi} Jacobian can be applied to 1D regions in 2D axisymmetrical simulations. It is also possible to use the \keyw{VolCylShell} Jacobian in the external region of a 2D planar simulation, but since it internally reverts to the \keyw{VolSphShell} Jacobian, it is more natural to use \keyw{VolSphShell} (which becomes 2D in this case).
+The \keyw{Sur} Jacobian can be applied to regions of dimension $n-1$ in the 2D and 3D simulations, while the \keyw{SurAxi} Jacobian can be applied to 1D regions in axisymmetrical simulations. It is also possible to use the \keyw{VolCylShell} Jacobian in the external region of a 2D simulation, but since it internally reverts to the \keyw{VolSphShell} Jacobian, it is more natural to use \keyw{VolSphShell} (which becomes 2D in this case).
 
 \begin{table}
 \centering
@@ -678,14 +675,14 @@ The \keyw{Sur} Jacobian can be applied to regions of dimension $n-1$ in the 2D p
 \multicolumn{4}{c}{Jacobians for main region, and external region when open boundary} \\
 \hline
  & $n$ & Jacobian & External Jacobian \\\hline
-2D planar  & 2  & \keyw{Vol} & \keyw{VolSphShell}  \\
-2D axisym. & 2  & \keyw{VolAxi} & \keyw{VolAxiSphShell} \\
-3D            & 3  & \keyw{Vol} & \keyw{VolSphShell}, \keyw{VolCylShell} \\
+2D  & 2  & \keyw{Vol} & \keyw{VolSphShell\{}$r_b$\keyw{,}$r_e$\keyw{\}}  \\
+Axi & 2  & \keyw{VolAxi} & \keyw{VolAxiSphShell\{}$r_b$\keyw{,}$r_e$\keyw{\}} \\
+3D & 3  & \keyw{Vol} & \keyw{VolSphShell\{}$r_b$\keyw{,}$r_e$\keyw{\}}, \keyw{VolCylShell\{}$r_b$\keyw{,}$r_e$\keyw{\}} \\
 \hline
 \end{tabular}
 \end{table}
 
-The $\keyw{Sur}$, $\keyw{SurAxi}$, $\keyw{Vol}$ and $\keyw{VolAxi}$ Jacobians do not have any parameters. The first two parameters of the external Jacobians are the internal and external radii of the shell region. The default center point for the external Jacobians is $x=y=z=0$, and the default axis for the $\keyw{VolCylShell}$ Jacobian is $z$.
+The $\keyw{Sur}$, $\keyw{SurAxi}$, $\keyw{Vol}$ and $\keyw{VolAxi}$ Jacobians do not have any parameters. The first two parameters of the external Jacobians are the internal ($r_b$) and external ($r_e$) radii of the shell region. The default center point for the external Jacobians is $x=y=z=0$. The default axis for the $\keyw{VolCylShell}$ Jacobian is~$z$, while the default axis for the $\keyw{VolAxi}$ and $\keyw{VolAxiSphShell}$ Jacobians is~$y$
 %https://gitlab.onelab.info/getdp/getdp/-/blob/master/src/kernel/Get_Geometry.cpp?ref_type=heads#L623
 
 
@@ -700,7 +697,7 @@ The $\keyw{Sur}$, $\keyw{SurAxi}$, $\keyw{Vol}$ and $\keyw{VolAxi}$ Jacobians do
 
 This section presents a very short and incomplete summary of global basis functions in GetDP. For a more detailed description, see tutorial \#6 in the GetDP user manual (version 4.0.0 or higher, or the development version until released).
 
-Certain scalar potential formulations presented in this document mention a global quantity associated with a constant Dirichlet boundary condition. These global quantities can be linked to a special type of basis function in GetDP. When this is done, two options become available when imposing a constaint on a given global region. Using the electrostatics formulation as an example, the first case consists of an imposed Dirichlet constraint on the variable itself (electrostatic potential), which is nothing new; however, when the global approach is used, the associated global quantity that is automatically calculated is the total charge. Conversely, it is also possible to impose the associated global quantity (the total charge here), whereby the electric potential of the region will be automatically calculated; this corresponds to situation called ``floating potential'', since the potential is not known in advance. Another example is a Dirichlet boundary of constant temperature, where the heat flux across this boundary is the associated global quantity; imposing either one allows the calculation of the other.
+Certain scalar potential formulations presented in this document mention a global quantity associated with a constant Dirichlet boundary condition. These global quantities can be linked to a special type of basis function in GetDP. When this is done, two options become available when imposing a constaint on a given global region. Using the electrostatics formulation as an example, the first case consists of an imposed Dirichlet constraint on the variable itself (electrostatic potential); when the global approach is used, the associated global quantity that is automatically calculated is the total charge. Conversely, it is also possible to impose the associated global quantity (the total charge here), whereby the electric potential of the region will be automatically calculated; this corresponds to situation called ``floating potential'', since the potential is not known in advance. Another example is a Dirichlet boundary of constant temperature, where the heat flux across this boundary is the associated global quantity; imposing either one allows the automatic calculation of the other.
 
 To implement global quantities in GetDP, the nodes $r$ of a region having a constant potential must be grouped into a separate basis function with Function/Entity keywords
 \begin{center}
