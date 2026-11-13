@@ -3,6 +3,7 @@ Example models for the [ONELAB](https://onelab.info/) finite element software (c
 
 List of examples:
 
+* [Various FEM Formulations (in development)](./Formulations)
 * [Shell and Kelvin transformation benchmarking](./ShellAndKelvin/)
-* [Wirepair RLC](./WirepairRLC/)
-* [Sphere energy and momentum benchmarking](./SphereBench/)
+* [Open boundary spherical benchmarking](./SphereBench/)
+* [Wirepair RLC parameters](./WirepairRLC/)
